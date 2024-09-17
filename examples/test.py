@@ -17,4 +17,4 @@ df = pd.read_csv("Inventory/Rentals.csv")
 
 print(df.to_string()) 
 
-// This program currently prints out the Rentals table. 
+# This program currently prints out the Rentals table. 

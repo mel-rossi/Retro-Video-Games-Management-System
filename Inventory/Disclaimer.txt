@@ -1,2 +1,3 @@
-The following csv files in this folder were created with GPT.
+The following csv files in this folder were created with ChatGPT and may have mistakes and inaccurately 
+produced information. 
 They are solely for dataset testing purposes. 

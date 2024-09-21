@@ -1,10 +1,16 @@
 import pandas as pd 
- 
+
+# Get user input for a value
+# RentalID = input("Enter Rental ID")
+
+
 # Create a DataFrame
-df = pd.DataFrame({'RentalID': ['V0072', 'V0136', 'V0655'], 
-        'Title': ['Animal Crossing: New Leaf', 'NBA 2K20', 'Need for Speed: Hot Pursuit'], 
-        'Publisher': ['Nintendo', '2K Sports', 'Electronic Arts'], 
-        'Year': ['2013', '2019', '2010']})
+df = pd.DataFrame({'RentalID': ['0000', '0001', '0002'], 
+        'VideoGameID': ['V0055', 'V0090', 'V0140'], 
+        'MemberID': ['M0040', 'M0194', 'M0174'], 
+        'StartDate': ['08/30/2024', '06/28/2022', '04/16/2020'],
+        'ReturnDate': ['', '07/30/2022', '11/02/2021'], 
+        'Status': ['Active', 'Inactive', 'Inactive']})
 
 # Write DataFrame to a csv file 
 df.to_csv('Inventory/Rentals.csv', index=False)

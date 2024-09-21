@@ -13,7 +13,6 @@ else:
     Status = 'Inactive'
 
 # Create a DataFrame 
-# currently overwrites the file everytime
 df = pd.DataFrame({'RentalID': [RentalID], 
         'VideoGameID': [VideoGameID], 
         'MemberID': [MemberID], 
@@ -22,7 +21,8 @@ df = pd.DataFrame({'RentalID': [RentalID],
         'Status': [Status]})
 
 # Write DataFrame to a csv file 
-df.to_csv('Inventory/Rentals.csv', index=False)
+# currently overwrites the file everytime
+f.to_csv('Inventory/Rentals.csv', index=False)
 
 # Display the content of DataFrame
 print(df.to_string())

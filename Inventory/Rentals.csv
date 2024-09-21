@@ -1,1 +1,4 @@
-﻿RentalID,VideoGameID,MemberID,StartDate,ReturnDate,Status
+RentalID,Title,Publisher,Year
+V0072,Animal Crossing: New Leaf,Nintendo,2013
+V0136,NBA 2K20,2K Sports,2019
+V0655,Need for Speed: Hot Pursuit,Electronic Arts,2010

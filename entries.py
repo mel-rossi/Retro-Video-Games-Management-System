@@ -12,7 +12,8 @@ if ReturnDate == '':
 else:
     Status = 'Inactive'
 
-# Create a DataFrame
+# Create a DataFrame 
+# currently overwrites the file everytime
 df = pd.DataFrame({'RentalID': [RentalID], 
         'VideoGameID': [VideoGameID], 
         'MemberID': [MemberID], 

@@ -1,4 +1,4 @@
-RentalID,Title,Publisher,Year
-V0072,Animal Crossing: New Leaf,Nintendo,2013
-V0136,NBA 2K20,2K Sports,2019
-V0655,Need for Speed: Hot Pursuit,Electronic Arts,2010
+RentalID,VideoGameID,MemberID,StartDate,ReturnDate,Status
+0000,V0055,M0040,08/30/2024,,Active
+0001,V0090,M0194,06/28/2022,07/30/2022,Inactive
+0002,V0140,M0174,04/16/2020,11/02/2021,Inactive

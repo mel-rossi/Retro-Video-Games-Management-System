@@ -1,16 +1,25 @@
 import pandas as pd 
 
 # Get user input for a value
-# RentalID = input("Enter Rental ID")
+RentalID = input("Enter Rental ID (make sure not to overwrite an ID, view the last Rental ID first): ")
+VideoGameID = input("Enter Video Game ID of Video Game Entered: ")
+MemberID = input("Enter Member ID: ")
+StartDate = input("Enter Start Date of Rental: ") 
+ReturnDate = input("Enter Renturn Date of Rental (leave blank if it hasn't been returned): :w
+                   ")
 
+if ReturnDate == '':
+    Status = 'Active'
+else:
+    Status = 'Inactive'
 
 # Create a DataFrame
-df = pd.DataFrame({'RentalID': ['0000', '0001', '0002'], 
-        'VideoGameID': ['V0055', 'V0090', 'V0140'], 
-        'MemberID': ['M0040', 'M0194', 'M0174'], 
-        'StartDate': ['08/30/2024', '06/28/2022', '04/16/2020'],
-        'ReturnDate': ['', '07/30/2022', '11/02/2021'], 
-        'Status': ['Active', 'Inactive', 'Inactive']})
+df = pd.DataFrame({'RentalID': [RentalID], 
+        'VideoGameID': [VideoGameID], 
+        'MemberID': [MemberID], 
+        'StartDate': [StartDate],
+        'ReturnDate': [ReturnDate], 
+        'Status': [Status]})
 
 # Write DataFrame to a csv file 
 df.to_csv('Inventory/Rentals.csv', index=False)

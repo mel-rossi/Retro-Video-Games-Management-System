@@ -21,8 +21,9 @@ df = pd.DataFrame({'RentalID': [RentalID],
         'Status': [Status]})
 
 # Write DataFrame to a csv file 
-# currently overwrites the file everytime
-f.to_csv('Inventory/Rentals.csv', index=False)
+# by appending (no longer overwrites file)
+with open('Inventory/Rentals.csv', 'a', newline='') as f: 
+    df.to_csv(f, header=False, index=False)
 
 # Display the content of DataFrame
 print(df.to_string())

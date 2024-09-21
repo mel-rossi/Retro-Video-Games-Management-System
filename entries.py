@@ -5,8 +5,7 @@ RentalID = input("Enter Rental ID (make sure not to overwrite an ID, view the la
 VideoGameID = input("Enter Video Game ID of Video Game Entered: ")
 MemberID = input("Enter Member ID: ")
 StartDate = input("Enter Start Date of Rental: ") 
-ReturnDate = input("Enter Renturn Date of Rental (leave blank if it hasn't been returned): :w
-                   ")
+ReturnDate = input("Enter Renturn Date of Rental (leave blank if it hasn't been returned): ")
 
 if ReturnDate == '':
     Status = 'Active'

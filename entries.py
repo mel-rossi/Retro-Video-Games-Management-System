@@ -1,7 +1,7 @@
-import pandas as pd 
+import pandas as pd
+from validateEntries import generateRentalID
 
 # Get user input for a value
-RentalID = input("Enter Rental ID (make sure not to overwrite an ID, view the last Rental ID first): ")
 VideoGameID = input("Enter Video Game ID of Video Game Entered: ")
 MemberID = input("Enter Member ID: ")
 StartDate = input("Enter Start Date of Rental: ") 
@@ -13,7 +13,7 @@ else:
     Status = 'Inactive'
 
 # Create a DataFrame 
-df = pd.DataFrame({'RentalID': [RentalID], 
+df = pd.DataFrame({'RentalID': [generateRentalID()], 
         'VideoGameID': [VideoGameID], 
         'MemberID': [MemberID], 
         'StartDate': [StartDate],

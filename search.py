@@ -23,17 +23,17 @@ def handle_json_requests():
 def select_search(option, search_term):
     match option:
             case 'all':
-                search_all()
+                return search_all()
             case 'title':
-                search_title(search_term)
+                return search_title(search_term)
             case 'id':
-                search_id(search_term)
+                return search_id(search_term)
             case 'publisher':
-                search_publisher(search_term)
+                return search_publisher(search_term)
             case 'year':
-                search_year(search_term)
+                return search_year(search_term)
             case 'availability':
-                check_availability(search_term)
+                return check_availability(search_term)
 
 def search_all():
     return pd.read_csv('VideoGames.csv')

@@ -57,7 +57,7 @@ def search_year(year):
 def check_availability(id):
     video_games = pd.read_csv('VideoGames.csv')
     rentals = pd.read_csv('Rentals.csv')
-    cnt = len(rentals[(rentals['VideoGameID']==id) & rentals['ReturnDate'].isna()])
+    cnt = len(rentals[(rentals['VideoGameID']==id) & rentals['ReturnDate'].isna() & rentals['ReturnDate'].isnull()])
     
     # df1 = pd.DataFrame(data={'Status': ['Available'], 'OutForRent': [cnt], 'MaxStock': []})
     # return if (cnt < video_games.at[1, 'MaxStock']) else return pd.DataFrame

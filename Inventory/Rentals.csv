@@ -1,3 +1,4 @@
 RentalID,VideoGameID,MemberID,StartDate,ReturnDate,Status
-0000,V0055,M0040,08/30/2024,,Active
-0001,V0188,M0027,08/03/2024,,Active
+0,V0055,M0040,08/03/2024,,Active
+1,V0188,M0027,08/30/2024,,Active
+2,V0002,M0007,09/02/2024,,Active

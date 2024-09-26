@@ -8,19 +8,20 @@ from flask import Flask, request, jsonify
 
 search = Flask(__name__)
 
-@search.route('/search', methods=['POST'])
+@search.route('/search', methods=['POST']) #WIP
 def handle_json_requests():
     data = request.json
     option = data.get('option')
-    # idea - buttons that are properly labelled should choose option, 
-    # search term prompt appears for each option except search_all 
+    # valid option terms are: 'all', 'title', 'id', publisher', 'year', 'availability'
+    # idea - javascript should have buttons, properly labelled, and when clicked
+    # sends a value to this python program
     search_term = data.get('search_term') 
-    # valid search terms are: 'all', 'title', 'id', publisher', 'year', 'availability'
-    jsonify(select_search(option, search_term)) 
-    # if search_all is selected this, value of search_term should not matter & should not be prompted
+    jsonify(select_search(option, search_term))
+    # if search_all is selected this, value of search_term should not matter & should not be prompted 
+    # if search_year is selected, the user should be prompted to enter 2 values (range between years)
     # if check_availability is selected, search_term must be id
 
-def select_search(option, search_term):
+def select_search(option, search_term): # WIP
     match option:
             case 'all':
                 return search_all()
@@ -31,7 +32,7 @@ def select_search(option, search_term):
             case 'publisher':
                 return search_publisher(search_term)
             case 'year':
-                return search_year(search_term)
+                return search_year(search_term) # WIP
             case 'availability':
                 return check_availability(search_term)
 
@@ -50,17 +51,25 @@ def search_publisher(publisher):
     df = pd.read_csv('VideoGames.csv')
     return df[df['Publisher'].str.contains(publisher, case=False, na=False)]
 
-def search_year(year):
+def search_year(start_year, end_year):
     df = pd.read_csv('VideoGames.csv')
-    return df[df['Year'].str.contains(year, case=False, na=False)]
-# WIP - year range should be a better option 
+    return df[(df['Year'] >= start_year) & (df['Year'] <= end_year)]
+ 
 def check_availability(id):
     video_games = pd.read_csv('VideoGames.csv')
     rentals = pd.read_csv('Rentals.csv')
-    cnt = len(rentals[(rentals['VideoGameID']==id) & rentals['ReturnDate'].isna() & rentals['ReturnDate'].isnull()])
+    max_stock = video_games.loc[video_games['VideoGameID']==id, 'MaxStock'].values[0]
+    cnt = len(
+        rentals[(rentals['VideoGameID']==id) 
+        & rentals['ReturnDate'].isna() & rentals['ReturnDate'].isnull()]
+        )
+    if (cnt < max_stock):
+        status = 'Available'
+    else:
+        status = 'Unavailable'
+    return pd.DataFrame(data={
+        'Status': [status], 'AmountAvailable': [max_stock - cnt], 'MaxStock': [max_stock]
+        })
     
-    # df1 = pd.DataFrame(data={'Status': ['Available'], 'OutForRent': [cnt], 'MaxStock': []})
-    # return if (cnt < video_games.at[1, 'MaxStock']) else return pd.DataFrame
-    print(cnt)
-# WIP
-check_availability('V0001')
+# if we go with print with python approach:
+# print(([insert function]).to_string(index=False))

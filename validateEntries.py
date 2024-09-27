@@ -40,3 +40,7 @@ def validateMemberID(MemberInput):
     print("Invalid MemberID. Try Again!")
     return False
 # validateMemberID
+
+def generateDate(): 
+    return pd.Timestamp.today().date()
+# generateDate

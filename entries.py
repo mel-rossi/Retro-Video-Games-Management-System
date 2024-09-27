@@ -5,8 +5,9 @@ import pandas as pd
 from validateEntries import generateRentalID
 from validateEntries import validateVideoGameID
 from validateEntries import validateMemberID
+from validateEntries import generateDate
 
-# Get user input for values
+# Get user input and generate valid values
 
 # Call generateRentalID
 RentalID = generateRentalID()
@@ -23,7 +24,9 @@ while validMemberID == False:
     MemberID = input("Enter Valid Member ID (M####): ")
     validMemberID = validateMemberID(MemberID)
 
-StartDate = input("Enter Start Date of Rental: ") 
+# For pratical purposes, generate today's date. As the log would generally be made alongside the Rental
+StartDate = generateDate()
+
 ReturnDate = input("Enter Return Date of Rental (leave blank if it hasn't been returned): ")
 
 if ReturnDate == '':
@@ -49,3 +52,6 @@ df.to_csv("Inventory/Rentals.csv", index=False)
 
 # Display the content of DataFrame
 print(df.to_string())
+
+today_date = pd.Timestamp.today().date()
+print(today_date)

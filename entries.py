@@ -31,12 +31,10 @@ if ReturnDate == '':
 else:
     Status = 'Inactive'
 
-# Load CSV file
-df = pd.read_csv('Inventory/Rentals.csv')
+# Read the CSV fiel into a DataFrame
+df = pd.read_csv("Inventory/Rentals.csv")
 
-# Create a DataFrame
-
-# Create a new row (dictionary)
+# Add a new row using loc
 row = {'RentalID': RentalID, 
        'VideoGameID': VideoGameID,
        'MemberID': MemberID, 
@@ -44,14 +42,10 @@ row = {'RentalID': RentalID,
        'ReturnDate': ReturnDate, 
        'Status': Status}
 
-# Convert dictionary to Data Frame
-df = pd.DataFrame.from_dict([row])
+df.loc[len(df)] = row
 
-# Append new row to CSV file
-with open('Inventory/Rentals.csv', 'a', newline='', encoding='utf8') as f: 
-  df.to_csv(f, header=False, index=False sep=',')
-
-# df.to_csv('Inventory/Rentals.csv', mode='a', header=False, index=False)
+# Write the updated DataFrame back to the CSV file
+df.to_csv("Inventory/Rentals.csv", index=False)
 
 # Display the content of DataFrame
 print(df.to_string())

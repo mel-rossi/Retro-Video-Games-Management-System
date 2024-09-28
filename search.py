@@ -3,38 +3,39 @@ from flask import Flask, request, jsonify
 
 # WIP!!! 
 # this code returns dataframes based off which function is selected
-# i think there are a few javascript libraries/frameworks that allow u to display?
 # first time using flask please bare with me lol
 
 search = Flask(__name__)
 
 @search.route('/search', methods=['POST']) #WIP
-def handle_json_requests():
+def output():
     data = request.json
     option = data.get('option')
-    # valid option terms are: 'all', 'title', 'id', publisher', 'year', 'availability'
-    # idea - javascript should have buttons, properly labelled, and when clicked
+    # valid option values are: 'all', 'title', 'id', publisher', 'year', 'availability'
+    # idea - frontend javascript should have buttons, properly labelled, and when clicked
     # sends a value to this python program
-    search_term = data.get('search_term') 
-    jsonify(select_search(option, search_term))
-    # if search_all is selected this, value of search_term should not matter & should not be prompted 
-    # if search_year is selected, the user should be prompted to enter 2 values (range between years)
-    # if check_availability is selected, search_term must be id
-
-def select_search(option, search_term): # WIP
+    # input should be prompted after option is selected
     match option:
             case 'all':
-                return search_all()
+                result = search_all() 
+                # no input
             case 'title':
-                return search_title(search_term)
+                result = search_title(data.get('input')) 
+                # input = title
             case 'id':
-                return search_id(search_term)
+                result = search_id(data.get('input')) 
+                # input = videogameid
             case 'publisher':
-                return search_publisher(search_term)
+                result = search_publisher(data.get('input')) 
+                # input = publisher
             case 'year':
-                return search_year(search_term) # WIP
+                result = search_year(data.get('first_input'), data.get('second_input'))
+                # input = start year (first_input) & end year (second_input)
             case 'availability':
-                return check_availability(search_term)
+                result = check_availability(data.get('input'))
+                # input = videogameid
+        
+    jsonify(result) # WIP - i think i need to return result as .json or .html?
 
 def search_all():
     return pd.read_csv('VideoGames.csv')
@@ -70,6 +71,3 @@ def check_availability(id):
     return pd.DataFrame(data={
         'Status': [status], 'AmountAvailable': [max_stock - cnt], 'MaxStock': [max_stock]
         })
-    
-# if we go with print with python approach:
-# print(([insert function]).to_string(index=False))

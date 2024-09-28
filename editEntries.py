@@ -6,6 +6,8 @@ import pandas as pd
 from validateEntries import validateRentalID
 from validateEntries import confirmRentalID
 from validateEntries import generateDate
+from linkIDs import returnGame
+from linkIDs import decRentals
 
 # Get RentalID from user input and validate input
 validRentalID = False

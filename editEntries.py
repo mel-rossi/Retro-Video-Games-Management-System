@@ -7,8 +7,6 @@ from validateEntries import validateRentalID
 from validateEntries import confirmRentalID
 from validateEntries import generateDate
 
-df = pd.read_csv('Inventory/Rentals.csv')
-
 # Get RentalID from user input and validate input
 validRentalID = False
 confirmRental = ""
@@ -18,6 +16,14 @@ while confirmRental != "y": # Exits loop when validRentalID == True and confirmR
     if validRentalID == True: 
         confirmRentalID(RentalID)
         confirmRental = input("Enter 'y' if it is correct: ")
+
+# Read the CSV file into a DataFram e
+df = pd.read_csv('Inventory/Rentals.csv')
+
+# Update dependent columns on files VideoGames.csv and Members.csv
+VideoGameID = df.loc[df.iloc[:, 0] == RentalID].iloc[0, 1]
+MemberID = df.loc[df.iloc[:, 0] == RentalID].iloc[0, 2]
+returnGame(VideoGameID)
 
 # Find value of RentalID and change Return Date and Status to generate today's date and "inactive"
 df.loc[df['RentalID'] == RentalID, ['ReturnDate', 'Status']] = [generateDate(), 'Inactive']

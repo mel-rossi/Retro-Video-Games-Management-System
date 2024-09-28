@@ -11,10 +11,10 @@ from validateEntries import generateDate
 
 # Get user input and generate valid values
 
-# Call generateRentalID
+# Generate the valid next RentalID for the Rental being added
 RentalID = generateRentalID()
 
-# Get VideoGameID
+# Get VideoGameID from user input and validate input 
 validGameID = False
 confirmGameID = ""
 while confirmGameID != "y": # Exits loop when validGameID == True and confirmGameID == "y"
@@ -24,7 +24,7 @@ while confirmGameID != "y": # Exits loop when validGameID == True and confirmGam
         confirmVideoGameID(VideoGameID)
         confirmGameID = input("Enter 'y', if it is correct: ")
            
-# Get MemberID
+# Get MemberID from user input and validate input
 validMemberID = False
 confirmMember = ""
 while confirmMember != "y": # Exits loop when validMemberID == True and confirmGameID == "y"
@@ -34,17 +34,17 @@ while confirmMember != "y": # Exits loop when validMemberID == True and confirmG
         confirmMemberID(MemberID)
         confirmMember = input("Enter 'y', if it is correct: ")
 
-# For pratical purposes, generate today's date. As the log would generally be made alongside the Rental, therefore on the same date
+# For pratical purposes, generate today's date. As the log would generally be made alongside the Rental, 
+# therefore on the same date
 StartDate = generateDate()
 
-ReturnDate = input("Enter Return Date of Rental (leave blank if it hasn't been returned): ")
+# Return date empty by default, because in practice a entry is made when the rental is checked out. 
+# Return date is now generated only when editing a entry with editEntry.py
+ReturnDate = ''
 
-if ReturnDate == '':
-    Status = 'Active'
-else:
-    Status = 'Inactive'
+Status = 'Active'
 
-# Read the CSV fiel into a DataFrame
+# Read the CSV file into a DataFrame
 df = pd.read_csv("Inventory/Rentals.csv")
 
 # Add a new row using loc
@@ -61,7 +61,5 @@ df.loc[len(df)] = row
 df.to_csv("Inventory/Rentals.csv", index=False)
 
 # Display the content of DataFrame
+print("This is the updated Rentals: "
 print(df.to_string())
-
-today_date = pd.Timestamp.today().date()
-print(today_date)

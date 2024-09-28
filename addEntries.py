@@ -61,5 +61,5 @@ df.loc[len(df)] = row
 df.to_csv("Inventory/Rentals.csv", index=False)
 
 # Display the content of DataFrame
-print("This is the updated Rentals: "
+print("This is the updated Rentals: ")
 print(df.to_string())

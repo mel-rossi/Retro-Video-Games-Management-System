@@ -55,6 +55,23 @@ def confirmMemberID(MemberInput):
     print(result)
 # confirmMemberID
 
+def validateRentalID(RentalInput): 
+    # Iterate through the column RentalID
+    for RentalID in df1['RentalID']: 
+        if RentalInput == RentalID: 
+            return True
+
+    print("Invalid RentalID. Try Again!")
+    return False
+# validateRentalID 
+
+def confirmRentalID(RentalInput): 
+    # Display Rental information based on ID
+    print("This is the Rental registration of the corresponding ID: ")
+    result = df1.loc[df1.iloc[:, 0] == RentalInput]
+    print(result)
+# confirmRentalID
+
 def generateDate(): 
     return pd.Timestamp.today().date()
 # generateDate

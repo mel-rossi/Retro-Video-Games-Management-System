@@ -4,6 +4,7 @@
 import pandas as pd
 from validateEntries import generateRentalID
 from validateEntries import validateVideoGameID
+from validateEntries import confirmVideoGameID
 from validateEntries import validateMemberID
 from validateEntries import generateDate
 
@@ -14,17 +15,24 @@ RentalID = generateRentalID()
 
 # Get VideoGameID
 validGameID = False
-while validGameID == False:
+confirmGameID = "k"
+while True:
     VideoGameID = input("Enter Valid Video Game ID (V####): ")
     validGameID = validateVideoGameID(VideoGameID)
-    
+    if validGameID == True:
+        confirmVideoGameID(VideoGameID)
+        confimGameID = input("Click enter/return if it is correct: ")
+        if confirmGameID == "":
+            break
+        break
+           
 # Get MemberID
 validMemberID = False
 while validMemberID == False:
     MemberID = input("Enter Valid Member ID (M####): ")
     validMemberID = validateMemberID(MemberID)
 
-# For pratical purposes, generate today's date. As the log would generally be made alongside the Rental
+# For pratical purposes, generate today's date. As the log would generally be made alongside the Rental, therefore on the same date
 StartDate = generateDate()
 
 ReturnDate = input("Enter Return Date of Rental (leave blank if it hasn't been returned): ")

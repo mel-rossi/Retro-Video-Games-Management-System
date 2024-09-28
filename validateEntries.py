@@ -31,6 +31,13 @@ def validateVideoGameID(VideoGameInput):
     return False 
 # validateVideoGameID
 
+def confirmVideoGameID(VideoGameInput): 
+    # Display VideoGame information based on ID
+    print("This is the Video Game of the corresponding ID: ")
+    result = df2.loc[df2.iloc[:, 0] == VideoGameInput]
+    print(result)
+# confirmVideoGameID
+
 def validateMemberID(MemberInput): 
     # Iterate through the column MemberID
     for MemberID in df3['MemberID']: 

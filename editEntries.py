@@ -13,7 +13,7 @@ df = pd.read_csv('Inventory/Rentals.csv')
 validRentalID = False
 confirmRental = ""
 while confirmRental != "y": # Exits loop when validRentalID == True and confirmRental == "y"
-    RentalID = input("Enter the Rental ID of the Rental you would like to mark as returned (#): ")
+    RentalID = input("Enter the Rental ID of the Rental you would like to mark as returned (R####): ")
     validRentalID = validateRentalID(RentalID)
     if validRentalID == True: 
         confirmRentalID(RentalID)

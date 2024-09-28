@@ -8,6 +8,8 @@ from validateEntries import confirmVideoGameID
 from validateEntries import validateMemberID
 from validateEntries import confirmMemberID
 from validateEntries import generateDate
+from linkIDs import rentOut
+from linkIDs import incRentals
 
 # Get user input and generate valid values
 
@@ -43,6 +45,10 @@ StartDate = generateDate()
 ReturnDate = ''
 
 Status = 'Active'
+
+# Update dependent columns on files VideoGames.csv and Members.csv
+rentOut(VideoGameID)
+incRentals(MemberID)
 
 # Read the CSV file into a DataFrame
 df = pd.read_csv("Inventory/Rentals.csv")

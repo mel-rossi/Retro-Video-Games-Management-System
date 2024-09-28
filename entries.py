@@ -6,6 +6,7 @@ from validateEntries import generateRentalID
 from validateEntries import validateVideoGameID
 from validateEntries import confirmVideoGameID
 from validateEntries import validateMemberID
+from validateEntries import confirmMemberID
 from validateEntries import generateDate
 
 # Get user input and generate valid values
@@ -16,21 +17,22 @@ RentalID = generateRentalID()
 # Get VideoGameID
 validGameID = False
 confirmGameID = "k"
-while True:
+while confirmGameID != "": # Exits loop when validGameID == True and confirmGameID == ""
     VideoGameID = input("Enter Valid Video Game ID (V####): ")
     validGameID = validateVideoGameID(VideoGameID)
     if validGameID == True:
         confirmVideoGameID(VideoGameID)
-        confimGameID = input("Click enter/return if it is correct: ")
-        if confirmGameID == "":
-            break
-        break
+        confirmGameID = input("Click enter/return if it is correct: ")
            
 # Get MemberID
 validMemberID = False
-while validMemberID == False:
+confirmMember = "k"
+while confirmMember != "": # Exits loop when validMemberID == True and confirmGameID == ""
     MemberID = input("Enter Valid Member ID (M####): ")
     validMemberID = validateMemberID(MemberID)
+    if validMemberID == True:
+        confirmMemberID(MemberID)
+        confirmMember = input("Click enter/return if it is correct: ")
 
 # For pratical purposes, generate today's date. As the log would generally be made alongside the Rental, therefore on the same date
 StartDate = generateDate()

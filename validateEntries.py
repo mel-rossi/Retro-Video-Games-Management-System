@@ -32,8 +32,8 @@ def validateVideoGameID(VideoGameInput):
 # validateVideoGameID
 
 def confirmVideoGameID(VideoGameInput): 
-    # Display VideoGame information based on ID
-    print("This is the Video Game of the corresponding ID: ")
+    # Display Video Game information based on ID
+    print("This is the Video Game registration of the corresponding ID: ")
     result = df2.loc[df2.iloc[:, 0] == VideoGameInput]
     print(result)
 # confirmVideoGameID
@@ -47,6 +47,13 @@ def validateMemberID(MemberInput):
     print("Invalid MemberID. Try Again!")
     return False
 # validateMemberID
+
+def confirmMemberID(MemberInput): 
+    # Display Member information based on ID
+    print("This is the Member registration of the corresponding ID: ")
+    result = df3.loc[df3.iloc[:, 0] == MemberInput] 
+    print(result)
+# confirmMemberID
 
 def generateDate(): 
     return pd.Timestamp.today().date()

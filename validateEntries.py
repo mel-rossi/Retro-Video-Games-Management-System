@@ -1,7 +1,5 @@
 # Validation & Valid Generation methods 
 # Currently a Work In Progress
-
-# Imports
 import pandas as pd
 
 # Data Frames 
@@ -19,10 +17,15 @@ def generateRentalID():
     # Iterate through the column RentalID
     for rentalID in df1['RentalID']: 
         pass
+   
+    # Separate the letter and the number 
+    letter = rentalID[0]
+    number = int(rentalID[1:])
 
-    return 'R' + format(rentalID + 1, '04')
-# generateRentalID()
-
+    number += 1
+    return 'R' + format(number, '04') 
+# generateRentalID
+                        
 def validateVideoGameID(VideoGameInput): 
     # Iterate through the column VideoGameID
     for VideoGameID in df2['VideoGameID']: 

@@ -18,7 +18,7 @@ def generateRentalID():
     for rentalID in df1['RentalID']: 
         pass
 
-    return rentalID + 1
+    return 'R' + format(rentalID + 1, '04')
 # generateRentalID()
 
 def validateVideoGameID(VideoGameInput): 

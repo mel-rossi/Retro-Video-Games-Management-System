@@ -26,6 +26,7 @@ df = pd.read_csv('Inventory/Rentals.csv')
 VideoGameID = df.loc[df.iloc[:, 0] == RentalID].iloc[0, 1]
 MemberID = df.loc[df.iloc[:, 0] == RentalID].iloc[0, 2]
 returnGame(VideoGameID)
+decRentals(MemberID)
 
 # Find value of RentalID and change Return Date and Status to generate today's date and "inactive"
 df.loc[df['RentalID'] == RentalID, ['ReturnDate', 'Status']] = [generateDate(), 'Inactive']

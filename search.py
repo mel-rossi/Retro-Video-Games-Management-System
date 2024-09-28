@@ -31,11 +31,11 @@ def output():
             case 'year':
                 result = search_year(data.get('first_input'), data.get('second_input'))
                 # input = start year (first_input) & end year (second_input)
-            case 'availability':
-                result = check_availability(data.get('input'))
-                # input = videogameid
+            case 'available':
+                result = search_available()
+                # no input
         
-    jsonify(result) # WIP - i think i need to return result as .json or .html?
+    jsonify(result.to_json())
 
 def search_all():
     return pd.read_csv('VideoGames.csv')
@@ -56,18 +56,6 @@ def search_year(start_year, end_year):
     df = pd.read_csv('VideoGames.csv')
     return df[(df['Year'] >= start_year) & (df['Year'] <= end_year)]
  
-def check_availability(id):
-    video_games = pd.read_csv('VideoGames.csv')
-    rentals = pd.read_csv('Rentals.csv')
-    max_stock = video_games.loc[video_games['VideoGameID']==id, 'MaxStock'].values[0]
-    cnt = len(
-        rentals[(rentals['VideoGameID']==id) 
-        & rentals['ReturnDate'].isna() & rentals['ReturnDate'].isnull()]
-        )
-    if (cnt < max_stock):
-        status = 'Available'
-    else:
-        status = 'Unavailable'
-    return pd.DataFrame(data={
-        'Status': [status], 'AmountAvailable': [max_stock - cnt], 'MaxStock': [max_stock]
-        })
+def search_available():
+    df = pd.read_csv('VideoGames.csv')
+    return df[(df['Availability'] == 'Available')]

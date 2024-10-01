@@ -2,7 +2,7 @@ import pandas as pd
 from flask import Flask, request, jsonify
 
 # WIP!!! 
-# this code returns html of dataframes based off which function is selected
+# this code returns json of dataframes based off which function is selected
 # first time using flask please bare with me lol
 
 search = Flask(__name__)
@@ -35,7 +35,7 @@ def output():
                 result = search_available()
                 # no input
         
-    jsonify(result.to_html())
+    jsonify(result.to_json())
 
 def search_all():
     return pd.read_csv('VideoGames.csv')

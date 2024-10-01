@@ -2,12 +2,12 @@ import pandas as pd
 from flask import Flask, request, jsonify
 
 # WIP!!! 
-# this code returns dataframes based off which function is selected
+# this code returns html of dataframes based off which function is selected
 # first time using flask please bare with me lol
 
 search = Flask(__name__)
 
-@search.route('/search', methods=['POST']) #WIP
+@search.route('/search', methods=['POST'])
 def output():
     data = request.json
     option = data.get('option')
@@ -35,7 +35,7 @@ def output():
                 result = search_available()
                 # no input
         
-    jsonify(result.to_json())
+    jsonify(result.to_html())
 
 def search_all():
     return pd.read_csv('VideoGames.csv')
@@ -46,7 +46,7 @@ def search_title(title):
 
 def search_id(id):
     df = pd.read_csv('VideoGames.csv')
-    return df[df['VideoGameID'].str.contains(id, case=False, na=False)]
+    return df[(df['VideoGameID'] == id)]
 
 def search_publisher(publisher):
     df = pd.read_csv('VideoGames.csv')
@@ -59,3 +59,4 @@ def search_year(start_year, end_year):
 def search_available():
     df = pd.read_csv('VideoGames.csv')
     return df[(df['Availability'] == 'Available')]
+    

@@ -103,5 +103,5 @@ def checkRentalStatus(RentalInput):
     row = df1.loc[df1.iloc[:, 0] == RentalInput] # Find correct Row
     if row.iloc[:, -1].eq('Active').any(): # Find the value of the last column : -1 = last column
         return True # Active 
-    print("Rental " + RentaInput + " is inactive.")
+    print("Rental " + RentalInput + " is inactive.")
     return False # Inactive

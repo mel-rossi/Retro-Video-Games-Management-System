@@ -9,15 +9,22 @@ from validateEntries import generateDate
 from linkIDs import returnGame
 from linkIDs import decRentals
 
+# Function
+def RentalInput(): 
+    validRentalID = False
+    confirmRental = "" 
+    while confirmRental != "y": # Exits loop when validRentalID == True and confirmRental == "y"
+        RentalID = input("Enter the RentalID of the Rental you would like to mark as returned (R####): ")
+        validRentalID = validateRentalID(RentalID) 
+        if validRentalID == True: 
+            confirmRentalID(RentalID)
+            confirmRental = input("Enter 'y' if it is correct: ")
+
+    return RentalID
+# RentalInput 
+
 # Get RentalID from user input and validate input
-validRentalID = False
-confirmRental = ""
-while confirmRental != "y": # Exits loop when validRentalID == True and confirmRental == "y"
-    RentalID = input("Enter the Rental ID of the Rental you would like to mark as returned (R####): ")
-    validRentalID = validateRentalID(RentalID)
-    if validRentalID == True: 
-        confirmRentalID(RentalID)
-        confirmRental = input("Enter 'y' if it is correct: ")
+RentalID = RentalInput()
 
 # Read the CSV file into a DataFram e
 df = pd.read_csv('Inventory/Rentals.csv')

@@ -6,7 +6,7 @@ M0004,Katie,Brown,739-419-6448,KatieBrown@gmail.com,0
 M0005,John,Brown,559-871-8808,JohnBrown@gmail.com,0
 M0006,Katie,Garcia,403-163-2212,KatieGarcia@gmail.com,0
 M0007,Michael,Jones,196-234-2261,MichaelJones@gmail.com,0
-M0008,John,Williams,111-690-8919,JohnWilliams@gmail.com,0
+M0008,John,Williams,111-690-8919,JohnWilliams@gmail.com,3
 M0009,Katie,Jones,989-857-1319,KatieJones@gmail.com,0
 M0010,John,Martinez,549-522-7421,JohnMartinez@gmail.com,1
 M0011,Jane,Williams,865-883-2292,JaneWilliams@gmail.com,0
@@ -70,7 +70,7 @@ M0068,Laura,Brown,742-182-4247,LauraBrown@gmail.com,0
 M0069,John,Smith,600-972-9194,JohnSmith@gmail.com,0
 M0070,Alex,Brown,144-574-7950,AlexBrown@gmail.com,0
 M0071,Alex,Johnson,326-237-3304,AlexJohnson@gmail.com,0
-M0072,Jane,Miller,671-351-8060,JaneMiller@gmail.com,1
+M0072,Jane,Miller,671-351-8060,JaneMiller@gmail.com,0
 M0073,Katie,Williams,325-561-3270,KatieWilliams@gmail.com,0
 M0074,Katie,Garcia,908-933-7369,KatieGarcia@gmail.com,0
 M0075,Emily,Davis,219-223-9523,EmilyDavis@gmail.com,0
@@ -178,7 +178,7 @@ M0176,Laura,Jones,175-397-5725,LauraJones@gmail.com,0
 M0177,Chris,Jones,440-514-2960,ChrisJones@gmail.com,0
 M0178,Emily,Garcia,548-945-5734,EmilyGarcia@gmail.com,0
 M0179,John,Brown,798-744-9732,JohnBrown@gmail.com,0
-M0180,Emily,Martinez,686-515-7467,EmilyMartinez@gmail.com,0
+M0180,Emily,Martinez,686-515-7467,EmilyMartinez@gmail.com,1
 M0181,Michael,Brown,935-714-6964,MichaelBrown@gmail.com,0
 M0182,Laura,Rodriguez,900-193-2834,LauraRodriguez@gmail.com,0
 M0183,Chris,Smith,599-190-3890,ChrisSmith@gmail.com,0

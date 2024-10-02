@@ -5,8 +5,10 @@ import pandas as pd
 from validateEntries import generateRentalID
 from validateEntries import validateVideoGameID
 from validateEntries import confirmVideoGameID
+from validateEntries import checkAvailability
 from validateEntries import validateMemberID
 from validateEntries import confirmMemberID
+from validateEntries import checkRentalLimit
 from validateEntries import generateDate
 from linkIDs import rentOut
 from linkIDs import incRentals
@@ -16,12 +18,15 @@ from linkIDs import incRentals
 def VideoGameInput(): 
     validGameID = False 
     confirmGameID = "" 
-    while confirmGameID != "y": # Exits loop when validGameID == True and confirmGameID == "y" 
+    while confirmGameID != "y": # Exits loop when validGameID == True and available == True 
+                                # and confirmGameID == "y" 
         VideoGameID = input("Enter Valid Video Game ID (V####): ") 
-        validGameID = validateVideoGameID(VideoGameID) 
-        if validGameID == True: 
-            confirmVideoGameID(VideoGameID) 
-            confirmGameID = input("Enter 'y', if it is correct: ")
+        validGameID = validateVideoGameID(VideoGameID)
+        if validGameID == True:
+            confirmVideoGameID(VideoGameID)
+            available = checkAvailability(VideoGameID)
+            if (available == True): 
+                confirmGameID = input("Enter 'y', if it is correct: ")
 
     return VideoGameID
 # VideoGameInput
@@ -29,12 +34,15 @@ def VideoGameInput():
 def MemberInput():
     validMemberID = False 
     confirmMember = ""
-    while confirmMember != "y": #Exits loop when validMemberID == True and confirmGameID == "y"
+    while confirmMember != "y": # Exits loop when validMemberID == True and limitStat == True 
+                                # and confirmGameID == "y"
         MemberID = input("Enter Valid Member ID (M####): ") 
         validMemberID = validateMemberID(MemberID) 
         if validMemberID == True: 
             confirmMemberID(MemberID) 
-            confirmMember = input("Enter 'y', if it is correct: ")
+            limitStat = checkRentalLimit(MemberID)
+            if (limitStat == True): 
+                confirmMember = input("Enter 'y', if it is correct: ")
 
     return MemberID
 # MemberInput

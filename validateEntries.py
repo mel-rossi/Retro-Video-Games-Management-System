@@ -80,3 +80,28 @@ def confirmRentalID(RentalInput):
 def generateDate(): 
     return pd.Timestamp.today().date()
 # generateDate
+
+def checkAvailability(VideoGameInput): 
+    row = df2.loc[df2.iloc[:, 0] == VideoGameInput] # Find correct Row 
+    if row.iloc[:, -1].eq('Available').any(): # Find the value of the last column : -1 = last column 
+                                              # check if said value == 'Available'
+        return True # Available 
+    print("VideoGame " + VideoGameInput + " is unavailable.")
+    return False # Unavailable 
+# checkAvailibility
+
+def checkRentalLimit(MemberInput): 
+    row = df3.loc[df3.iloc[:, 0] == MemberInput] # Find correct Row 
+    if row.iloc[:, -1].item() < 5: # Find if value of last column is less than 5 : -1 = last column 
+                                   # check if said value < 5
+        return True # Limit Not Reached
+    print("Member " + MemberInput + " has reached their Rental Limit(5).")
+    return False # Limit Reached
+# checkRentalLimit
+
+def checkRentalStatus(RentalInput): 
+    row = df1.loc[df1.iloc[:, 0] == RentalInput] # Find correct Row
+    if row.iloc[:, -1].eq('Active').any(): # Find the value of the last column : -1 = last column
+        return True # Active 
+    print("Rental " + RentaInput + " is inactive.")
+    return False # Inactive

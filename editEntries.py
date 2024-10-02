@@ -5,6 +5,7 @@
 import pandas as pd 
 from validateEntries import validateRentalID
 from validateEntries import confirmRentalID
+from validateEntries import checkRentalStatus
 from validateEntries import generateDate
 from linkIDs import returnGame
 from linkIDs import decRentals
@@ -18,7 +19,9 @@ def RentalInput():
         validRentalID = validateRentalID(RentalID) 
         if validRentalID == True: 
             confirmRentalID(RentalID)
-            confirmRental = input("Enter 'y' if it is correct: ")
+            Stat = checkRentalStatus(RentalID) 
+            if Stat == True: 
+                confirmRental = input("Enter 'y' if it is correct: ")
 
     return RentalID
 # RentalInput 

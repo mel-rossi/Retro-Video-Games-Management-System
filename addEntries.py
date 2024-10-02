@@ -11,32 +11,47 @@ from validateEntries import generateDate
 from linkIDs import rentOut
 from linkIDs import incRentals
 
+# Functions
+
+def VideoGameInput(): 
+    validGameID = False 
+    confirmGameID = "" 
+    while confirmGameID != "y": # Exits loop when validGameID == True and confirmGameID == "y" 
+        VideoGameID = input("Enter Valid Video Game ID (V####): ") 
+        validGameID = validateVideoGameID(VideoGameID) 
+        if validGameID == True: 
+            confirmVideoGameID(VideoGameID) 
+            confirmGameID = input("Enter 'y', if it is correct: ")
+
+    return VideoGameID
+# VideoGameInput
+
+def MemberInput():
+    validMemberID = False 
+    confirmMember = ""
+    while confirmMember != "y": #Exits loop when validMemberID == True and confirmGameID == "y"
+        MemberID = input("Enter Valid Member ID (M####): ") 
+        validMemberID = validateMemberID(MemberID) 
+        if validMemberID == True: 
+            confirmMemberID(MemberID) 
+            confirmMember = input("Enter 'y', if it is correct: ")
+
+    return MemberID
+# MemberInput
+
 # Get user input and generate valid values
 
 # Generate the valid next RentalID for the Rental being added
 RentalID = generateRentalID()
 
 # Get VideoGameID from user input and validate input 
-validGameID = False
-confirmGameID = ""
-while confirmGameID != "y": # Exits loop when validGameID == True and confirmGameID == "y"
-    VideoGameID = input("Enter Valid Video Game ID (V####): ")
-    validGameID = validateVideoGameID(VideoGameID)
-    if validGameID == True:
-        confirmVideoGameID(VideoGameID)
-        confirmGameID = input("Enter 'y', if it is correct: ")
-           
-# Get MemberID from user input and validate input
-validMemberID = False
-confirmMember = ""
-while confirmMember != "y": # Exits loop when validMemberID == True and confirmGameID == "y"
-    MemberID = input("Enter Valid Member ID (M####): ")
-    validMemberID = validateMemberID(MemberID)
-    if validMemberID == True:
-        confirmMemberID(MemberID)
-        confirmMember = input("Enter 'y', if it is correct: ")
+VideoGameID = VideoGameInput()
 
-# For pratical purposes, generate today's date. As the log would generally be made alongside the Rental, 
+# Get MemberID from user input and validate input
+MemberID = MemberInput()
+
+# For pratical purposes, generate today's date. 
+# As the log would generally be made alongside the Rental,
 # therefore on the same date
 StartDate = generateDate()
 

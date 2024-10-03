@@ -1,5 +1,5 @@
-# Validation & Valid Generation methods 
-# Currently a Work In Progress
+# Validation & Generation Methods 
+
 import pandas as pd
 
 # Data Frames 
@@ -12,7 +12,8 @@ df2 = pd.read_csv('Inventory/VideoGames.csv')
 
 # Read Members
 df3 = pd.read_csv('Inventory/Members.csv')
- 
+
+# Generate the next valid RentalID 
 def generateRentalID():
     # Iterate through the column RentalID
     for rentalID in df1['RentalID']: 
@@ -25,7 +26,8 @@ def generateRentalID():
     number += 1
     return 'R' + format(number, '04') 
 # generateRentalID
-                        
+                 
+# Check Validation of VideoGameID input 
 def validateVideoGameID(VideoGameInput): 
     # Iterate through the column VideoGameID
     for VideoGameID in df2['VideoGameID']: 
@@ -36,6 +38,7 @@ def validateVideoGameID(VideoGameInput):
     return False 
 # validateVideoGameID
 
+# Confirm if the VideoGameID entered is the correct one 
 def confirmVideoGameID(VideoGameInput): 
     # Display Video Game information based on ID
     print("This is the Video Game registration of the corresponding ID: ")
@@ -43,6 +46,7 @@ def confirmVideoGameID(VideoGameInput):
     print(result)
 # confirmVideoGameID
 
+# Check Validation of MemberID input 
 def validateMemberID(MemberInput): 
     # Iterate through the column MemberID
     for MemberID in df3['MemberID']: 
@@ -53,6 +57,7 @@ def validateMemberID(MemberInput):
     return False
 # validateMemberID
 
+# Confirm if the MemberID entered is the correct one 
 def confirmMemberID(MemberInput): 
     # Display Member information based on ID
     print("This is the Member registration of the corresponding ID: ")
@@ -60,6 +65,7 @@ def confirmMemberID(MemberInput):
     print(result)
 # confirmMemberID
 
+# Check Validation of RentalID input 
 def validateRentalID(RentalInput): 
     # Iterate through the column RentalID
     for RentalID in df1['RentalID']: 
@@ -70,6 +76,7 @@ def validateRentalID(RentalInput):
     return False
 # validateRentalID 
 
+# Confirm if the RentalID entered is the correct one 
 def confirmRentalID(RentalInput): 
     # Display Rental information based on ID
     print("This is the Rental registration of the corresponding ID: ")
@@ -77,10 +84,12 @@ def confirmRentalID(RentalInput):
     print(result)
 # confirmRentalID
 
+# Generate today's date: YYYY-MM-DD
 def generateDate(): 
     return pd.Timestamp.today().date()
 # generateDate
 
+# Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
     row = df2.loc[df2.iloc[:, 0] == VideoGameInput] # Find correct Row 
     if row.iloc[:, -1].eq('Available').any(): # Find the value of the last column : -1 = last column 
@@ -90,6 +99,7 @@ def checkAvailability(VideoGameInput):
     return False # Unavailable 
 # checkAvailibility
 
+# Check Rental Limit based on MemberID input 
 def checkRentalLimit(MemberInput): 
     row = df3.loc[df3.iloc[:, 0] == MemberInput] # Find correct Row 
     if row.iloc[:, -1].item() < 5: # Find if value of last column is less than 5 : -1 = last column 
@@ -99,6 +109,7 @@ def checkRentalLimit(MemberInput):
     return False # Limit Reached
 # checkRentalLimit
 
+# Check Rental Status based on RentalID input 
 def checkRentalStatus(RentalInput): 
     row = df1.loc[df1.iloc[:, 0] == RentalInput] # Find correct Row
     if row.iloc[:, -1].eq('Active').any(): # Find the value of the last column : -1 = last column

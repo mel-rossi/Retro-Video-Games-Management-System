@@ -1,5 +1,6 @@
 # This file allows the user to edit entries in the Rentals table
-# For pratical purposes it currently only generates the return date and changes the Status of the Rental 
+# For pratical purposes it currently only generates the return date 
+# and changes the Status of the Rental 
 
 # Imports
 import pandas as pd 
@@ -11,6 +12,8 @@ from linkIDs import returnGame
 from linkIDs import decRentals
 
 # Function
+
+# Get user input for RentalID and perform validation checks 
 def RentalInput(): 
     validRentalID = False
     confirmRental = "" 

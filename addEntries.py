@@ -15,6 +15,7 @@ from linkIDs import incRentals
 
 # Functions
 
+# Get user input for VideoGameID and perform validation checks 
 def VideoGameInput(): 
     validGameID = False 
     confirmGameID = "" 
@@ -31,6 +32,7 @@ def VideoGameInput():
     return VideoGameID
 # VideoGameInput
 
+# Get user input for MemberID and perform validation checks 
 def MemberInput():
     validMemberID = False 
     confirmMember = ""

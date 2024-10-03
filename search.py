@@ -1,12 +1,12 @@
 import pandas as pd
-from flask import Flask, request, jsonify
+from flask import Flask, request
 
-search = Flask(__name__)
+app = Flask(__name__)
 
-@search.route('/search', methods=['POST'])
-def output():
+@app.route('/search', methods=['POST'])
+def search():
     data = request.json
-    option = data.get('option')
+    option = data['option']
     # valid option values are: 'all', 'title', 'id', publisher', 'year', 'availability'
     # idea - frontend javascript should have buttons, properly labelled, and when clicked
     # sends a value to this python program
@@ -30,7 +30,7 @@ def output():
             case 'available':
                 result = search_available()
                 # no input
-    jsonify(result.to_json())
+    result.to_html(open('searchResults.html', 'w'))
 
 def search_all():
     return pd.read_csv('VideoGames.csv')
@@ -54,6 +54,6 @@ def search_year(start_year, end_year):
 def search_available():
     df = pd.read_csv('VideoGames.csv')
     return df[(df['Availability'] == 'Available')]
-    
+
 if __name__ == '__main__':
-    search.run(debug=True)
+    app.run(debug=True)

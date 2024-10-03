@@ -1,10 +1,6 @@
 import pandas as pd
 from flask import Flask, request, jsonify
 
-# WIP!!! 
-# this code returns json of dataframes based off which function is selected
-# first time using flask please bare with me lol
-
 search = Flask(__name__)
 
 @search.route('/search', methods=['POST'])
@@ -34,7 +30,6 @@ def output():
             case 'available':
                 result = search_available()
                 # no input
-        
     jsonify(result.to_json())
 
 def search_all():
@@ -60,3 +55,5 @@ def search_available():
     df = pd.read_csv('VideoGames.csv')
     return df[(df['Availability'] == 'Available')]
     
+if __name__ == '__main__':
+    search.run(debug=True)

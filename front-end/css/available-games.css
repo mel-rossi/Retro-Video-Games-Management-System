@@ -1,0 +1,128 @@
+/* Back Button Styling */
+.back-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    top: 30px;
+    left: 20px;
+}
+
+.back-button:hover {
+    background-color: #45a049;
+}
+
+/* Title Styling */
+.title-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.title-container h1 {
+    font-size: 40px;
+    color: white;
+}
+
+/* Search and Filter Section */
+.search-filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.search-filter-container input, 
+.search-filter-container select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 200px;
+}
+
+.search-filter-container .search-button {
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-filter-container .search-button:hover {
+    background-color: #e64a19;
+}
+
+/* Game List Styling */
+.game-list-container {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 400px;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 15px;
+    overflow-y: auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    background-color: rgba(255, 255, 255, 0.741); 
+    border: 1px solid #ddd;
+    padding-top: 10px;
+    scrollbar-width: none;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+.game-list-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.game-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 15px;
+}
+
+.game-list-container::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 100%;
+}
+
+.game-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+}
+
+.game-card h3 {
+    font-family: 'Lato', sans-serif;
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.game-card p {
+    font-family: 'Lato', sans-serif;
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}

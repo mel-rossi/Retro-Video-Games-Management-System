@@ -46,11 +46,25 @@
     width: 200px;
 }
 
+.search-filter-container .search-button {
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-filter-container .search-button:hover {
+    background-color: #e64a19;
+}
+
 /* Game List Styling */
 .game-list-container {
     width: 100%;
     max-width: 1200px;
-    min-height: 400px; /* Set fixed height */
+    min-height: 400px;
     margin: 5px;
     padding: 10px;
     border-radius: 15px;

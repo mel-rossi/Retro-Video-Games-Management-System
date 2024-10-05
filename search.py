@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -53,8 +53,7 @@ def output():
             case 'available':
                 results = search_available()
                 # no input
-    with open('searchResults.html', 'w') as f:
-        results.to_html(f, index=False)
+    return jsonify(results.to_dict(orient='records'))
 
 if __name__ == '__main__':
     app.run(debug=True)

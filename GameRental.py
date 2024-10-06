@@ -4,14 +4,16 @@
 
 # Imports 
 import pandas as pd 
-from flask import Flask
+from flask import Flask, request, jsonify
 
 app = Flask(__name__) # Define app here 
 
-@app.route('/') # Route Definition 
+@app.route('/', methods=['POST']) # Route Definition 
 
-def hello(): 
-    return 'Hello, Word!'
+def game_info():
+    game = request.get_json()
+    gameID = game.get('gameID', 0)
+    return jsonify({"result": gameID}) 
 
 if __name__ == '__main__': 
     app.run(debug=True)

@@ -1,64 +1,56 @@
-from flask import Flask, request, jsonify
 import pandas as pd
 
-app = Flask(__name__)
+#Load the CSV file
+file_path = 'Inventory/Members.csv'
+members_df = pd.read_csv('Inventory/Members.csv')
 
-# Open Rentals.csv and Members.csv
-df_Rentals = pd.read_csv('Inventory/Rentals.csv')
-df_Members = pd.read_csv('Inventory/Members.csv')
+def member_layout(row):
+    """ Formats the member info for output"""
 
+    member_id = row['MemberID']
+    first_name = row['FirstName']
+    last_name = row['LastName']
+    phone_number = row['PhoneNumber']
+    email = row['Email']
+    rentals = row['CurRentals']
 
-# Get member details and rental status by member ID
-def get_member_info ():
-   # Get Member ID and Phone Number from the POST request (sent from JavaScript)
-    MemberID_input = request.json('MemberID')
-    phone_number_input = request.json.get('PhoneNumber')
-    
-   # Search for member either by Member ID or Phone Number
-    if MemberID_input:
-        member_row = df_Members[df_Members['MemberID'] == MemberID_input]
-    elif phone_number_input:
-        member_row = df_Members[df_Members['PhoneNumber'] == phone_number_input]
+    # Member ID auto format
+    #member_id = f"M{member_id}"
+
+    # 10-digit phone number auto format ###-###-####
+    #phone_number = f"{phone_number[:3]}-{phone_number[3:6]}-{phone_number[6:]}"
+
+    #print member details
+    print(f"Member ID: {member_id}")
+    print(f"First Name: {first_name}")
+    print(f"Last Name: {last_name}")
+    print(f"Phone Number: {phone_number}")
+    print(f"Email: {email}")
+    print(f"Rental Count: {rentals}")
+
+def search_member(user_input):
+    """ Finds and returns a member based on the input (Member ID / Phone Number)"""
+
+    if user_input.isdigit() and len(user_input) == 4:
+        user_input = "M" + user_input #automatically add "M" before the number
+
+    if user_input.startswith("M") and len(user_input) == 5:
+        member = members_df[members_df['MemberID'] == user_input]
     else:
-        return jsonify({"error": "Please provide either Member ID or Phone Number."})
+        updated_input = user_input.replace("-","").replace(" ","")
+        member = members_df[members_df['PhoneNumber'].str.replace("-","").str.replace(" ","") == updated_input]
     
-    # Check if member exists
-    if member_row.empty:
-        return jsonify({"error": "Member not found."})
-    
-        
-    # Extract member details
-    first_name = member_row['FirstName'].values[0]
-    last_name = member_row['LastName'].values[0]
-    phone_number = member_row['PhoneNumber'].values[0]
-    email = member_row['Email'].values[0]
-    #cur_rentals = member_row['CurRentals'].values[0]
-
-    # Search for rentals related to the member in Rentals.csv
-    rental_records = df_Rentals[df_Rentals['MemberID'] == member_row['MemberID'].values[0]]
-
-    # Count occurrences of 'Active'
-    active_count = (rental_records['Status'] == 'Active').sum()
-
-    # Determine Rental Status
-    if active_count >= 5:
-        rental_status = f"Maximum limit Reached! \n Number of video games rented: {active_count} "
+    #if member is found, print the information
+    if not member.empty:
+        member_layout(member.iloc[0])
     else:
-        rental_status = f"Number of video games rented: {active_count}"
+        print("No member found with the provided ID or phone number.")
+
+# Main loop 
+while True:
+    user_input = input("Enter Member ID (M####) or 10-Digit Phone Number, or type exit to quit: ").strip()
+    if user_input.lower() == 'exit':
+        print("Exiting the program.")
+        break
     
-    # Send member details and rental status as JSON response
-    return jsonify({
-        "MemberID": member_row['MemberID'].values[0],
-        "FirstName": first_name,
-        "LastName": last_name,
-        "PhoneNumber": phone_number,
-        "Email": email,
-        "RentalStatus": rental_status
-    })
-   
-   
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
+    search_member(user_input)

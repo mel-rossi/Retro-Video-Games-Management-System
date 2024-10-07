@@ -24,21 +24,20 @@ def filterRentals(VideoGameInput):
 
 # Print out Rental Information of VideoGameID
 def RentalInfo(VideoGameInput): 
-    print("This are the Rental registrations of the following Video Game: ")
-    
     # Filter relevant rentals 
     rentals = filterRentals(VideoGameInput) 
 
     # Display Rental Registrations based on VideoGameID
 
     if rentals.empty:
-        print("No Rentals for this Video Game were made.")
         return False # VideoGameID doesn't appear in Rentals at all
     else: 
+        print("These are the Rentals registrations of the following Video Game: \n")
         for index, row in rentals.iterrows(): 
             dic = row.to_dict() # Convert to dictionary 
             for key, value in dic.items(): 
                 print(f"{key}: {value}")
+            print('\n')
         return True # VideoGameID appears in Rentals at least once 
 # RentalInfo 
 
@@ -69,14 +68,15 @@ def avgRentalTime(VideoGameInput, exist):
 # avgRentalTime 
 
 # Calculate : How many times VideoGameID has been rented out 
-def rentNum(VideoGameInput, exist): 
+def rentNum(VideoGameInput, exist):
     # No Rentals with Video Game ID
-    if not exist: 
-        return None 
+    if not exist:
+        return None
 
     # Filter relevant rentals 
     rentals = filterRentals(VideoGameInput) 
 
+    # Initialize number of rentals
     num = 0
 
     # Iterate through teh column VideoGameID in Rentals 
@@ -84,34 +84,65 @@ def rentNum(VideoGameInput, exist):
         if VideoGameID == VideoGameInput: 
             num += 1
 
-    print(f"This Video Game has been rented out {num} time(s) before.") 
     return num
 # rentNum
 
-# Rank based on number of times VideoGames have been rented out 
+# Rank Video Games based on number of times they have been rented out
+def rank():
+    rentals = [] 
+    for VideoGameID in df2['VideoGameID']: 
+        exist = not filterRentals(VideoGameID).empty
+        numRentals = rentNum(VideoGameID, exist) 
+        rentals.append((VideoGameID, numRentals)) 
+    
+    # Convert to DataFrame for easy sorting 
+    sortByRentals = pd.DataFrame(rentals, columns=['VideoGameID', 'rentNum'])
+
+    # Merge rentals with VideoGames DataFrame 
+    merge = pd.merge(df2, sortByRentals, on='VideoGameID', how='left')
+    merge['rentNum'] = merge['rentNum'].fillna(0) # Fill in no rentals with 0 
+
+    # Sort merged DataFrame by rentNum in descending order
+    sortedGames = merge.sort_values(by='rentNum', ascending=False)
+
+    # Print out sorted Games
+    print(sortedGames) 
+    return sortedGames
+# rank
 
 # How many VideoGame IDs are currently active rentals
 
 # How many rentals have there been ever 
 
+# Run
 while True: 
     # Note: Add Title input later 
-    VideoGameID = input("Enter Video Game ID (V####), or type exit to quit: ").strip()
+    VideoGameID = input("Enter Video Game ID (V####), 'rank' to see the ranking of Video Games on how often they have been rented out, or 'exit' to quit: ").strip()
 
+    print('\n')
+
+    # Exit the Program    
     if VideoGameID.lower() == 'exit': 
         print("Exiting the program.") 
-        break 
+        break
+    # Rank Rentals based on numRentals
+    elif VideoGameID.lower() == 'rank': 
+        sortedRentals = rank();
+        continue
 
     # Note: Add validation for existent Video Game ID here. 
    
-    # Rentals related to inputed VideoGameID 
+    # Rentals related to inputed VideoGameID
     rentalExist = RentalInfo(VideoGameID) 
     
     # Calculate average Rental Time of said Video Game 
     avgRentalTime(VideoGameID, rentalExist)
 
     # Calculate how many times said Video Game has been Rented 
-    numRentals = rentNum(VideoGameID, rentalExist) 
-
-
+    numRentals = rentNum(VideoGameID, rentalExist)
+    if numRentals == None: 
+        print("No Rentals of this Game have been made.")
+    else: 
+        print(f"This Video Game has been rented out {numRentals} time(s) before.")
+    print('\n')
 

@@ -17,7 +17,7 @@ df2 = pd.read_csv('Inventory/VideoGames.csv')
 
 # Functions
 
-# Filter rows where VideoGameID matches VideoGameInput 
+# Filter Rental rows where VideoGameID matches VideoGameInput 
 def filterRentals(VideoGameInput): 
     return df1[df1['VideoGameID'] == VideoGameInput].copy()
 # filterRentals
@@ -42,7 +42,7 @@ def RentalInfo(VideoGameInput):
         return True # VideoGameID appears in Rentals at least once 
 # RentalInfo 
 
-# Calculate average Rental Time (Return - Start Date)
+# Calculate : Average Rental Time (Return - Start Date)
 def avgRentalTime(VideoGameInput, exist):
     # No Rentals with Video Game ID 
     if not exist: 
@@ -68,7 +68,25 @@ def avgRentalTime(VideoGameInput, exist):
     print(f"The average Rental Time of the following Video Game is {average} days.")
 # avgRentalTime 
 
-# How many times VideoGame ID has been rented out 
+# Calculate : How many times VideoGameID has been rented out 
+def rentNum(VideoGameInput, exist): 
+    # No Rentals with Video Game ID
+    if not exist: 
+        return None 
+
+    # Filter relevant rentals 
+    rentals = filterRentals(VideoGameInput) 
+
+    num = 0
+
+    # Iterate through teh column VideoGameID in Rentals 
+    for VideoGameID in df1['VideoGameID']: 
+        if VideoGameID == VideoGameInput: 
+            num += 1
+
+    print(f"This Video Game has been rented out {num} time(s) before.") 
+    return num
+# rentNum
 
 # Rank based on number of times VideoGames have been rented out 
 
@@ -86,8 +104,14 @@ while True:
 
     # Note: Add validation for existent Video Game ID here. 
    
+    # Rentals related to inputed VideoGameID 
     rentalExist = RentalInfo(VideoGameID) 
     
+    # Calculate average Rental Time of said Video Game 
     avgRentalTime(VideoGameID, rentalExist)
+
+    # Calculate how many times said Video Game has been Rented 
+    numRentals = rentNum(VideoGameID, rentalExist) 
+
 
 

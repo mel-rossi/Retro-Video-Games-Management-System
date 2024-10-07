@@ -96,9 +96,25 @@ def activeRentals():
         if Status == 'Active': 
             active += 1
 
-    print(f"There are current {active} Active Rentals.\n")
+    print(f"There are currently {active} Active Rentals.\n")
     return active
 # activeRentals
+
+# Calculate : How many inactive rentals are there right now? 
+def inactiveRentals(): 
+    inactive = 0
+
+    # Iterate through Status column in Rentals 
+    for Status in df1['Status']:
+        if Status == 'Inactive': 
+            inactive += 1
+
+    print(f"There are currently {inactive} Inactive Rentals.\n")
+    return inactive
+# inactiveRentals
+
+# Calculate : How many rentals have the been ever? 
+#def allRentals(): 
 
 # Rank Video Games based on number of times they have been rented out
 def rank():
@@ -128,16 +144,16 @@ def rank():
     return sortedGames
 # rank
 
-# How many rentals have there been ever 
-
 # Run
 while True: 
     # Note: Add Title input later 
     VideoGameID = input("Enter one of these:" +  
-                "\n\t'V####', a Video Game ID, to see the Rental History of the Video Game its associated with," + 
+                "\n\t'V####' (a Video Game ID) to see the Rental History of the Video Game its associated with," + 
                 "\n\t'rank' to see the ranking of Video Games based on how often they have been rented out," + 
                 "\n\t'active' to find out how many Video Games are currently being rented out," + 
-                "\n\t'rental' to find out how many Video Games in total have ever been rented out,"                                   "\n\t'exit' to quit: ").strip()
+                "\n\t'inactive' to find out how many fulfilled (closed) Rental Transations there have been," + 
+                "\n\t'all' to find out how many total Rental Transations there have been" + 
+                "\n\t'exit' to quit: ").strip()
 
     print('\n')
 
@@ -154,6 +170,11 @@ while True:
     # Number of active Rentals 
     elif VideoGameID.lower() == 'active': 
         active = activeRentals()
+        continue
+
+    # Number of inactive Rentals 
+    elif VideoGameID.lower() == 'inactive': 
+        inactive = inactiveRentals()
         continue
 
     # Note: Add validation for existent Video Game ID here. 

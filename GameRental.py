@@ -4,19 +4,6 @@
 
 # Imports 
 import pandas as pd 
-from flask import Flask, request, jsonify
-
-app = Flask(__name__) # Define app here 
-
-@app.route('/', methods=['POST']) # Route Definition 
-
-def game_info():
-    game = request.get_json()
-    gameID = game.get('gameID', 0)
-    return jsonify({"result": gameID}) 
-
-if __name__ == '__main__': 
-    app.run(debug=True)
 
 # Data Frames 
 
@@ -25,8 +12,27 @@ df1 = pd.read_csv('Inventory/Rentals.csv')
 
 # Read VideoGames 
 df2 = pd.read_csv('Inventory/VideoGames.csv')
-                           
+                          
+
+# Functions 
+
 # Print out Rental Information of VideoGameID
+def RentalInfo(VideoGameInput): 
+    print("This are the Rental registrations of the the following Game ID: ")
+    
+    # Filter rows where VideoGameID matches VideoGameInput 
+    rentals = df1[df1['VideoGameID'] == VideoGameInput] 
+
+    # Display Rental Registrations based on VideoGameID
+
+    if rentals.empty: # VideoGameID doesn't appear in Rentals at all
+        print("No Rentals for this Video Game were made.")
+    else: 
+        for index, row in rentals.iterrows(): 
+            dic = row.to_dict() # Convert to dictionary 
+            for key, value in dic.items(): 
+                print(f"{key}: {value}")
+# RentalInfo 
 
 # Calculate average Rental Time (Start - Return Date) 
 
@@ -37,4 +43,17 @@ df2 = pd.read_csv('Inventory/VideoGames.csv')
 # How many VideoGame IDs are currently active rentals
 
 # How many rentals have there been ever 
+
+while True: 
+    # Note: Add Title input later 
+    VideoGameID = input("Enter Video Game ID (V####), or type exit to quit: ").strip()
+
+    if VideoGameID.lower() == 'exit': 
+        print("Exiting the program.") 
+        break 
+
+    # Note: Add validation for existent Video Game ID here. 
+    
+    RentalInfo(VideoGameID)
+
 

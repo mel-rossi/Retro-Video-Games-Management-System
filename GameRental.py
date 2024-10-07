@@ -114,7 +114,15 @@ def inactiveRentals():
 # inactiveRentals
 
 # Calculate : How many rentals have the been ever? 
-#def allRentals(): 
+def allRentals(): 
+    rentals = 0
+
+    for _, _ in df1.iterrows(): 
+        rentals += 1
+    
+    print(f"There have been {rentals} Rentals in Total thus far.\n")
+    return rentals + 1
+# allRentals
 
 # Rank Video Games based on number of times they have been rented out
 def rank():
@@ -175,6 +183,10 @@ while True:
     # Number of inactive Rentals 
     elif VideoGameID.lower() == 'inactive': 
         inactive = inactiveRentals()
+        continue
+
+    elif VideoGameID.lower() == 'all': 
+        rentalsEver = allRentals() 
         continue
 
     # Note: Add validation for existent Video Game ID here. 

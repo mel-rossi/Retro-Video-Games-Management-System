@@ -15,14 +15,19 @@ df1 = pd.read_csv('Inventory/Rentals.csv')
 df2 = pd.read_csv('Inventory/VideoGames.csv')
                           
 
-# Functions 
+# Functions
+
+# Filter rows where VideoGameID matches VideoGameInput 
+def filterRentals(VideoGameInput): 
+    return df1[df1['VideoGameID'] == VideoGameInput].copy()
+# filterRentals
 
 # Print out Rental Information of VideoGameID
 def RentalInfo(VideoGameInput): 
     print("This are the Rental registrations of the following Video Game: ")
     
-    # Filter rows where VideoGameID matches VideoGameInput 
-    rentals = df1[df1['VideoGameID'] == VideoGameInput].copy() 
+    # Filter relevant rentals 
+    rentals = filterRentals(VideoGameInput) 
 
     # Display Rental Registrations based on VideoGameID
 
@@ -37,14 +42,14 @@ def RentalInfo(VideoGameInput):
         return True # VideoGameID appears in Rentals at least once 
 # RentalInfo 
 
-# Calculate average Rental Time (Start - Return Date)
+# Calculate average Rental Time (Return - Start Date)
 def avgRentalTime(VideoGameInput, exist):
     # No Rentals with Video Game ID 
     if not exist: 
         return None 
 
-    # Filter rows where VideoGameID matches VideoGameInput 
-    rentals = df1[df1['VideoGameID'] == VideoGameInput].copy() # Note: Consider putting into Func so it doesn't                                                                   # need to be written / copy pasted over and over                                                                   # again. Save a little code bloating  
+    # Filter relevant rentals 
+    rentals = filterRentals(VideoGameInput) 
 
     # Convert date columns to datetime
     rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])

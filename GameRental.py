@@ -1,6 +1,6 @@
-# This program Shows Hisory based off of the Video Game instead of the Member
+# This program Shows Hisory based off of the Video Game
 
-# BIG WIP
+# Functional WIP
 
 # Imports 
 import pandas as pd 
@@ -13,7 +13,6 @@ df1 = pd.read_csv('Inventory/Rentals.csv')
 
 # Read VideoGames 
 df2 = pd.read_csv('Inventory/VideoGames.csv')
-                          
 
 # Functions
 
@@ -113,7 +112,7 @@ def inactiveRentals():
     return inactive
 # inactiveRentals
 
-# Calculate : How many rentals have the been ever? 
+# Calculate : How many rentals have there been ever? 
 def allRentals(): 
     rentals = 0
 
@@ -164,6 +163,11 @@ while True:
                 "\n\t'exit' to quit: ").strip()
 
     print('\n')
+
+    # Note: Change to switch statement 
+
+    # Note: Change printing into method or outside, depending on utility 
+        # Ask about return method of functions when flask 
 
     # Exit the Program    
     if VideoGameID.lower() == 'exit': 

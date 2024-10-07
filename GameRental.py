@@ -4,6 +4,7 @@
 
 # Imports 
 import pandas as pd 
+from validateEntries import generateDate
 
 # Data Frames 
 
@@ -18,23 +19,49 @@ df2 = pd.read_csv('Inventory/VideoGames.csv')
 
 # Print out Rental Information of VideoGameID
 def RentalInfo(VideoGameInput): 
-    print("This are the Rental registrations of the the following Game ID: ")
+    print("This are the Rental registrations of the following Video Game: ")
     
     # Filter rows where VideoGameID matches VideoGameInput 
-    rentals = df1[df1['VideoGameID'] == VideoGameInput] 
+    rentals = df1[df1['VideoGameID'] == VideoGameInput].copy() 
 
     # Display Rental Registrations based on VideoGameID
 
-    if rentals.empty: # VideoGameID doesn't appear in Rentals at all
+    if rentals.empty:
         print("No Rentals for this Video Game were made.")
+        return False # VideoGameID doesn't appear in Rentals at all
     else: 
         for index, row in rentals.iterrows(): 
             dic = row.to_dict() # Convert to dictionary 
             for key, value in dic.items(): 
                 print(f"{key}: {value}")
+        return True # VideoGameID appears in Rentals at least once 
 # RentalInfo 
 
-# Calculate average Rental Time (Start - Return Date) 
+# Calculate average Rental Time (Start - Return Date)
+def avgRentalTime(VideoGameInput, exist):
+    # No Rentals with Video Game ID 
+    if not exist: 
+        return None 
+
+    # Filter rows where VideoGameID matches VideoGameInput 
+    rentals = df1[df1['VideoGameID'] == VideoGameInput].copy() # Note: Consider putting into Func so it doesn't                                                                   # need to be written / copy pasted over and over                                                                   # again. Save a little code bloating  
+
+    # Convert date columns to datetime
+    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
+    rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate'])
+
+    # Replace empty ReturnDate with today's data
+    today = pd.to_datetime(generateDate())
+    rentals['ReturnDate'] = rentals['ReturnDate'].fillna(today)
+
+    # Calculate rental duration in days
+    rentals['RentalDuration'] = (rentals['ReturnDate'] - rentals['StartDate']).dt.days
+
+    # Calculate the average rental duration 
+    average = rentals['RentalDuration'].mean()
+
+    print(f"The average Rental Time of the following Video Game is {average} days.")
+# avgRentalTime 
 
 # How many times VideoGame ID has been rented out 
 
@@ -53,7 +80,9 @@ while True:
         break 
 
     # Note: Add validation for existent Video Game ID here. 
+   
+    rentalExist = RentalInfo(VideoGameID) 
     
-    RentalInfo(VideoGameID)
+    avgRentalTime(VideoGameID, rentalExist)
 
 

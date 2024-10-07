@@ -87,9 +87,24 @@ def rentNum(VideoGameInput, exist):
     return num
 # rentNum
 
+# Calculate : How many active rentals are there right now? 
+def activeRentals(): 
+    active = 0
+
+    # Iterate through Status column in Rentals 
+    for Status in df1['Status']: 
+        if Status == 'Active': 
+            active += 1
+
+    print(f"There are current {active} Active Rentals.\n")
+    return active
+# activeRentals
+
 # Rank Video Games based on number of times they have been rented out
 def rank():
     rentals = [] 
+
+    # Iterate through VideoGameID column in Video Games 
     for VideoGameID in df2['VideoGameID']: 
         exist = not filterRentals(VideoGameID).empty
         numRentals = rentNum(VideoGameID, exist) 
@@ -105,19 +120,24 @@ def rank():
     # Sort merged DataFrame by rentNum in descending order
     sortedGames = merge.sort_values(by='rentNum', ascending=False)
 
+    # Drop the 'rentNum' column 
+    sortedGames = sortedGames.drop(columns=['rentNum'])
+
     # Print out sorted Games
     print(sortedGames) 
     return sortedGames
 # rank
-
-# How many VideoGame IDs are currently active rentals
 
 # How many rentals have there been ever 
 
 # Run
 while True: 
     # Note: Add Title input later 
-    VideoGameID = input("Enter Video Game ID (V####), 'rank' to see the ranking of Video Games on how often they have been rented out, or 'exit' to quit: ").strip()
+    VideoGameID = input("Enter one of these:" +  
+                "\n\t'V####', a Video Game ID, to see the Rental History of the Video Game its associated with," + 
+                "\n\t'rank' to see the ranking of Video Games based on how often they have been rented out," + 
+                "\n\t'active' to find out how many Video Games are currently being rented out," + 
+                "\n\t'rental' to find out how many Video Games in total have ever been rented out,"                                   "\n\t'exit' to quit: ").strip()
 
     print('\n')
 
@@ -125,9 +145,15 @@ while True:
     if VideoGameID.lower() == 'exit': 
         print("Exiting the program.") 
         break
+
     # Rank Rentals based on numRentals
     elif VideoGameID.lower() == 'rank': 
-        sortedRentals = rank();
+        sortedRentals = rank()
+        continue
+
+    # Number of active Rentals 
+    elif VideoGameID.lower() == 'active': 
+        active = activeRentals()
         continue
 
     # Note: Add validation for existent Video Game ID here. 

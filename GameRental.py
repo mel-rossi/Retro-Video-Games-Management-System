@@ -102,7 +102,6 @@ def activeRentals():
         if Status == 'Active': 
             active += 1
 
-    print(f"There are currently {active} Active Rentals.\n")
     return active
 # activeRentals
 
@@ -189,6 +188,7 @@ while True:
     # Number of active Rentals 
     elif VideoGameID.lower() == 'active': 
         active = activeRentals()
+        print(f"There are currently {active} Active Rentals. \n")
         continue
 
     # Number of inactive Rentals 

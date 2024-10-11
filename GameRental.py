@@ -155,8 +155,14 @@ def rank():
     return sortedGames
 # rank
 
+def get_input(userInput):
+    if userInput.lower() == 'rank':
+        sortedRentals = rank() 
+        print(sortedRentals)
+# get_input
+
 # Run
-while True: 
+while True: # Replace with app route & main function 
     # Note: Add Title input later 
     VideoGameID = input("Enter one of these:" +  
                 "\n\t'V####' (a Video Game ID) to see the Rental History of the Video Game its associated with," + 
@@ -168,7 +174,9 @@ while True:
 
     print('\n')
 
-    # Exit the Program    
+    # Call to get_input here
+
+    # Exit the Program    # Get rid of this
     if VideoGameID.lower() == 'exit': 
         print("Exiting the program.") 
         break
@@ -190,6 +198,7 @@ while True:
         inactive = inactive_rentals()
         print(f"There are currently {inactive} Inactive Rentals. \n")
         continue
+
 
     elif VideoGameID.lower() == 'all':
         rentalsEver = all_rentals()
@@ -218,3 +227,4 @@ while True:
         print(f"This Video Game has been rented out {numRentals} time(s) before.")
     print('\n')
 
+# If name here 

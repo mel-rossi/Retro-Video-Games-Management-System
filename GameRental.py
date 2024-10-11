@@ -21,6 +21,11 @@ def filterRentals(VideoGameInput):
     return df1[df1['VideoGameID'] == VideoGameInput].copy()
 # filterRentals
 
+# Check whether Rentals of said videoGame exist
+def rentalExist(VideoGameInput): 
+    return not filterRentals(VideoGameInput).empty
+# rentalExist 
+
 # Print out Rental Information of VideoGameID
 def RentalInfo(VideoGameInput): 
     # Filter relevant rentals 
@@ -28,16 +33,18 @@ def RentalInfo(VideoGameInput):
 
     # Display Rental Registrations based on VideoGameID
 
-    if rentals.empty:
-        return False # VideoGameID doesn't appear in Rentals at all
-    else: 
-        print("These are the Rentals registrations of the following Video Game: \n")
-        for index, row in rentals.iterrows(): 
-            dic = row.to_dict() # Convert to dictionary 
-            for key, value in dic.items(): 
-                print(f"{key}: {value}")
-            print('\n')
-        return True # VideoGameID appears in Rentals at least once 
+    if rentals.empty: 
+        return None 
+
+    info = "" 
+    for index, row in rentals.iterrows(): 
+        dic = row.to_dict() # Convert to dictionary 
+        for key, value in dic.items(): 
+            info += f"{key}: {value}\n"
+        info += '\n' # Add a newline between entries
+
+    return info 
+
 # RentalInfo 
 
 # Calculate : Average Rental Time (Return - Start Date)
@@ -189,20 +196,27 @@ while True:
         inactive = inactiveRentals()
         continue
 
-    elif VideoGameID.lower() == 'all': 
+    elif VideoGameID.lower() == 'all':
         rentalsEver = allRentals() 
         continue
 
     # Note: Add validation for existent Video Game ID here. 
    
+    if (filterRentals(VideoGameID).empty):
+        exist = False
+    else: 
+        exist = True
+
     # Rentals related to inputed VideoGameID
-    rentalExist = RentalInfo(VideoGameID) 
+    rentalData = RentalInfo(VideoGameID)
+    if rentalData != None: 
+        print(rentalData)
     
     # Calculate average Rental Time of said Video Game 
-    avgRentalTime(VideoGameID, rentalExist)
+    avgRentalTime(VideoGameID, exist)
 
     # Calculate how many times said Video Game has been Rented 
-    numRentals = rentNum(VideoGameID, rentalExist)
+    numRentals = rentNum(VideoGameID, exist)
     if numRentals == None: 
         print("No Rentals of this Game have been made.")
     else: 

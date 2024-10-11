@@ -70,7 +70,7 @@ def avgRentalTime(VideoGameInput, exist):
     # Calculate the average rental duration 
     average = rentals['RentalDuration'].mean()
 
-    print(f"The average Rental Time of the following Video Game is {average} days.")
+    return average
 # avgRentalTime 
 
 # Calculate : How many times VideoGameID has been rented out 
@@ -213,7 +213,9 @@ while True:
         print(rentalData)
     
     # Calculate average Rental Time of said Video Game 
-    avgRentalTime(VideoGameID, exist)
+    average = avgRentalTime(VideoGameID, exist)
+    if avgRentalTime != None: 
+        print(f"The average Rental Time of the following VideoGame is {average} days.")
 
     # Calculate how many times said Video Game has been Rented 
     numRentals = rentNum(VideoGameID, exist)

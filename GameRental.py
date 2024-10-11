@@ -26,16 +26,16 @@ def rentalExist(VideoGameInput):
     return not filterRentals(VideoGameInput).empty
 # rentalExist 
 
-# Print out Rental Information of VideoGameID
+# Organize Rental Information of VideoGameID
 def RentalInfo(VideoGameInput): 
     # Filter relevant rentals 
     rentals = filterRentals(VideoGameInput) 
 
-    # Display Rental Registrations based on VideoGameID
-
+    # No Rentals with Video Game ID
     if rentals.empty: 
         return None 
 
+    # Display Rental Registrations based on VideoGameID
     info = "" 
     for index, row in rentals.iterrows(): 
         dic = row.to_dict() # Convert to dictionary 
@@ -150,8 +150,7 @@ def rank():
     # Drop the 'rentNum' column 
     sortedGames = sortedGames.drop(columns=['rentNum'])
 
-    # Print out sorted Games
-    print(sortedGames) 
+    # Return sorted Games
     return sortedGames
 # rank
 
@@ -181,6 +180,7 @@ while True:
     # Rank Rentals based on numRentals
     elif VideoGameID.lower() == 'rank': 
         sortedRentals = rank()
+        print(sortedRentals)
         continue
 
     # Number of active Rentals 
@@ -209,7 +209,7 @@ while True:
 
     # Rentals related to inputed VideoGameID
     rentalData = RentalInfo(VideoGameID)
-    if rentalData != None: 
+    if rentalData != None:
         print(rentalData)
     
     # Calculate average Rental Time of said Video Game 

@@ -123,9 +123,8 @@ def allRentals():
 
     for _, _ in df1.iterrows(): 
         rentals += 1
-    
-    print(f"There have been {rentals} Rentals in Total thus far.\n")
-    return rentals + 1
+  
+    return rentals
 # allRentals
 
 # Rank Video Games based on number of times they have been rented out
@@ -197,7 +196,8 @@ while True:
         continue
 
     elif VideoGameID.lower() == 'all':
-        rentalsEver = allRentals() 
+        rentalsEver = allRentals()
+        print(f"There have been {rentals} Rentals in Total thus far. \n")
         continue
 
     # Note: Add validation for existent Video Game ID here. 

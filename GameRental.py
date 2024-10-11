@@ -1,17 +1,18 @@
-# This program Shows Hisory based off of the Video Game
+# This program Shows History based off of the Video Game
 
-# Functional WIP
+# Flask WIP
 
 # Imports 
+from flask import Flask, jsonify, request
 import pandas as pd 
 from validateEntries import generateDate
 
+app = Flask(__name__)
+
 # Data Frames 
 
-# Read Rentals
+# Load Rentals & Video Games
 df1 = pd.read_csv('Inventory/Rentals.csv')
-
-# Read VideoGames 
 df2 = pd.read_csv('Inventory/VideoGames.csv')
 
 # Functions
@@ -133,7 +134,7 @@ def rank():
 
     # Iterate through VideoGameID column in Video Games 
     for VideoGameID in df2['VideoGameID']: 
-        exist = not filterRentals(VideoGameID).empty
+        exist = rentalExist(VideoGameID)  
         numRentals = rentNum(VideoGameID, exist) 
         rentals.append((VideoGameID, numRentals)) 
     
@@ -167,11 +168,6 @@ while True:
 
     print('\n')
 
-    # Note: Change to switch statement 
-
-    # Note: Change printing into method or outside, depending on utility 
-        # Ask about return method of functions when flask 
-
     # Exit the Program    
     if VideoGameID.lower() == 'exit': 
         print("Exiting the program.") 
@@ -197,15 +193,12 @@ while True:
 
     elif VideoGameID.lower() == 'all':
         rentalsEver = allRentals()
-        print(f"There have been {rentals} Rentals in Total thus far. \n")
+        print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
         continue
 
     # Note: Add validation for existent Video Game ID here. 
    
-    if (filterRentals(VideoGameID).empty):
-        exist = False
-    else: 
-        exist = True
+    exist = rentalExist(VideoGameID)  
 
     # Rentals related to inputed VideoGameID
     rentalData = RentalInfo(VideoGameID)
@@ -214,7 +207,7 @@ while True:
     
     # Calculate average Rental Time of said Video Game 
     average = avgRentalTime(VideoGameID, exist)
-    if avgRentalTime != None: 
+    if average != None: 
         print(f"The average Rental Time of the following VideoGame is {average} days.")
 
     # Calculate how many times said Video Game has been Rented 

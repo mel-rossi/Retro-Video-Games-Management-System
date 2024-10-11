@@ -18,19 +18,19 @@ df2 = pd.read_csv('Inventory/VideoGames.csv')
 # Functions
 
 # Filter Rental rows where VideoGameID matches VideoGameInput 
-def filterRentals(VideoGameInput): 
+def filter_rentals(VideoGameInput): 
     return df1[df1['VideoGameID'] == VideoGameInput].copy()
-# filterRentals
+# filter_rentals
 
 # Check whether Rentals of said videoGame exist
-def rentalExist(VideoGameInput): 
-    return not filterRentals(VideoGameInput).empty
-# rentalExist 
+def rental_exist(VideoGameInput): 
+    return not filter_rentals(VideoGameInput).empty
+# rental_exist 
 
 # Organize Rental Information of VideoGameID
-def RentalInfo(VideoGameInput): 
+def rental_info(VideoGameInput): 
     # Filter relevant rentals 
-    rentals = filterRentals(VideoGameInput) 
+    rentals = filter_rentals(VideoGameInput) 
 
     # No Rentals with Video Game ID
     if rentals.empty: 
@@ -46,16 +46,16 @@ def RentalInfo(VideoGameInput):
 
     return info 
 
-# RentalInfo 
+# rental_info 
 
 # Calculate : Average Rental Time (Return - Start Date)
-def avgRentalTime(VideoGameInput, exist):
+def avg_rental_time(VideoGameInput, exist):
     # No Rentals with Video Game ID 
     if not exist: 
         return None 
 
     # Filter relevant rentals 
-    rentals = filterRentals(VideoGameInput) 
+    rentals = filter_rentals(VideoGameInput) 
 
     # Convert date columns to datetime
     rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
@@ -72,16 +72,16 @@ def avgRentalTime(VideoGameInput, exist):
     average = rentals['RentalDuration'].mean()
 
     return average
-# avgRentalTime 
+# avg_rental_time 
 
 # Calculate : How many times VideoGameID has been rented out 
-def rentNum(VideoGameInput, exist):
+def rent_num(VideoGameInput, exist):
     # No Rentals with Video Game ID
     if not exist:
         return None
 
     # Filter relevant rentals 
-    rentals = filterRentals(VideoGameInput) 
+    rentals = filter_rentals(VideoGameInput) 
 
     # Initialize number of rentals
     num = 0
@@ -92,10 +92,10 @@ def rentNum(VideoGameInput, exist):
             num += 1
 
     return num
-# rentNum
+# rent_num
 
 # Calculate : How many active rentals are there right now? 
-def activeRentals(): 
+def active_rentals(): 
     active = 0
 
     # Iterate through Status column in Rentals 
@@ -104,10 +104,10 @@ def activeRentals():
             active += 1
 
     return active
-# activeRentals
+# active_rentals
 
 # Calculate : How many inactive rentals are there right now? 
-def inactiveRentals(): 
+def inactive_rentals(): 
     inactive = 0
 
     # Iterate through Status column in Rentals 
@@ -116,17 +116,17 @@ def inactiveRentals():
             inactive += 1
 
     return inactive
-# inactiveRentals
+# inactive_rentals
 
 # Calculate : How many rentals have there been ever? 
-def allRentals(): 
+def all_rentals(): 
     rentals = 0
 
     for _, _ in df1.iterrows(): 
         rentals += 1
   
     return rentals
-# allRentals
+# all_rentals
 
 # Rank Video Games based on number of times they have been rented out
 def rank():
@@ -134,8 +134,8 @@ def rank():
 
     # Iterate through VideoGameID column in Video Games 
     for VideoGameID in df2['VideoGameID']: 
-        exist = rentalExist(VideoGameID)  
-        numRentals = rentNum(VideoGameID, exist) 
+        exist = rental_exist(VideoGameID)  
+        numRentals = rent_num(VideoGameID, exist) 
         rentals.append((VideoGameID, numRentals)) 
     
     # Convert to DataFrame for easy sorting 
@@ -181,37 +181,37 @@ while True:
 
     # Number of active Rentals 
     elif VideoGameID.lower() == 'active': 
-        active = activeRentals()
+        active = active_rentals()
         print(f"There are currently {active} Active Rentals. \n")
         continue
 
     # Number of inactive Rentals 
     elif VideoGameID.lower() == 'inactive': 
-        inactive = inactiveRentals()
-        print(f"There are current {inactive} Inactive Rentals. \n")
+        inactive = inactive_rentals()
+        print(f"There are currently {inactive} Inactive Rentals. \n")
         continue
 
     elif VideoGameID.lower() == 'all':
-        rentalsEver = allRentals()
+        rentalsEver = all_rentals()
         print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
         continue
 
     # Note: Add validation for existent Video Game ID here. 
    
-    exist = rentalExist(VideoGameID)  
+    exist = rental_exist(VideoGameID)  
 
     # Rentals related to inputed VideoGameID
-    rentalData = RentalInfo(VideoGameID)
+    rentalData = rental_info(VideoGameID)
     if rentalData != None:
         print(rentalData)
     
     # Calculate average Rental Time of said Video Game 
-    average = avgRentalTime(VideoGameID, exist)
+    average = avg_rental_time(VideoGameID, exist)
     if average != None: 
         print(f"The average Rental Time of the following VideoGame is {average} days.")
 
     # Calculate how many times said Video Game has been Rented 
-    numRentals = rentNum(VideoGameID, exist)
+    numRentals = rent_num(VideoGameID, exist)
     if numRentals == None: 
         print("No Rentals of this Game have been made.")
     else: 

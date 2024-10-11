@@ -155,15 +155,14 @@ def rank():
     return sortedGames
 # rank
 
-def get_input(userInput):
+def route_input(userInput):
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
         print(sortedRentals)
 # get_input
 
 # Run
-while True: # Replace with app route & main function 
-    # Note: Add Title input later 
+def main(): # Change name later
     VideoGameID = input("Enter one of these:" +  
                 "\n\t'V####' (a Video Game ID) to see the Rental History of the Video Game its associated with," + 
                 "\n\t'rank' to see the ranking of Video Games based on how often they have been rented out," + 
@@ -174,36 +173,31 @@ while True: # Replace with app route & main function
 
     print('\n')
 
-    # Call to get_input here
+    videoGame = route_input(VideoGameID)
 
     # Exit the Program    # Get rid of this
     if VideoGameID.lower() == 'exit': 
         print("Exiting the program.") 
-        break
 
     # Rank Rentals based on numRentals
     elif VideoGameID.lower() == 'rank': 
         sortedRentals = rank()
         print(sortedRentals)
-        continue
 
     # Number of active Rentals 
     elif VideoGameID.lower() == 'active': 
         active = active_rentals()
         print(f"There are currently {active} Active Rentals. \n")
-        continue
 
     # Number of inactive Rentals 
     elif VideoGameID.lower() == 'inactive': 
         inactive = inactive_rentals()
         print(f"There are currently {inactive} Inactive Rentals. \n")
-        continue
 
 
     elif VideoGameID.lower() == 'all':
         rentalsEver = all_rentals()
         print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
-        continue
 
     # Note: Add validation for existent Video Game ID here. 
    
@@ -227,4 +221,5 @@ while True: # Replace with app route & main function
         print(f"This Video Game has been rented out {numRentals} time(s) before.")
     print('\n')
 
-# If name here 
+if __name__ == '__main__': 
+    main() # Change later

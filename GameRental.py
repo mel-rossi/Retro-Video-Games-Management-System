@@ -156,9 +156,27 @@ def rank():
 # rank
 
 def route_input(userInput):
+    # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
         print(sortedRentals)
+
+    # Number of active Rentals
+    elif userInput.lower() == 'active': 
+        active = active_rentals()
+        print(f"There are currently {active} Active Rentals. \n")
+
+    # Number of inactive Rentals 
+    elif userInput.lower() == 'inactive': 
+        inactive = inactive_rentals()
+        print(f"There are currently {inactive} Inactive Rentals. \n")
+    
+    elif userInput.lower() == 'all': 
+        rentalsEver = all_rentals()
+        print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
+
+    #elif 
+
 # get_input
 
 # Run
@@ -174,32 +192,6 @@ def main(): # Change name later
     print('\n')
 
     videoGame = route_input(VideoGameID)
-
-    # Exit the Program    # Get rid of this
-    if VideoGameID.lower() == 'exit': 
-        print("Exiting the program.") 
-
-    # Rank Rentals based on numRentals
-    elif VideoGameID.lower() == 'rank': 
-        sortedRentals = rank()
-        print(sortedRentals)
-
-    # Number of active Rentals 
-    elif VideoGameID.lower() == 'active': 
-        active = active_rentals()
-        print(f"There are currently {active} Active Rentals. \n")
-
-    # Number of inactive Rentals 
-    elif VideoGameID.lower() == 'inactive': 
-        inactive = inactive_rentals()
-        print(f"There are currently {inactive} Inactive Rentals. \n")
-
-
-    elif VideoGameID.lower() == 'all':
-        rentalsEver = all_rentals()
-        print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
-
-    # Note: Add validation for existent Video Game ID here. 
    
     exist = rental_exist(VideoGameID)  
 

@@ -138,6 +138,9 @@ def rank():
     # Drop the 'rentNum' column 
     sortedGames = sortedGames.drop(columns=['rentNum'])
 
+    # Convert sorted Games DataFrame to dictionary 
+    sortedGames = sortedGames.to_dict(orient='records')
+
     # Return sorted Games
     return sortedGames
 # rank

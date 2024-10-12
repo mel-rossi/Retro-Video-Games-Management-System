@@ -5,6 +5,8 @@ from flask import Flask, jsonify, request
 import pandas as pd 
 from validateEntries import generateDate
 from flask_cors import CORS
+import numpy as np
+
 
 app = Flask(__name__)
 CORS(app)
@@ -148,15 +150,21 @@ def rank():
 def checkID(instance): 
     while True:
         check = input(f"Enter the correct instance of the title {instance}: ")
+        if check.lower() == 'all': 
+            return instance
         for ID in instance:
-            if check == ID: 
+            if check == ID:
+                print("check")
                 return check
         
-        print("Please enter a valid instance.\n")
+        print("Please enter a valid instance or 'all' to see all instances.\n")
        
 # checkID
     
 def route_input(userInput):
+    # Initiate boolean for multipleInstances of a Title
+    multipleInstances = False
+
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
@@ -185,42 +193,68 @@ def route_input(userInput):
     # Video Game Title input 
     else: 
         userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
-        if len(userInput) == 0: 
+        
+        # Invalid Title input
+        if len(userInput) <= 0: 
             return None
-       
-        if len(userInput) > 1:
-            # Select the correct instance of the Title  
-            userInput = checkID(userInput)
-        else: 
+        # Only one Instance of Title 
+        elif len(userInput) == 1: 
             userInput = userInput[0]
-             
-    # Video Game ID input validation
-    if userInput.startswith("V") and len(userInput) == 5: 
-        # Check if VideoGameID is valid  
-        if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
+        # Multiple Instances of Title
+        else: 
+            # Select the correct instance of the Title
+            userInput = checkID(userInput)
+                  
+    # In the case of multiple instances of the same title were selected
+    if isinstance(userInput, np.ndarray) or isinstance(userInput, list): 
+        result = ""
+        for instance in userInput: 
             # Check whether rentals of this VideoGameID exist 
-            exist = rental_exist(userInput)
+            exist = rental_exist(instance)
 
-            # There is at least one Rental with VideoGameID
+            # There is at least one Rental with VideoGameID 
             if exist: 
                 # Rentals related to inputed VideoGameID 
-                rentalData = rental_info(userInput)
+                rentalData = rental_info(instance) 
 
                 # Calculate average Rental Time of said Video Game 
-                average = avg_rental_time(userInput)
+                average = avg_rental_time(instance) 
 
-                # Calcultae how many times said Video Game has been Rented Out 
-                numRentals = rent_num(userInput) 
+                # Calculate how many times said Video Game has been Rented Out 
+                numRentals = rent_num(instance)
 
-                return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+                result += f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+        return result
+             
+    # Video Game ID input validation
+    else:
+        # Check for valid 
+        if userInput.startswith("V") and len(userInput) == 5: 
+            # Check if VideoGameID is valid
+            if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
+                # Check whether rentals of this VideoGameID exist 
+                exist = rental_exist(userInput)
 
-            # No Rentals with VideoGameID 
-            else:
-                return "Rentals: 0"
+                # There is at least one Rental with VideoGameID
+                if exist: 
+                    # Rentals related to inputed VideoGameID 
+                    rentalData = rental_info(userInput)
 
-        # Invalid VideoGameID 
-        else: 
-            return None
+                    # Calculate average Rental Time of said Video Game 
+                    average = avg_rental_time(userInput)
+
+                    # Calcultae how many times said Video Game has been Rented Out 
+                    numRentals = rent_num(userInput) 
+
+                    return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+
+                # No Rentals with VideoGameID 
+                else:
+                    return "Rentals: 0"
+
+            # Invalid VideoGameID 
+            else: 
+                return None
 
 # get_input
 

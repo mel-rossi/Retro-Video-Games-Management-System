@@ -208,7 +208,7 @@ def route_input(userInput):
 @app.route('/game_rental', methods=['GET'])
 def game_rental_route(): # Change name later
 
-    videoGameID = request.args.get('input')
+    VideoGameID = request.args.get('input')
 
     # remove prompt later
     #VideoGameID = input("Enter one of these:" +  

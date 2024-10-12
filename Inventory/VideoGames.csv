@@ -19,7 +19,7 @@ V0017,Nintendogs,Nintendo,2005,Available,1
 V0018,Mario Kart DS,Nintendo,2005,Available,9
 V0019,Pokemon Gold / Silver Version,Nintendo,2000,Available,14
 V0020,Wii Fit,Nintendo,2008,Available,10
-V0021,Wii Fit Plus,Nintendo,2009,Unavailable,6
+V0021,Wii Fit Plus,Nintendo,2009,Available,6
 V0022,Super Mario World,Nintendo,1991,Available,7
 V0023,Grand Theft Auto V,Rockstar Games,2013,Available,3
 V0025,Brain Age: Train Your Brain in Minutes a Day,Nintendo,2006,Available,10
@@ -27,13 +27,13 @@ V0026,Super Smash Bros. Ultimate,Nintendo,2018,Available,5
 V0027,Mario Kart 7,Nintendo,2011,Available,12
 V0028,Super Mario Land,Nintendo,1989,Available,3
 V0029,Pokemon Diamond / Pearl Version,Nintendo,2007,Available,8
-V0030,Super Mario Odyssey,Nintendo,2017,Unavailable,5
+V0030,Super Mario Odyssey,Nintendo,2017,Available,5
 V0031,The Legend of Zelda: Breath of the Wild,Nintendo,2017,Available,1
 V0032,Pokemon Sword / Shield,Nintendo,2019,Available,3
 V0033,Grand Theft Auto: San Andreas,Rockstar Games,2004,Available,1
 V0034,Super Mario Bros. 3,Nintendo,1990,Available,6
 V0035,Garry's Mod,Valve,2006,Available,5
-V0036,Pokemon X/Y,Nintendo,2013,Unavailable,3
+V0036,Pokemon X/Y,Nintendo,2013,Available,3
 V0037,Uncharted 4: A Thief's End,Sony Interactive Entertainment,2016,Available,12
 V0038,Pokemon Ruby / Sapphire Version,Nintendo,2003,Available,13
 V0039,Pokemon Sun/Moon,Nintendo,2016,Available,6
@@ -51,7 +51,7 @@ V0051,Halo 3,Microsoft Game Studios,2007,Available,5
 V0052,Pokemon Omega Ruby/Pokemon Alpha Sapphire,Nintendo,2014,Available,6
 V0053,Terraria,Unknown,2011,Available,10
 V0054,Red Dead Redemption 2,Rockstar Games,2018,Available,8
-V0055,Call of Duty: Black Ops II,Activision,2012,Unavailable,9
+V0055,Call of Duty: Black Ops II,Activision,2012,Available,9
 V0057,Call of Duty: Modern Warfare 2,Activision,2009,Available,3
 V0058,Animal Crossing: New Horizons,Nintendo,2020,Available,6
 V0059,Call of Duty: WWII,Activision,2017,Available,2
@@ -63,7 +63,7 @@ V0065,Portal 2,Valve,2011,Available,4
 V0067,Super Mario Galaxy,Nintendo,2007,Available,11
 V0068,Pokemon Heart Gold / Soul Silver Version,Nintendo,2010,Available,12
 V0069,Super Mario 3D Land,Nintendo,2011,Available,10
-V0072,Animal Crossing: New Leaf,Nintendo,2013,Unavailable,2
+V0072,Animal Crossing: New Leaf,Nintendo,2013,Available,2
 V0073,The Witcher 3: Wild Hunt,Warner Bros. Interactive Entertainment,2015,Available,1
 V0074,Diablo III,Blizzard Entertainment,2012,Available,4
 V0075,Half-Life 2,VU Games,2004,Available,1
@@ -71,7 +71,7 @@ V0076,Pokemon FireRed / LeafGreen Version,Nintendo,2004,Available,13
 V0077,World of Warcraft,Blizzard Entertainment,2004,Available,12
 V0078,"Pokemon: Let's Go, Pikachu/Eevee",Nintendo,2018,Available,13
 V0079,Gran Turismo 5,Sony Computer Entertainment,2010,Available,1
-V0080,Super Mario 64,Nintendo,1996,Unavailable,4
+V0080,Super Mario 64,Nintendo,1996,Available,4
 V0081,FIFA 18,EA Sports,2017,Available,15
 V0082,The Last of Us Remastered,Sony Computer Entertainment,2014,Available,3
 V0083,Gran Turismo 4,Sony Computer Entertainment,2005,Available,12
@@ -98,7 +98,7 @@ V0107,Mario Kart 64,Nintendo,1997,Available,5
 V0108,Super Smash Bros. for 3DS,Nintendo,2014,Available,15
 V0109,Call of Duty 4: Modern Warfare,Activision,2007,Available,6
 V0110,Gran Turismo 2,Sony Computer Entertainment,1999,Available,6
-V0111,Wii Party,Nintendo,2010,Unavailable,3
+V0111,Wii Party,Nintendo,2010,Available,3
 V0112,Call of Duty: Black Ops IIII,Activision,2018,Available,3
 V0113,Mario Party DS,Nintendo,2007,Available,11
 V0114,Donkey Kong Country,Nintendo,1994,Available,4
@@ -168,8 +168,8 @@ V0185,Luigi's Mansion 3,Nintendo,2019,Available,2
 V0186,FIFA 15,EA Sports,2014,Available,12
 V0187,Kingdom Hearts,Square EA,2002,Available,3
 V0188,Myst,Broderbund,1995,Available,11
-V0189,Street Fighter II: The World Warrior,Capcom,1992,Unavailable,7
-V0190,Driver,GT Interactive,1999,Unavailable,3
+V0189,Street Fighter II: The World Warrior,Capcom,1992,Available,7
+V0190,Driver,GT Interactive,1999,Available,3
 V0192,Luigi's Mansion: Dark Moon,Nintendo,2013,Available,2
 V0193,Big Brain Academy,Nintendo,2006,Available,12
 V0195,Metal Gear Solid 2: Sons of Liberty,Konami,2001,Available,11
@@ -683,7 +683,7 @@ V0783,Rock Band,MTV Games,2007,Available,10
 V0785,Battlefield 1942,Electronic Arts,2002,Available,14
 V0786,WarioWare Touched!,Nintendo,2005,Available,9
 V0787,Resistance 2,Sony Computer Entertainment,2008,Available,11
-V0790,Mario Party 4,Nintendo,2002,Unavailable,15
+V0790,Mario Party 4,Nintendo,2002,Available,15
 V0791,Paper Mario: Sticker Star,Nintendo,2012,Available,10
 V0794,LEGO Harry Potter: Years 1-4,Warner Bros. Interactive,2010,Available,12
 V0795,uDraw Studio,THQ,2010,Available,7
@@ -849,7 +849,7 @@ V1002,LittleBigPlanet 3,Sony Computer Entertainment,2014,Available,12
 V1003,Professor Layton and the Last Specter,Nintendo,2011,Available,7
 V1005,Call of Duty 2,Activision,2005,Available,9
 V1007,Toy Story 3: The Video Game,Disney Interactive Studios,2010,Available,11
-V1008,R4: Ridge Racer Type 4,Namco,1999,Unavailable,10
+V1008,R4: Ridge Racer Type 4,Namco,1999,Available,10
 V1009,Tom Clancy's Splinter Cell: Conviction,Ubisoft,2010,Available,10
 V1010,Need for Speed: Undercover,Electronic Arts,2008,Available,11
 V1012,The Elder Scrolls Online: Tamriel Unlimited,Bethesda Softworks,2015,Available,15
@@ -1424,7 +1424,7 @@ V1787,IHRA Drag Racing 2,Bethesda Softworks,2002,Available,15
 V1788,Lego Star Wars: The Force Awakens,Warner Bros. Interactive Entertainment,2016,Available,1
 V1789,Madagascar,Activision,2005,Available,12
 V1790,Rugrats Studio Tour,THQ,1999,Available,7
-V1792,Pitfall II: Lost Caverns,Activision,1983,Unavailable,4
+V1792,Pitfall II: Lost Caverns,Activision,1983,Available,4
 V1793,[Prototype],Activision,2009,Available,12
 V1794,Turok: Evolution,Acclaim Entertainment,2002,Available,10
 V1796,EA Sports UFC 2,EA Sports,2016,Available,7

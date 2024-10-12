@@ -1,6 +1,6 @@
 # This program Shows History based off of the Video Game
 
-# Flask WIP
+# Note for future: Fix returns into ideal form for frontend code to use. 
 
 # Imports 
 from flask import Flask, jsonify, request
@@ -149,25 +149,25 @@ def route_input(userInput):
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
-        print(sortedRentals)
+        # print(sortedRentals)
         return sortedRentals
 
     # Number of active Rentals
     elif userInput.lower() == 'active': 
         active = active_rentals()
-        print(f"There are currently {active} Active Rentals. \n")
+        # print(f"There are currently {active} Active Rentals. \n")
         return active
 
     # Number of inactive Rentals 
     elif userInput.lower() == 'inactive': 
         inactive = inactive_rentals()
-        print(f"There are currently {inactive} Inactive Rentals. \n")
+        # print(f"There are currently {inactive} Inactive Rentals. \n")
         return inactive
     
     # Number of all Rentals ever made
     elif userInput.lower() == 'all': 
         rentalsEver = all_rentals()
-        print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
+        # print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
         return rentalsEver
 
     # Video Game ID input if only 4 digits
@@ -185,21 +185,21 @@ def route_input(userInput):
             if exist: 
                 # Rentals related to inputed VideoGameID 
                 rentalData = rental_info(userInput)
-                print(rentalData)
+                # print(rentalData)
 
                 # Calculate average Rental Time of said Video Game 
                 average = avg_rental_time(userInput)
-                print(f"The average Rental Time of the following VideoGame is {average} days.")
+                # print(f"The average Rental Time of the following VideoGame is {average} days.")
 
                 # Calcultae how many times said Video Game has been Rented Out 
                 numRentals = rent_num(userInput) 
-                print(f"This Video Game has been rented out {numRentals} time(s) before.")
+                # print(f"This Video Game has been rented out {numRentals} time(s) before.")
 
                 return f"Rentals: {rentalData}\nRental Time Average: {average}\nNumber of Rentals: {numRentals}"
 
             # No Rentals with VideoGameID 
             else:
-                print("No Rentals of this Game have been made.")
+                # print("No Rentals of this Game have been made.")
                 return "Rentals: 0"
 
         # Invalid VideoGameID 
@@ -212,16 +212,6 @@ def route_input(userInput):
 def game_rental_route(): # Change name later
 
     VideoGameID = request.args.get('input')
-
-    # remove prompt later
-    #VideoGameID = input("Enter one of these:" +  
-    #            "\n\t'V####' (a Video Game ID) to see the Rental History of the Video Game its associated with," + 
-    #            "\n\t'rank' to see the ranking of Video Games based on how often they have been rented out," + 
-    #            "\n\t'active' to find out how many Video Games are currently being rented out," + 
-    #            "\n\t'inactive' to find out how many fulfilled (closed) Rental Transations there have been," + 
-    #            "\n\t'all' to find out how many total Rental Transations there have been: ").strip()
-
-    #print('\n')
 
     videoGame = route_input(VideoGameID)
 

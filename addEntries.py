@@ -72,8 +72,8 @@ ReturnDate = ''
 Status = 'Active'
 
 # Update dependent columns on files VideoGames.csv and Members.csv
-rentOut(VideoGameID)
 incRentals(MemberID)
+rentOut(VideoGameID)
 
 # Read the CSV file into a DataFrame
 df = pd.read_csv("Inventory/Rentals.csv")

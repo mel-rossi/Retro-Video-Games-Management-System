@@ -37,9 +37,10 @@ def find_member(user_input):
 
 #Flask endpoint to search member
 
-@app.route('/search_member', methods=['GET'])
+@app.route('/search_member', methods=['POST'])
 def search_member_route():
-    user_input = request.args.get('input')
+    data = request.json #Get json data from POST body
+    user_input = data.get('input') #Extract 'input' field
     member = find_member(user_input)
     
     if member:

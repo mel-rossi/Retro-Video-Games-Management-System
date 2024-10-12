@@ -1,7 +1,5 @@
 # This program Shows History based off of the Video Game
 
-# Note for future: Fix returns into ideal form for frontend code to use. 
-
 # Imports 
 from flask import Flask, jsonify, request
 import pandas as pd 
@@ -157,19 +155,16 @@ def route_input(userInput):
     # Number of active Rentals
     elif userInput.lower() == 'active': 
         active = active_rentals()
-        # print(f"There are currently {active} Active Rentals. \n")
         return active
 
     # Number of inactive Rentals 
     elif userInput.lower() == 'inactive': 
         inactive = inactive_rentals()
-        # print(f"There are currently {inactive} Inactive Rentals. \n")
         return inactive
     
     # Number of all Rentals ever made
     elif userInput.lower() == 'all': 
         rentalsEver = all_rentals()
-        # print(f"There have been {rentalsEver} Rentals in Total thus far. \n")
         return rentalsEver
 
     # Video Game ID input if only 4 digits
@@ -187,21 +182,17 @@ def route_input(userInput):
             if exist: 
                 # Rentals related to inputed VideoGameID 
                 rentalData = rental_info(userInput)
-                # print(rentalData)
 
                 # Calculate average Rental Time of said Video Game 
                 average = avg_rental_time(userInput)
-                # print(f"The average Rental Time of the following VideoGame is {average} days.")
 
                 # Calcultae how many times said Video Game has been Rented Out 
                 numRentals = rent_num(userInput) 
-                # print(f"This Video Game has been rented out {numRentals} time(s) before.")
 
-                return f"Rentals: {rentalData}\nRental Time Average: {average}\nNumber of Rentals: {numRentals}"
+                return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
 
             # No Rentals with VideoGameID 
             else:
-                # print("No Rentals of this Game have been made.")
                 return "Rentals: 0"
 
         # Invalid VideoGameID 
@@ -220,7 +211,7 @@ def game_rental_route():
     if videoGame: 
         return jsonify(videoGame)
     else: 
-        return jsonify({"error": "No method nor video game with provided ID nor name"}), 404
+        return jsonify({"error": "No method nor video game with provided ID or name"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

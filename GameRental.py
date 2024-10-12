@@ -173,7 +173,7 @@ def route_input(userInput):
         return rentalsEver
 
     # Video Game ID input if only 4 digits
-    elif userInput.isdigit() and len(user_input) == 4: 
+    elif userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
     
     # Video Game ID input validation

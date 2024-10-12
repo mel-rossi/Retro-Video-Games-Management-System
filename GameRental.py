@@ -145,6 +145,17 @@ def rank():
     return sortedGames
 # rank
 
+def checkID(instance): 
+    while True:
+        check = input(f"Enter the correct instance of the title {instance}: ")
+        for ID in instance:
+            if check == ID: 
+                return check
+        
+        print("Please enter a valid instance.\n")
+       
+# checkID
+    
 def route_input(userInput):
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
@@ -174,13 +185,15 @@ def route_input(userInput):
     # Video Game Title input 
     else: 
         userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
-        if len(userInput) <= 0: 
+        if len(userInput) == 0: 
             return None
-
-        userInput = userInput[0]
-
-        # Problem only the first instance of the Title is caught. 
-    
+       
+        if len(userInput) > 1:
+            # Select the correct instance of the Title  
+            userInput = checkID(userInput)
+        else: 
+            userInput = userInput[0]
+             
     # Video Game ID input validation
     if userInput.startswith("V") and len(userInput) == 5: 
         # Check if VideoGameID is valid  

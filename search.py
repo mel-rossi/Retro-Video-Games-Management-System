@@ -42,11 +42,11 @@ def output():
         case 'all':
             results = search_all() 
         case 'title':
-            results = search_title(data.get('input')) 
+            results = search_title(data.get('first_input')) 
         case 'id':
-            results = search_id(data.get('input')) 
+            results = search_id(data.get('first_input')) 
         case 'publisher':
-            results = search_publisher(data.get('input')) 
+            results = search_publisher(data.get('first_input')) 
         case 'year':
             results = search_year(data.get('first_input'), data.get('second_input'))
         case 'available':

@@ -148,9 +148,6 @@ def rank():
 # rank
 
 def route_input(userInput):
-    # Initiate boolean for multipleInstances of a Title
-    multipleInstances = False
-
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
@@ -187,37 +184,10 @@ def route_input(userInput):
         # Invalid Title input
         if len(userInput) <= 0: 
             return None
-        # Only one Instance of Title 
         elif len(userInput) == 1: 
             userInput = userInput[0]
-                  
-    # In the case of multiple instances of the same title
-    if isinstance(userInput, np.ndarray) or isinstance(userInput, list): 
-        rentalDataTot = ""
-        averageTot = 0 
-        numRentalTot = 0
-        for instance in userInput: 
-            # Check whether rentals of this VideoGameID exist 
-            exist = rental_exist(instance)
-
-            # There is at least one Rental with VideoGameID 
-            if exist: 
-                # Rentals related to inputed VideoGameID 
-                rentalData = rental_info(instance) 
-
-                # Calculate average Rental Time of said Video Game 
-                average = avg_rental_time(instance) 
-                averageTot += average
-
-                # Calculate how many times said Video Game has been Rented Out 
-                numRentals = rent_num(instance)
-                numRentalsTot= numRentals
-
-                rentalDataTot += f"\n\n{rentalData}"
-        return f"Rentals: {rentalDataTot} Rental Time Average: {averageTot} Number of Rentals: {numRentalsTot}"
              
     # Video Game ID input validation
-    # Check for valid Video Game ID
     if userInput.startswith("V") and len(userInput) == 5: 
         # Check if VideoGameID is valid
         if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
@@ -250,7 +220,7 @@ def route_input(userInput):
 @app.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
 def game_rental_route():
     if request.method == 'POST': 
-        VideoGameID = request.form.get('input')
+        VideoGameID = request.json.get('input')
     else: 
         VideoGameID = request.args.get('input')
 

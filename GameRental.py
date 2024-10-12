@@ -148,9 +148,6 @@ def rank():
 # rank
 
 def route_input(userInput):
-    # Initiate boolean for multipleInstances of a Title
-    multipleInstances = False
-
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
@@ -217,7 +214,6 @@ def route_input(userInput):
         return f"Rentals: {rentalDataTot} Rental Time Average: {averageTot} Number of Rentals: {numRentalsTot}"
              
     # Video Game ID input validation
-    # Check for valid Video Game ID
     if userInput.startswith("V") and len(userInput) == 5: 
         # Check if VideoGameID is valid
         if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
@@ -250,7 +246,7 @@ def route_input(userInput):
 @app.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
 def game_rental_route():
     if request.method == 'POST': 
-        VideoGameID = request.form.get('input')
+        VideoGameID = request.json.get('input')
     else: 
         VideoGameID = request.args.get('input')
 

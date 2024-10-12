@@ -205,8 +205,8 @@ def route_input(userInput):
 
 # get_input
 
-@app.route('/rentals_by_game', methods=['GET'])
-def game_rental(): # Change name later
+@app.route('/game_rental', methods=['GET'])
+def game_rental_route(): # Change name later
 
     videoGameID = request.args.get('input')
 

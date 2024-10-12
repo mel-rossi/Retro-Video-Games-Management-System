@@ -15,19 +15,19 @@ def search_all():
 
 def search_title(title, status):
     df = pd.read_csv(CSV_FILE)
-    return df[df['Title'].str.contains(title, case=False, na=False) & (df['Availability'] == status)]
+    return df[df['Title'].str.contains(title, case=False, na=False) & (df['Availability'].str.contains(status, case=True,na=False))]
 
 def search_id(id, status):
     df = pd.read_csv(CSV_FILE)
-    return df[(df['VideoGameID'] == id) & (df['Availability'] == status)]
+    return df[(df['VideoGameID'] == id) & (df['Availability'].str.contains(status, case=True,na=False))]
 
 def search_publisher(publisher, status):
     df = pd.read_csv(CSV_FILE)
-    return df[df['Publisher'].str.contains(publisher, case=False, na=False) & (df['Availability'] == status)]
+    return df[df['Publisher'].str.contains(publisher, case=False, na=False) & (df['Availability'].str.contains(status, case=True,na=False))]
 
 def search_year(start_year, end_year, status):
     df = pd.read_csv(CSV_FILE)
-    return df[(df['Year'] >= start_year) & (df['Year'] <= end_year) & (df['Availability'] == status)]
+    return df[(df['Year'] >= start_year) & (df['Year'] <= end_year) & (df['Availability'].str.contains(status, case=True,na=False))]
  
 def search_available():
     df = pd.read_csv(CSV_FILE)

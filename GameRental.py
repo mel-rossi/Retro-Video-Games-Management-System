@@ -176,6 +176,10 @@ def route_input(userInput):
     elif userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
 
+    # Video Game ID input with V + 4 digits
+    elif userInput.startswith("V") and len(userInput) == 5: 
+        pass
+
     # Video Game Title input 
     else: 
         userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
@@ -213,34 +217,33 @@ def route_input(userInput):
         return f"Rentals: {rentalDataTot} Rental Time Average: {averageTot} Number of Rentals: {numRentalsTot}"
              
     # Video Game ID input validation
-    else:
-        # Check for valid Video Game ID 
-        if userInput.startswith("V") and len(userInput) == 5: 
-            # Check if VideoGameID is valid
-            if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
-                # Check whether rentals of this VideoGameID exist 
-                exist = rental_exist(userInput)
+    # Check for valid Video Game ID
+    if userInput.startswith("V") and len(userInput) == 5: 
+        # Check if VideoGameID is valid
+        if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
+            # Check whether rentals of this VideoGameID exist 
+            exist = rental_exist(userInput)
 
-                # There is at least one Rental with VideoGameID
-                if exist: 
-                    # Rentals related to inputed VideoGameID 
-                    rentalData = rental_info(userInput)
+            # There is at least one Rental with VideoGameID
+            if exist: 
+                # Rentals related to inputed VideoGameID 
+                rentalData = rental_info(userInput)
 
-                    # Calculate average Rental Time of said Video Game 
-                    average = avg_rental_time(userInput)
+                # Calculate average Rental Time of said Video Game 
+                average = avg_rental_time(userInput)
 
-                    # Calcultae how many times said Video Game has been Rented Out 
-                    numRentals = rent_num(userInput) 
+                # Calcultae how many times said Video Game has been Rented Out 
+                numRentals = rent_num(userInput) 
 
-                    return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+                return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
 
-                # No Rentals with VideoGameID 
-                else:
-                    return "Rentals: 0"
+            # No Rentals with VideoGameID 
+            else:
+                return "Rentals: 0"
 
-            # Invalid VideoGameID 
-            else: 
-                return None
+        # Invalid VideoGameID 
+        else: 
+            return None
 
 # get_input
 
@@ -256,7 +259,7 @@ def game_rental_route():
     if videoGame: 
         return jsonify(videoGame)
     else: 
-        return jsonify({"error": "No method nor video game with provided ID or name"}), 404
+        return jsonify({"error": "No special call nor video game with provided ID or name"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

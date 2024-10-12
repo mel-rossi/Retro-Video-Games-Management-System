@@ -205,18 +205,22 @@ def route_input(userInput):
 
 # get_input
 
-# Run
-def main(): # Change name later
-    VideoGameID = input("Enter one of these:" +  
-                "\n\t'V####' (a Video Game ID) to see the Rental History of the Video Game its associated with," + 
-                "\n\t'rank' to see the ranking of Video Games based on how often they have been rented out," + 
-                "\n\t'active' to find out how many Video Games are currently being rented out," + 
-                "\n\t'inactive' to find out how many fulfilled (closed) Rental Transations there have been," + 
-                "\n\t'all' to find out how many total Rental Transations there have been: ").strip()
+@app.route('/rentals_by_game', methods=['GET'])
+def game_rental(): # Change name later
 
-    print('\n')
+    videoGameID = request.args.get('input')
+
+    # remove prompt later
+    #VideoGameID = input("Enter one of these:" +  
+    #            "\n\t'V####' (a Video Game ID) to see the Rental History of the Video Game its associated with," + 
+    #            "\n\t'rank' to see the ranking of Video Games based on how often they have been rented out," + 
+    #            "\n\t'active' to find out how many Video Games are currently being rented out," + 
+    #            "\n\t'inactive' to find out how many fulfilled (closed) Rental Transations there have been," + 
+    #            "\n\t'all' to find out how many total Rental Transations there have been: ").strip()
+
+    #print('\n')
 
     videoGame = route_input(VideoGameID)
 
-if __name__ == '__main__': 
-    main() # Change later
+if __name__ == '__main__':
+    app.run(debug=True)

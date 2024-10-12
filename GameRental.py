@@ -214,7 +214,7 @@ def route_input(userInput):
              
     # Video Game ID input validation
     else:
-        # Check for valid 
+        # Check for valid Video Game ID 
         if userInput.startswith("V") and len(userInput) == 5: 
             # Check if VideoGameID is valid
             if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
@@ -244,10 +244,12 @@ def route_input(userInput):
 
 # get_input
 
-@app.route('/game_rental', methods=['GET'])
+@app.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
 def game_rental_route():
-
-    VideoGameID = request.args.get('input')
+    if request.method == 'POST': 
+        VideoGameID = request.form.get('input')
+    else: 
+        VideoGameID = request.args.get('input')
 
     videoGame = route_input(VideoGameID)
 

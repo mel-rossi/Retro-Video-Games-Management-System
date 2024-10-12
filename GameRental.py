@@ -147,20 +147,6 @@ def rank():
     return sortedGames
 # rank
 
-def checkID(instance): 
-    while True:
-        check = input(f"Enter the correct instance of the title {instance}: ")
-        if check.lower() == 'all': 
-            return instance
-        for ID in instance:
-            if check == ID:
-                print("check")
-                return check
-        
-        print("Please enter a valid instance or 'all' to see all instances.\n")
-       
-# checkID
-    
 def route_input(userInput):
     # Initiate boolean for multipleInstances of a Title
     multipleInstances = False
@@ -200,14 +186,12 @@ def route_input(userInput):
         # Only one Instance of Title 
         elif len(userInput) == 1: 
             userInput = userInput[0]
-        # Multiple Instances of Title
-        else: 
-            # Select the correct instance of the Title
-            userInput = checkID(userInput)
                   
-    # In the case of multiple instances of the same title were selected
+    # In the case of multiple instances of the same title
     if isinstance(userInput, np.ndarray) or isinstance(userInput, list): 
-        result = ""
+        rentalDataTot = ""
+        averageTot = 0 
+        numRentalTot = 0
         for instance in userInput: 
             # Check whether rentals of this VideoGameID exist 
             exist = rental_exist(instance)
@@ -219,12 +203,14 @@ def route_input(userInput):
 
                 # Calculate average Rental Time of said Video Game 
                 average = avg_rental_time(instance) 
+                averageTot += average
 
                 # Calculate how many times said Video Game has been Rented Out 
                 numRentals = rent_num(instance)
+                numRentalsTot= numRentals
 
-                result += f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
-        return result
+                rentalDataTot += f"\n\n{rentalData}"
+        return f"Rentals: {rentalDataTot} Rental Time Average: {averageTot} Number of Rentals: {numRentalsTot}"
              
     # Video Game ID input validation
     else:

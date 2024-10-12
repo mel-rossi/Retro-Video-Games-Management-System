@@ -222,5 +222,10 @@ def game_rental(): # Change name later
 
     videoGame = route_input(VideoGameID)
 
+    if videoGame: 
+        return jsonify(videoGame)
+    else: 
+        return jsonify({"error": "No method nor video game with provided ID nor name"}), 404
+
 if __name__ == '__main__':
     app.run(debug=True)

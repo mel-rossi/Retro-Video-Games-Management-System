@@ -1,6 +1,7 @@
 var searchOption = undefined;
 var statusOption = undefined;
 
+const searchFilters = ["title", "publisher", "year"];
 const searchPlaceHolders = {"title": "Search games by title...", "publisher": "Search games by publisher..."};
 
 function bodyOnLoad(){
@@ -8,10 +9,34 @@ function bodyOnLoad(){
     statusOption = document.getElementById("statusFilter").selectedOptions[0].id;
 }
 
+function searchSwitch(){
+
+}
+
 function selectionChange(element){
     if(element.id == "searchFilter"){
+        let searchBarElement = document.getElementById("searchBar");
+
         searchOption = element.selectedOptions[0].id;
-        document.getElementById("searchBar").setAttribute("placeholder", searchPlaceHolders[searchOption]);
+        searchBarElement.setAttribute("placeholder", searchPlaceHolders[searchOption]);
+
+        if(searchOption == "year"){
+            let divThing = document.createElement("div");
+            divThing.setAttribute("id","dateInput");
+
+            let startDate = document.createElement("input");
+            startDate.setAttribute("id", "startDate");
+            startDate.setAttribute("type", "date");
+
+            let endDate = document.createElement("input");
+            endDate.setAttribute("id", "endDate");
+            endDate.setAttribute("type", "date");
+
+            divThing.appendChild(startDate);
+            divThing.appendChild(endDate);
+
+            searchBarElement.parentNode.replaceChild(divThing, searchBarElement);
+        }
     }
     else if(element.id == "statusFilter"){
         statusOption = element.selectedOptions[0].id;

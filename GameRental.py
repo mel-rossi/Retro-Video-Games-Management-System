@@ -173,9 +173,8 @@ def route_input(userInput):
     
     # Video Game ID input validation
     if userInput.startswith("V") and len(userInput) == 5: 
-        # This code currently assumes that if the first char is V than the next 4 must be digits
         # Check if VideoGameID is valid  
-        if userInput >= "V0000" and userInput <= "V6000": # V0000 - V6000
+        if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
             # Check whether rentals of this VideoGameID exist 
             exist = rental_exist(userInput)
 
@@ -198,7 +197,7 @@ def route_input(userInput):
             # No Rentals with VideoGameID 
             else:
                 print("No Rentals of this Game have been made.")
-                return None
+                return "Rentals: 0"
 
         # Invalid VideoGameID 
         else: 

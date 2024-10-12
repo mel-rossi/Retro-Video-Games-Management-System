@@ -1,18 +1,45 @@
 function searchGames(){
     let searchOption = "publisher";
-    let searchInput = "";
+    let searchInput = "nin";
 
-    var data = {'option': searchOption, 'first_input': searchInput, 'second_input': ''}; //change this for each button click or somrthing
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:5500/search', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = function () {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    var response = JSON.parse(xhr.responseText); //change code to store it in a var or something idk
-                    console.log('Response:', response);
-                } else {
-                    console.error('Request failed with status:', xhr.status);
-                }
-            };
-            xhr.send(JSON.stringify(data));                     
+    let data = undefined;
+
+    let params = {'option': searchOption, 'first_input': searchInput, 'second_input': ''}; //change this for each button click or somrthing        
+    postRequestParams("search", params, goThroughGamesIDK);
+}
+
+function goThroughGamesIDK(games){
+    games.forEach(gameInfo => {
+        addToGameContainer(gameInfo);
+    });
+}
+
+function addToGameContainer(gameInfo){
+    let gameCardElement = undefined;
+    let gameContainer = document.getElementById("gameList");
+
+    let newGameCard = document.createElement("div");
+    newGameCard.setAttribute("class","game-card");
+
+    //title
+    gameCardElement = document.createElement("h3");
+    gameCardElement.innerText = gameInfo.Title;    
+    newGameCard.appendChild(gameCardElement);
+    
+    //publisher
+    gameCardElement = document.createElement("p");
+    gameCardElement.innerText = "Publisher: " + gameInfo.Publisher;
+    newGameCard.appendChild(gameCardElement);
+
+    //year
+    gameCardElement = document.createElement("p");
+    gameCardElement.innerText = "Year: " + gameInfo.Year;
+    newGameCard.appendChild(gameCardElement);
+
+    //status
+    gameCardElement = document.createElement("p");
+    gameCardElement.innerText = "Status: " + gameInfo.Availability;
+    newGameCard.appendChild(gameCardElement);
+
+    gameContainer.appendChild(newGameCard);
 }

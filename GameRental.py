@@ -5,6 +5,8 @@ from flask import Flask, jsonify, request
 import pandas as pd 
 from validateEntries import generateDate
 from flask_cors import CORS
+import numpy as np
+
 
 app = Flask(__name__)
 CORS(app)
@@ -145,18 +147,10 @@ def rank():
     return sortedGames
 # rank
 
-def checkID(instance): 
-    while True:
-        check = input(f"Enter the correct instance of the title {instance}: ")
-        for ID in instance:
-            if check == ID: 
-                return check
-        
-        print("Please enter a valid instance.\n")
-       
-# checkID
-    
 def route_input(userInput):
+    # Initiate boolean for multipleInstances of a Title
+    multipleInstances = False
+
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
@@ -182,21 +176,50 @@ def route_input(userInput):
     elif userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
 
+    # Video Game ID input with V + 4 digits
+    elif userInput.startswith("V") and len(userInput) == 5: 
+        pass
+
     # Video Game Title input 
     else: 
         userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
-        if len(userInput) == 0: 
+        
+        # Invalid Title input
+        if len(userInput) <= 0: 
             return None
-       
-        if len(userInput) > 1:
-            # Select the correct instance of the Title  
-            userInput = checkID(userInput)
-        else: 
+        # Only one Instance of Title 
+        elif len(userInput) == 1: 
             userInput = userInput[0]
+                  
+    # In the case of multiple instances of the same title
+    if isinstance(userInput, np.ndarray) or isinstance(userInput, list): 
+        rentalDataTot = ""
+        averageTot = 0 
+        numRentalTot = 0
+        for instance in userInput: 
+            # Check whether rentals of this VideoGameID exist 
+            exist = rental_exist(instance)
+
+            # There is at least one Rental with VideoGameID 
+            if exist: 
+                # Rentals related to inputed VideoGameID 
+                rentalData = rental_info(instance) 
+
+                # Calculate average Rental Time of said Video Game 
+                average = avg_rental_time(instance) 
+                averageTot += average
+
+                # Calculate how many times said Video Game has been Rented Out 
+                numRentals = rent_num(instance)
+                numRentalsTot= numRentals
+
+                rentalDataTot += f"\n\n{rentalData}"
+        return f"Rentals: {rentalDataTot} Rental Time Average: {averageTot} Number of Rentals: {numRentalsTot}"
              
     # Video Game ID input validation
+    # Check for valid Video Game ID
     if userInput.startswith("V") and len(userInput) == 5: 
-        # Check if VideoGameID is valid  
+        # Check if VideoGameID is valid
         if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
             # Check whether rentals of this VideoGameID exist 
             exist = rental_exist(userInput)
@@ -224,17 +247,19 @@ def route_input(userInput):
 
 # get_input
 
-@app.route('/game_rental', methods=['GET'])
+@app.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
 def game_rental_route():
-
-    VideoGameID = request.args.get('input')
+    if request.method == 'POST': 
+        VideoGameID = request.form.get('input')
+    else: 
+        VideoGameID = request.args.get('input')
 
     videoGame = route_input(VideoGameID)
 
     if videoGame: 
         return jsonify(videoGame)
     else: 
-        return jsonify({"error": "No method nor video game with provided ID or name"}), 404
+        return jsonify({"error": "No special call nor video game with provided ID or name"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

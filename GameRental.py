@@ -170,6 +170,16 @@ def route_input(userInput):
     # Video Game ID input if only 4 digits
     elif userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
+
+    # Video Game Title input 
+    else: 
+        userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
+        if len(userInput) <= 0: 
+            return None
+
+        userInput = userInput[0]
+
+        # Problem only the first instance of the Title is caught. 
     
     # Video Game ID input validation
     if userInput.startswith("V") and len(userInput) == 5: 

@@ -1,18 +1,40 @@
-var searchOption = undefined
+var searchOption = undefined;
+var statusOption = undefined;
+
+const searchPlaceHolders = {"title": "Search games by title...", "publisher": "Search games by publisher..."};
 
 function bodyOnLoad(){
-    searchOption = document.getElementById("searchFilter").value;
+    searchOption = document.getElementById("searchFilter").selectedOptions[0].id;
+    statusOption = document.getElementById("statusFilter").selectedOptions[0].id;
 }
 
-function selectionChange(){
-    searchOption = document.getElementById("searchFilter").value;
+function selectionChange(element){
+    if(element.id == "searchFilter"){
+        searchOption = element.selectedOptions[0].id;
+        document.getElementById("searchBar").setAttribute("placeholder", searchPlaceHolders[searchOption]);
+    }
+    else if(element.id == "statusFilter"){
+        statusOption = element.selectedOptions[0].id;
+    }    
 }
 
 function searchGames(){    
     let searchInput = document.getElementById("searchBar").value;
 
-    let params = {'option': searchOption, 'first_input': searchInput, 'second_input': ''}; //change this for each button click or somrthing        
+    let params = getSearchParams(searchInput);
+
     postRequestParams("search", params, goThroughGamesIDK);
+}
+
+function getSearchParams(searchInput){
+
+    let params = {'option': searchOption, 'first_input': searchInput, 'status': statusOption};
+
+    if(searchOption == "year"){
+        params = {'option': searchOption, 'first_input': searchInput, 'second_input': '', 'status': statusOption};
+    }
+
+    return params;
 }
 
 function goThroughGamesIDK(games){

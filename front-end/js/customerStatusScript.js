@@ -28,7 +28,7 @@ function errorCheckInput(input){
     }
     
     console.log(results[validIndex]);
-    return [validIndex, results[validIndex][0]];
+    return [validIndex, validIndex == INPUT_TYPES.INVALID ? '' : results[validIndex][0]];
 }
 
 function searchCustomer(){

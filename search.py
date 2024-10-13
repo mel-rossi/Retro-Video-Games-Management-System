@@ -36,7 +36,7 @@ def search_available():
 def search_general(title, publisher, start_year, end_year, status):
     df = pd.read_csv(CSV_FILE)
 
-    if (start_year is None | end_year is None):
+    if (start_year is None or end_year is None):
         return df[df['Title'].str.contains(title, case=False, na=False)
             & (df['Publisher'].str.contains(publisher, case=False, na=False))
             & (df['Availability'].str.contains(status, case=True,na=False))]

@@ -25,6 +25,8 @@ def RentalInput():
             Stat = checkRentalStatus(RentalID) 
             if Stat == True: 
                 confirmRental = input("Enter 'y' if it is correct: ")
+        else: 
+            print("Invalid RentalID. Try Again!")
 
     return RentalID
 # RentalInput 

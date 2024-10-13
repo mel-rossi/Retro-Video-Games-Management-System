@@ -34,7 +34,6 @@ def validateVideoGameID(VideoGameInput):
         if VideoGameID == VideoGameInput: 
             return True 
     
-    print("Invalid VideoGameID. Try Again!")
     return False 
 # validateVideoGameID
 
@@ -53,7 +52,6 @@ def validateMemberID(MemberInput):
         if MemberInput == MemberID: 
             return True
 
-    print("Invalid MemberID. Try Again!")
     return False
 # validateMemberID
 
@@ -72,7 +70,6 @@ def validateRentalID(RentalInput):
         if RentalInput == RentalID: 
             return True
 
-    print("Invalid RentalID. Try Again!")
     return False
 # validateRentalID 
 

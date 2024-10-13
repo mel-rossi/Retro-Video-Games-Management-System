@@ -50,7 +50,7 @@ def search_general(title, publisher, start_year, end_year, status):
 @app.route('/search', methods=['POST'])
 def output():
     data = request.json
-    option = data['option']
+    option = data.get('option')
     
     match option:
         case 'all':

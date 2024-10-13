@@ -1,49 +1,54 @@
 var currSearchOption = undefined;
 var currStatusOption = undefined;
 
-const START_YEAR = 1900;
-const END_YEAR = 2100;
+//magic numbers from data set
+const START_YEAR = 1977;
+const END_YEAR = 2020;
 
 //holds the values for textboxs with values and placeholders
 const SEARCH_HOLDERS = {"title": ["", "Search games by title..."], "publisher": ["", "Search games by publisher..."]};
+const YEAR_HOLDERS = {"startYear": [START_YEAR, "Start Year"], "endYear": [END_YEAR, "End Year"]};
 
+//elements we dynamically change, only grab them once
 const SEARCH_BAR_ELEMENT = document.getElementById("searchBar");
+const START_YEAR_ELEMENT = document.getElementById("startYear");
+const END_YEAR_ELEMENT = document.getElementById("endYear");
+const SEARCH_FILTER_ELEMENT = document.getElementById("searchFilter");
+const SEARCH_STATUS_ELEMENT = document.getElementById("statusFilter");
+const GAME_CARD_CONTAINTER_ELEMENT = document.getElementById("gameList");
 
 function bodyOnLoad(){
-    currSearchOption = document.getElementById("searchFilter").selectedOptions[0].id;
-    currStatusOption = document.getElementById("statusFilter").selectedOptions[0].id;
+    currSearchOption = SEARCH_FILTER_ELEMENT.selectedOptions[0].id;
+    currStatusOption = SEARCH_STATUS_ELEMENT.selectedOptions[0].id;
+
+    createYearSearch();
 }
 
 //create a start date and end date 
-function createYearSearch(){
-    let dateElement = document.createElement("div");
-    dateElement.setAttribute("id","searchBar");
-
-    let startDate = createYearSelector("startDate", START_YEAR, END_YEAR);
-    let endDate = createYearSelector("endDate", START_YEAR, END_YEAR);    
-
-    dateElement.appendChild(startDate);
-    dateElement.appendChild(endDate);
-
-    return dateElement;
+function createYearSearch(){    
+    createYearSelector(START_YEAR_ELEMENT, START_YEAR, END_YEAR);
+    createYearSelector(END_YEAR_ELEMENT, START_YEAR, END_YEAR);    
 }
 
 //create a year selector with a certain id and dates
-function createYearSelector(id, startYear, endYear){
-    let yearSelector = document.createElement("select");
-    yearSelector.setAttribute("id", id);       
+function createYearSelector(element, startYear, endYear){    
+    //Starting option with default value if nothing is selected
+    let firstOption = document.createElement("option");
+    firstOption.value = YEAR_HOLDERS[element.id][0];
+    firstOption.innerText = YEAR_HOLDERS[element.id][1];
+    element.appendChild(firstOption);
 
+    //Generate year options based on start and end years
     for(let year = startYear; year <= endYear; year++){
         let dateOption = document.createElement("option");        
         dateOption.value = year;
         dateOption.innerText = year;
 
-        yearSelector.appendChild(dateOption);
+        element.appendChild(dateOption);
     }    
-
-    return yearSelector;
 }
 
+//everytime text values changes update value according to the current search option
 function searchTextChange(element){
     SEARCH_HOLDERS[currSearchOption][0] = element.value;
 }
@@ -67,25 +72,27 @@ function selectionChange(element){
 }
 
 //when the search button is pressed
-function searchGames(){      
-let test = getSearchParams();
+function searchGames(){  
+    const startYear = parseInt(START_YEAR_ELEMENT.value);
+    const endYear = parseInt(END_YEAR_ELEMENT.value);
 
-    postRequestParams("search", test, generateGameCards);
-}
+    //error handling for invalid start and end years
+    if(startYear > endYear){
+        alert("End year must be greater than or equal to start year.")
+        return;
+    }
 
-//get the params for post request based on the search option
-function getSearchParams(){
-    
     let params = {'option': "all_params", 
         'title': SEARCH_HOLDERS["title"][0], 
         'publisher': SEARCH_HOLDERS["publisher"][0], 
-        'start_year': '', 
-        'end_year': '', 
+        'start_year': startYear, 
+        'end_year': endYear, 
         'status': currStatusOption
     };
-
-    return params;
+    
+    postRequestParams("search", params, generateGameCards);
 }
+
 
 //generate the game cards for what is given back from the post request
 function generateGameCards(games){
@@ -98,46 +105,28 @@ function generateGameCards(games){
 }
 
 //create a game card element with the given game information
-function addToGameContainer(gameInfo){
-    let gameCardElement = undefined;
-    let gameContainer = document.getElementById("gameList");
-
+function addToGameContainer(gameInfo){    
     let newGameCard = document.createElement("div");
     newGameCard.id = gameInfo.VideoGameID;
     newGameCard.setAttribute("class","game-card");
 
-    //title
-    gameCardElement = document.createElement("h3");
-    gameCardElement.innerText = gameInfo.Title;    
-    newGameCard.appendChild(gameCardElement);
-
-    //video game id
-    gameCardElement = document.createElement("p");
-    gameCardElement.innerText = "Id: " + gameInfo.VideoGameID;
-    newGameCard.appendChild(gameCardElement);
-
-    //publisher
-    gameCardElement = document.createElement("p");
-    gameCardElement.innerText = "Publisher: " + gameInfo.Publisher;
-    newGameCard.appendChild(gameCardElement);
-
-    //year
-    gameCardElement = document.createElement("p");
-    gameCardElement.innerText = "Year: " + gameInfo.Year;
-    newGameCard.appendChild(gameCardElement);
-
-    //status
-    gameCardElement = document.createElement("p");
-    gameCardElement.innerText = "Status: " + gameInfo.Availability;
-    newGameCard.appendChild(gameCardElement);
-
-    gameContainer.appendChild(newGameCard);
+    const appendElement = (tag, text) => {
+        const element = document.createElement(tag);
+        element.innerText = text;
+        newGameCard.appendChild(element);
+    };
+    
+    appendElement("h3", gameInfo.Title); //title    
+    appendElement("p", "Id: " + gameInfo.VideoGameID); //video game id    
+    appendElement("p", "Publisher: " + gameInfo.Publisher); //publisher    
+    appendElement("p", "Year: " + gameInfo.Year); //year
+    appendElement("p", "Status: " + gameInfo.Availability); //status
+    
+    GAME_CARD_CONTAINTER_ELEMENT.appendChild(newGameCard);
 }
 
 //delete the game cards for when we do a new search
 function deleteGameContainerValues(){
-    let gameContainer = document.getElementById("gameList");
-    let currGameCards = gameContainer.querySelectorAll("div");
-
-    currGameCards.forEach(gameCard => gameCard.remove());
+    //reset the html for the container
+    GAME_CARD_CONTAINTER_ELEMENT.innerHTML = "";
 }

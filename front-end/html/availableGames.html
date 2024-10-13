@@ -20,12 +20,15 @@
 
                 <!-- Search and Filter section -->
                 <div id="searchContainer" class="search-filter-container">                   
-                    <div id="searchTypeContainer"></div>                    
+                    <input type="text" id="searchBar" placeholder="Search games by title..." onchange="searchTextChange(this)">                 
                     <select id="searchFilter" onchange="selectionChange(this)">
                         <option id="title">Title</option>
-                        <option id="publisher">Publisher</option>
-                        <option id="year">Year</option>                        
-                    </select>                    
+                        <option id="publisher">Publisher</option>                                             
+                    </select>   
+                    <div id="yearContainer">
+                        <select id="startYear"></select>                    
+                        <select id="endYear"></select>                                                                    
+                    </div>                 
                     <select id="statusFilter" onchange="selectionChange(this)">
                         <option id="">All Status</option>
                         <option id="Available">In Stock</option>

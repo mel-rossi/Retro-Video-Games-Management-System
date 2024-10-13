@@ -19,17 +19,17 @@
                 </div>
 
                 <!-- Search and Filter section -->
-                <div class="search-filter-container">
-                    <input type="text" id="searchBar" placeholder="Search games by title...">
-                    <select id="searchFilter" onchange="selectionChange()">
-                        <option value="title">Title</option>
-                        <option value="publisher">Publisher</option>
-                        <option value="year">Year</option>                        
+                <div id="searchContainer" class="search-filter-container">                   
+                    <div id="searchTypeContainer"></div>                    
+                    <select id="searchFilter" onchange="selectionChange(this)">
+                        <option id="title">Title</option>
+                        <option id="publisher">Publisher</option>
+                        <option id="year">Year</option>                        
                     </select>                    
-                    <select id="availabilityFilter">
-                        <option value="">Availability</option>
-                        <option value="InStock">In Stock</option>
-                        <option value="OutOfStock">Out of Stock</option>
+                    <select id="statusFilter" onchange="selectionChange(this)">
+                        <option id="">All Status</option>
+                        <option id="Available">In Stock</option>
+                        <option id="Unavailable">Out of Stock</option>
                     </select>
                     <button class="search-button" onclick="searchGames()">Search</button>
                 </div>

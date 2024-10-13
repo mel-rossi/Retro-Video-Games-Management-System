@@ -16,7 +16,7 @@ function bodyOnLoad(){
 }
 
 //switch between the search type inputs
-function searchSwitch(searchType){
+/*function searchSwitch(searchType){
     let searchElement = undefined;
 
     switch (searchType){
@@ -33,17 +33,17 @@ function searchSwitch(searchType){
     }
 
     return searchElement;
-}
+}*/
 
 //create a general textbox for search
-function createGeneralSearch(searchType){
+/*function createGeneralSearch(searchType){
     let searchBarElement = document.createElement("input");
     searchBarElement.setAttribute("type","text");
     searchBarElement.setAttribute("id", "searchBar");
     searchBarElement.setAttribute("placeholder", SEARCH_PLACEHOLDERS[searchType]);
 
     return searchBarElement;
-}
+}*/
 
 //create a start date and end date 
 function createYearSearch(){
@@ -59,6 +59,7 @@ function createYearSearch(){
     return dateElement;
 }
 
+//create a year selector with a certain id and dates
 function createYearSelector(id, startYear, endYear){
     let yearSelector = document.createElement("select");
     yearSelector.setAttribute("id", id);       
@@ -74,8 +75,11 @@ function createYearSelector(id, startYear, endYear){
     return yearSelector;
 }
 
+//function called when selection box's change value
 function selectionChange(element){
-    if(element.id == "searchFilter"){ 
+    if(element.id == "searchFilter"){ //change for search type
+
+        //replace the search type element with the new one
         let searchBarElement = document.getElementById("searchBar");
         let newSearchElement = searchSwitch(document.getElementById("searchFilter").selectedOptions[0].id);
 
@@ -83,21 +87,23 @@ function selectionChange(element){
 
         searchOption = element.selectedOptions[0].id;
     }
-    else if(element.id == "statusFilter"){
+    else if(element.id == "statusFilter"){ //change for game status
         statusOption = element.selectedOptions[0].id;
     }    
 }
 
+//when the search button is pressed
 function searchGames(){  
     let searchInput = undefined;    
     let searchBar = document.getElementById("searchBar");
     
+    //change input values based on the search type
     switch(searchBar.tagName){
-        case "INPUT":
+        case "INPUT": //textbox
             //get the search value from the textbox
-            searchInput = searchBar.value
+            searchInput = searchBar.value;
             break;
-        case "DIV":
+        case "DIV": //year selector
             //child 0 is start date and child 1 is end date, get the selected option from each of them
             searchInput = [searchBar.children[0].selectedOptions[0].value, searchBar.children[1].selectedOptions[0].value];
             break;
@@ -105,21 +111,26 @@ function searchGames(){
 
     let params = getSearchParams(searchInput);
 
-    postRequestParams("search", params, goThroughGamesIDK);
+    postRequestParams("search", params, generateGameCards);
 }
 
+//get the params for post request based on the search option
 function getSearchParams(searchInput){
 
+    //by default its 1 input
     let params = {'option': searchOption, 'first_input': searchInput, 'status': statusOption};
 
+    //year is the only one with 2 inputs
     if(searchOption == "year"){
-        params = {'option': searchOption, 'first_input': searchInput[0], 'second_input': searchInput[1], 'status': statusOption};
+        params = {'option': searchOption, 'first_input': parseInt(searchInput[0]), 'second_input': parseInt(searchInput[1]), 'status': statusOption};
     }
 
     return params;
 }
 
-function goThroughGamesIDK(games){
+//generate the game cards for what is given back from the post request
+function generateGameCards(games){
+    //delete the old game cards if any
     deleteGameContainerValues();
 
     games.forEach(gameInfo => {
@@ -127,6 +138,7 @@ function goThroughGamesIDK(games){
     });
 }
 
+//create a game card element with the given game information
 function addToGameContainer(gameInfo){
     let gameCardElement = undefined;
     let gameContainer = document.getElementById("gameList");
@@ -144,7 +156,6 @@ function addToGameContainer(gameInfo){
     gameCardElement = document.createElement("p");
     gameCardElement.innerText = "Id: " + gameInfo.VideoGameID;
     newGameCard.appendChild(gameCardElement);
-    
 
     //publisher
     gameCardElement = document.createElement("p");
@@ -164,6 +175,7 @@ function addToGameContainer(gameInfo){
     gameContainer.appendChild(newGameCard);
 }
 
+//delete the game cards for when we do a new search
 function deleteGameContainerValues(){
     let gameContainer = document.getElementById("gameList");
     let currGameCards = gameContainer.querySelectorAll("div");

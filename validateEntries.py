@@ -92,7 +92,7 @@ def generateDate():
 # Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
     row = df2.loc[df2.iloc[:, 0] == VideoGameInput] # Find correct Row 
-    if row.iloc[:, -1].eq('Available').any(): # Find the value of the last column : -1 = last column 
+    if row.iloc[:, -2].eq('Available').any(): # Find the value of the last column : -1 = last column 
                                               # check if said value == 'Available'
         return True # Available 
     print("VideoGame " + VideoGameInput + " is unavailable.")

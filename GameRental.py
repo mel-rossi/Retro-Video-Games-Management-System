@@ -4,6 +4,7 @@
 from flask import Flask, jsonify, request
 import pandas as pd 
 from validateEntries import generateDate
+from validateEntries import validateVideoGameID
 from flask_cors import CORS
 import numpy as np
 
@@ -188,32 +189,30 @@ def route_input(userInput):
             userInput = userInput[0]
              
     # Video Game ID input validation
-    if userInput.startswith("V") and len(userInput) == 5: 
-        # Check if VideoGameID is valid
-        if userInput >= "V0000" and userInput <= "V6000" and userInput[1:].isdigit(): # V0000 - V6000
-            # Check whether rentals of this VideoGameID exist 
-            exist = rental_exist(userInput)
+    if validateVideoGameID(userInput): 
+        # Check whether rentals of this VideoGameID exist 
+        exist = rental_exist(userInput)
 
-            # There is at least one Rental with VideoGameID
-            if exist: 
-                # Rentals related to inputed VideoGameID 
-                rentalData = rental_info(userInput)
+        # There is at least one Rental with VideoGameID
+        if exist: 
+            # Rentals related to inputed VideoGameID 
+            rentalData = rental_info(userInput)
 
-                # Calculate average Rental Time of said Video Game 
-                average = avg_rental_time(userInput)
+            # Calculate average Rental Time of said Video Game 
+            average = avg_rental_time(userInput)
 
-                # Calcultae how many times said Video Game has been Rented Out 
-                numRentals = rent_num(userInput) 
+            # Calcultae how many times said Video Game has been Rented Out 
+            numRentals = rent_num(userInput) 
 
-                return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+            return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
 
-            # No Rentals with VideoGameID 
-            else:
-                return "Rentals: 0"
+        # No Rentals with VideoGameID 
+        else:
+            return "Rentals: 0"
 
-        # Invalid VideoGameID 
-        else: 
-            return None
+    # Invalid VideoGameID 
+    else: 
+        return None
 
 # get_input
 

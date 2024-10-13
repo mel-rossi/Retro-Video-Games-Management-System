@@ -34,7 +34,6 @@ def validateVideoGameID(VideoGameInput):
         if VideoGameID == VideoGameInput: 
             return True 
     
-    print("Invalid VideoGameID. Try Again!")
     return False 
 # validateVideoGameID
 
@@ -53,7 +52,6 @@ def validateMemberID(MemberInput):
         if MemberInput == MemberID: 
             return True
 
-    print("Invalid MemberID. Try Again!")
     return False
 # validateMemberID
 
@@ -72,7 +70,6 @@ def validateRentalID(RentalInput):
         if RentalInput == RentalID: 
             return True
 
-    print("Invalid RentalID. Try Again!")
     return False
 # validateRentalID 
 
@@ -92,7 +89,7 @@ def generateDate():
 # Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
     row = df2.loc[df2.iloc[:, 0] == VideoGameInput] # Find correct Row 
-    if row.iloc[:, -1].eq('Available').any(): # Find the value of the last column : -1 = last column 
+    if row.iloc[:, -2].eq('Available').any(): # Find the value of the last column : -1 = last column 
                                               # check if said value == 'Available'
         return True # Available 
     print("VideoGame " + VideoGameInput + " is unavailable.")

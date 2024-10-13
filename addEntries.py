@@ -28,6 +28,8 @@ def VideoGameInput():
             available = checkAvailability(VideoGameID)
             if (available == True): 
                 confirmGameID = input("Enter 'y', if it is correct: ")
+        else: 
+            print("Invalid VideoGameID. Try Again!")
 
     return VideoGameID
 # VideoGameInput
@@ -45,6 +47,8 @@ def MemberInput():
             limitStat = checkRentalLimit(MemberID)
             if (limitStat == True): 
                 confirmMember = input("Enter 'y', if it is correct: ")
+        else: 
+            print("Invalid MemberID. Try Again!")
 
     return MemberID
 # MemberInput

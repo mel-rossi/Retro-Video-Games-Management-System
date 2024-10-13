@@ -32,14 +32,6 @@ def rental_info(MemberInput):
     # Filter relevant rentals 
     rentals = filter_rentals(MemberInput)
 
-    # Display Rental Registeration based on MemberID 
-    #info = "" 
-    #for index, row in rentals.iterrows(): 
-    #    dic = row.to_dict() # Convert to dictionary 
-    #    for key, value in dic.items(): 
-    #        info += f"{key}: {value}\n"
-    #    info += '\n' # Add a newline between entries
-
     return rentals
 # rental_info
 
@@ -78,13 +70,7 @@ def find_member(user_input):
     # Member ID input validation 
     if validateMemberID(user_input):
         member = members_df[members_df['MemberID'] == user_input]
-       # formatted_output = ""
-       # for column in member.columns:
-       #     value = member[column].values[0]
-       #     formatted_output += f"{column}: {value}\n"
-
-       # member = formatted_output
-
+     
         # Check whether rentals of this MemberID exist 
         exist = rental_exist(user_input) 
 

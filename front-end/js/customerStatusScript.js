@@ -50,11 +50,11 @@ function searchCustomer(){
 
     console.log(errorResult[1]);
 
-    let params = {'input': errorResult[1]};
+    let params = {'option': errorResult[1]};
 
     postRequestParams("search_member", params, generateRentalCards);
 }
 
 function generateRentalCards(data){
-    
+    console.log(JSON.stringify(data));
 }

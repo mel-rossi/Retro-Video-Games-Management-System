@@ -1,6 +1,7 @@
 # This program Shows History based off of the Video Game
 
 # Imports 
+import os
 from flask import Flask, jsonify, request
 import pandas as pd 
 from validateEntries import generateDate

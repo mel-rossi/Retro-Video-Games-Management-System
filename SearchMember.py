@@ -46,18 +46,6 @@ def extract_numbers(phone):
     return re.sub(r'\D', '', phone)
 # extract_numbers
 
-# Format the member info for output
-def member_layout(row):
-    return {
-        "MemberID": row['MemberID'],
-        "FirstName": row['FirstName'],
-        "LastName": row['LastName'],
-        "PhoneNumber": row['PhoneNumber'],
-        "Email": row['Email'],
-        "CurRentals": row['CurRentals']
-    }
-# member_layout 
-
 # Search member based on input
 def find_member(user_input):
     # Member ID input if only 4 digits
@@ -87,7 +75,13 @@ def find_member(user_input):
 
     # Member ID input validation 
     if validateMemberID(user_input):
-        member = members_df[members_df['MemberID'] == user_input] 
+        member = members_df[members_df['MemberID'] == user_input]
+        formatted_output = ""
+        for column in member.columns:
+            value = member[column].values[0]
+            formatted_output += f"{column}: {value}\n"
+
+        member = formatted_output
 
         # Check whether rentals of this MemberID exist 
         exist = rental_exist(user_input) 

@@ -11,13 +11,15 @@ CORS(app)
 # Load the .csv file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
-FILE_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
+MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
+RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 
-members_df = pd.read_csv(FILE_PATH)
+members_df = pd.read_csv(MEMBER_PATH)
+rentals_df = pd.read_csv(RENTAL_PATH)
 
 # Filter Rental rows where MemberID matches MemberInput 
 def filter_rentals(MemberInput): 
-    return members_df[members_df['MemberID'] == MemberInput].copy()
+    return rentals_df[rentals_df['MemberID'] == MemberInput].copy()
 # filter_rentals
 
 # Check whether Rentals of said Member exist

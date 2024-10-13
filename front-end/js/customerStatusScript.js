@@ -56,5 +56,5 @@ function searchCustomer(){
 }
 
 function generateRentalCards(data){
-    console.log(JSON.stringify(data));
+    console.log(data);
 }

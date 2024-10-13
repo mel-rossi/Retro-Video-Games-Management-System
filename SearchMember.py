@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -6,8 +7,11 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the .csv file
-file_path = 'Inventory/Members.csv'
-members_df = pd.read_csv(file_path)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
+FILE_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
+
+members_df = pd.read_csv(FILE_PATH)
 
 # Format the member info for output
 def member_layout(row):
@@ -19,6 +23,7 @@ def member_layout(row):
         "Email": row['Email'],
         "CurRentals": row['CurRentals']
     }
+# member_layeout 
 
 # Search member based on input
 def find_member(user_input):
@@ -26,6 +31,8 @@ def find_member(user_input):
         user_input = "M" + user_input
     if user_input.startswith("M") and len(user_input) == 5:
         member = members_df[members_df['MemberID'] == user_input]
+
+    # Add email input 
     else: 
         updated_input = user_input.replace("-","").replace(" ", "")
         member = members_df[members_df['PhoneNumber'].str.replace("-","").str.replace(" ","") == updated_input]
@@ -36,6 +43,7 @@ def find_member(user_input):
     else:
         #return jsonify({"error": "No member found with the provided ID or phone number."}), 404
         return None
+# find_member
 
 #Flask endpoint to search member
 
@@ -50,6 +58,7 @@ def search_member_route():
         #return jsonify(member.to_dict()), 200
     else:
         return jsonify ({"error": "No member found with the provided ID or phone number."}), 404
+# search_member_route
     
 if __name__ == '__main__':
     app.run(debug=True)

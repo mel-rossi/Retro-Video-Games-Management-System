@@ -189,7 +189,7 @@ def route_input(userInput):
             userInput = userInput[0]
              
     # Video Game ID input validation
-    if validateVideoGameID(userInput) 
+    if validateVideoGameID(userInput): 
         # Check whether rentals of this VideoGameID exist 
         exist = rental_exist(userInput)
 

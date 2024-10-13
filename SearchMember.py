@@ -33,14 +33,14 @@ def rental_info(MemberInput):
     rentals = filter_rentals(MemberInput)
 
     # Display Rental Registeration based on MemberID 
-    info = "" 
-    for index, row in rentals.iterrows(): 
-        dic = row.to_dict() # Convert to dictionary 
-        for key, value in dic.items(): 
-            info += f"{key}: {value}\n"
-        info += '\n' # Add a newline between entries
+    #info = "" 
+    #for index, row in rentals.iterrows(): 
+    #    dic = row.to_dict() # Convert to dictionary 
+    #    for key, value in dic.items(): 
+    #        info += f"{key}: {value}\n"
+    #    info += '\n' # Add a newline between entries
 
-    return info 
+    return rentals
 # rental_info
 
 # 
@@ -78,12 +78,12 @@ def find_member(user_input):
     # Member ID input validation 
     if validateMemberID(user_input):
         member = members_df[members_df['MemberID'] == user_input]
-        formatted_output = ""
-        for column in member.columns:
-            value = member[column].values[0]
-            formatted_output += f"{column}: {value}\n"
+       # formatted_output = ""
+       # for column in member.columns:
+       #     value = member[column].values[0]
+       #     formatted_output += f"{column}: {value}\n"
 
-        member = formatted_output
+       # member = formatted_output
 
         # Check whether rentals of this MemberID exist 
         exist = rental_exist(user_input) 
@@ -93,10 +93,10 @@ def find_member(user_input):
             # There is at least one Rental with MemberID 
             rentalData = rental_info(user_input)
 
-            return f"Member: {member} Rentals: {rentalData}"
+            return member, rentalData
 
         else: 
-            return f"Member: {member} Rentals: No Rentals"
+            return member
 
     # Invalid MemberID
     else: 
@@ -110,10 +110,15 @@ def search_member_route():
     data = request.json # Get json data from POST body
     user_input = data.get('option') # Extract 'option' field
 
-    member = find_member(user_input)
+    member, rentals = find_member(user_input)
+
+    data = {
+        "member": member.to_dict(orient='records'),
+        "rentals": rentals.to_dict(orient='records')
+    }
     
-    if member:
-        return jsonify(member)
+    if not member.empty:
+        return jsonify(data)
     else:
         return jsonify ({"error": "No member found with the provided ID or phone number."}), 404
 # search_member_route

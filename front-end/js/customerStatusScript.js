@@ -15,6 +15,7 @@ function bodyOnLoad(){
 }
 
 //return corresponding value to enum INPUT_TYPES for valid input
+//returns an array [emum value, first match result]
 function errorCheckInput(input){    
     const results = [regexEmail.exec(input), regexPhone.exec(input)];
     
@@ -26,7 +27,8 @@ function errorCheckInput(input){
         }
     }
     
-    return validIndex;
+    console.log(results[validIndex]);
+    return [validIndex, results[validIndex][0]];
 }
 
 function searchCustomer(){
@@ -34,7 +36,7 @@ function searchCustomer(){
     let input = SEARCH_INPUT_ELEMENT.value;
     let errorResult = errorCheckInput(input);
 
-    switch(errorResult){
+    switch(errorResult[0]){
         case INPUT_TYPES.INVALID:
             console.error("Invalid input do nothing");
             return;            
@@ -46,7 +48,9 @@ function searchCustomer(){
             break;
     }
 
-    let params = {'input': input};
+    console.log(errorResult[1]);
+
+    let params = {'input': errorResult[1]};
 
     postRequestParams("search_member", params, generateRentalCards);
 }

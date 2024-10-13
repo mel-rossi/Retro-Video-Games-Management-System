@@ -1,49 +1,18 @@
-var searchOption = undefined;
-var statusOption = undefined;
+var currSearchOption = undefined;
+var currStatusOption = undefined;
 
 const START_YEAR = 1900;
 const END_YEAR = 2100;
 
-const SEARCH_FILTERS = ["title", "publisher", "year"];
-const SEARCH_PLACEHOLDERS = {"title": "Search games by title...", "publisher": "Search games by publisher..."};
+//holds the values for textboxs with values and placeholders
+const SEARCH_HOLDERS = {"title": ["", "Search games by title..."], "publisher": ["", "Search games by publisher..."]};
+
+const SEARCH_BAR_ELEMENT = document.getElementById("searchBar");
 
 function bodyOnLoad(){
-    searchOption = document.getElementById("searchFilter").selectedOptions[0].id;
-    statusOption = document.getElementById("statusFilter").selectedOptions[0].id;
-
-    //dynamically create textbox for searching
-    document.getElementById("searchTypeContainer").appendChild(createGeneralSearch(SEARCH_FILTERS[0]));
+    currSearchOption = document.getElementById("searchFilter").selectedOptions[0].id;
+    currStatusOption = document.getElementById("statusFilter").selectedOptions[0].id;
 }
-
-//switch between the search type inputs
-/*function searchSwitch(searchType){
-    let searchElement = undefined;
-
-    switch (searchType){
-        case "title":            
-        case "publisher":
-            searchElement = createGeneralSearch(searchType);
-            break;
-        case "year":
-            searchElement = createYearSearch();
-            break;
-        default:
-            console.error("Invalid search switch occured")
-            break;
-    }
-
-    return searchElement;
-}*/
-
-//create a general textbox for search
-/*function createGeneralSearch(searchType){
-    let searchBarElement = document.createElement("input");
-    searchBarElement.setAttribute("type","text");
-    searchBarElement.setAttribute("id", "searchBar");
-    searchBarElement.setAttribute("placeholder", SEARCH_PLACEHOLDERS[searchType]);
-
-    return searchBarElement;
-}*/
 
 //create a start date and end date 
 function createYearSearch(){
@@ -75,55 +44,45 @@ function createYearSelector(id, startYear, endYear){
     return yearSelector;
 }
 
+function searchTextChange(element){
+    SEARCH_HOLDERS[currSearchOption][0] = element.value;
+}
+
 //function called when selection box's change value
 function selectionChange(element){
     if(element.id == "searchFilter"){ //change for search type
+        //set the previous search value to empty
+        SEARCH_HOLDERS[currSearchOption][0] = "";
 
-        //replace the search type element with the new one
-        let searchBarElement = document.getElementById("searchBar");
-        let newSearchElement = searchSwitch(document.getElementById("searchFilter").selectedOptions[0].id);
-
-        searchBarElement.parentNode.replaceChild(newSearchElement, searchBarElement);    
-
-        searchOption = element.selectedOptions[0].id;
+        //set the new search option (title/publisher)
+        currSearchOption = element.selectedOptions[0].id;
+        
+        //change place holder for pretty
+        SEARCH_BAR_ELEMENT.value = "";
+        SEARCH_BAR_ELEMENT.setAttribute("placeholder", SEARCH_HOLDERS[currSearchOption][1]);        
     }
     else if(element.id == "statusFilter"){ //change for game status
-        statusOption = element.selectedOptions[0].id;
+        currStatusOption = element.selectedOptions[0].id;
     }    
 }
 
 //when the search button is pressed
-function searchGames(){  
-    let searchInput = undefined;    
-    let searchBar = document.getElementById("searchBar");
-    
-    //change input values based on the search type
-    switch(searchBar.tagName){
-        case "INPUT": //textbox
-            //get the search value from the textbox
-            searchInput = searchBar.value;
-            break;
-        case "DIV": //year selector
-            //child 0 is start date and child 1 is end date, get the selected option from each of them
-            searchInput = [searchBar.children[0].selectedOptions[0].value, searchBar.children[1].selectedOptions[0].value];
-            break;
-    }
+function searchGames(){      
+let test = getSearchParams();
 
-    let params = getSearchParams(searchInput);
-
-    postRequestParams("search", params, generateGameCards);
+    postRequestParams("search", test, generateGameCards);
 }
 
 //get the params for post request based on the search option
-function getSearchParams(searchInput){
-
-    //by default its 1 input
-    let params = {'option': searchOption, 'first_input': searchInput, 'status': statusOption};
-
-    //year is the only one with 2 inputs
-    if(searchOption == "year"){
-        params = {'option': searchOption, 'first_input': parseInt(searchInput[0]), 'second_input': parseInt(searchInput[1]), 'status': statusOption};
-    }
+function getSearchParams(){
+    
+    let params = {'option': "all_params", 
+        'title': SEARCH_HOLDERS["title"][0], 
+        'publisher': SEARCH_HOLDERS["publisher"][0], 
+        'start_year': '', 
+        'end_year': '', 
+        'status': currStatusOption
+    };
 
     return params;
 }

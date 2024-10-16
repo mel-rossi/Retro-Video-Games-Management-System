@@ -81,25 +81,25 @@ def find_member(user_input):
     elif user_input.upper().startswith("M") and len(user_input) == 5 and user_input[1:].isdigit():
         user_input = user_input.upper(); # Case insensitivity: takes care if input starts with "m" instead of "M" 
 
-    # Add email input
     # Non MemberID input 
     else:
-        # input that has @
+        # Email input : If input contains '@' 
+        if '@' in user_input:
+            # Retrieve MemberID associated with Email
+            user_input = df1.loc[df1['Email'].str.lower() == user_input.lower(), 'MemberID'].values
 
-        # Phone Number input 
-
-        # If input has 10 digits
+        # Phone Number input : If input contains 10 digits
         if sum(char.isdigit() for char in user_input) == 10: 
             digits = extract_numbers(user_input) # Extract digits 
 
             # Retrieve MemberID associated with Phone Number 
             user_input = df1.loc[df1['PhoneNumber'].apply(extract_numbers) == digits, 'MemberID'].values
 
-        # Invalid Phone Number
+        # Invalid Phone Number or Email
         if len(user_input) <= 0:
             return None
 
-        # Valid Phone Number 
+        # Valid Phone Number or Email 
         else: 
             user_input = user_input[0]
 

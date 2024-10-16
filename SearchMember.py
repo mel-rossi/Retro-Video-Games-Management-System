@@ -13,10 +13,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
 MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
 RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 
 # Read .csv files into DataFrames 
 df1 = pd.read_csv(MEMBER_PATH)
 df2 = pd.read_csv(RENTAL_PATH)
+df3 = pd.read_csv(VIDEOGAME_PATH)
 
 # Filter Rental rows where MemberID matches MemberInput 
 def filter_rentals(MemberInput): 
@@ -30,11 +32,23 @@ def rental_exist(MemberInput):
     return not filter_rentals(MemberInput).empty
 # rental_exist
 
+# Grab only 'VideoGameID' and 'Title' from Video Game details
+def game_title():
+
+    return df3[['VideoGameID', 'Title']]
+# game_title 
+
 # Organize Rental Information of MemberID  
 def rental_info(MemberInput):
 
     # Filter relevant rentals 
     rentals = filter_rentals(MemberInput)
+
+    # Retrieve Titles of Video Games  
+    titles = game_title()
+
+    # Merge rentals with titles 
+    rentals = pd.merge(rentals, titles, on='VideoGameID', how='left')
 
     # Separate rentals into active and inactive rentals 
     activeRentals = rentals[rentals['Status'] == 'Active'].copy()  

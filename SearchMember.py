@@ -44,6 +44,9 @@ def rental_info(MemberInput):
     # Filter relevant rentals 
     rentals = filter_rentals(MemberInput)
 
+    # Drop the 'MemberID' column
+    rentals = rentals.drop(columns=['MemberID'])
+
     # Retrieve Titles of Video Games  
     titles = game_title()
 
@@ -52,7 +55,11 @@ def rental_info(MemberInput):
 
     # Separate rentals into active and inactive rentals 
     activeRentals = rentals[rentals['Status'] == 'Active'].copy()  
-    inactiveRentals = rentals[rentals['Status'] == 'Inactive'].copy() 
+    inactiveRentals = rentals[rentals['Status'] == 'Inactive'].copy()
+
+    # Drop the 'Status' column 
+    activeRentals = activeRentals.drop(columns=['Status', 'ReturnDate']) # Additionally drop 'ReturnDate' column 
+    inactiveRentals = inactiveRentals.drop(columns=['Status'])
 
     return activeRentals, inactiveRentals 
 # rental_info

@@ -79,7 +79,7 @@ def rent_num(VideoGameInput):
     # Initialize number of rentals
     num = 0
 
-    # Iterate through teh column VideoGameID in Rentals 
+    # Iterate through the column VideoGameID in Rentals 
     for VideoGameID in df1['VideoGameID']: 
         if VideoGameID == VideoGameInput: 
             num += 1
@@ -144,9 +144,6 @@ def rank():
     # Drop the 'rentNum' column 
     sortedGames = sortedGames.drop(columns=['rentNum'])
 
-    # Convert sorted Games DataFrame to dictionary 
-    sortedGames = sortedGames.to_dict(orient='records')
-
     # Return sorted Games
     return sortedGames
 # rank
@@ -155,7 +152,6 @@ def route_input(userInput):
     # Rank Rentals based on numRentals 
     if userInput.lower() == 'rank':
         sortedRentals = rank() 
-        # print(sortedRentals)
         return sortedRentals
 
     # Number of active Rentals
@@ -207,11 +203,14 @@ def route_input(userInput):
             # Calcultae how many times said Video Game has been Rented Out 
             numRentals = rent_num(userInput) 
 
-            return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+            return rentalData, average, numberRentals
+        #f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
 
         # No Rentals with VideoGameID 
         else:
-            return "Rentals: 0"
+
+            return empty, empty, empty
+        # "no rentals"
 
     # Invalid VideoGameID 
     else: 

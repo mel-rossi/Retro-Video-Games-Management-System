@@ -2,49 +2,51 @@
 
 # Imports 
 import os
-from flask import Flask, jsonify, request
-import pandas as pd 
-from validateEntries import generateDate
-from validateEntries import validateVideoGameID
-from flask_cors import CORS
 import numpy as np
-
+import pandas as pd
+from flask_cors import CORS
+from validateEntries import generateDate
+from flask import Flask, jsonify, request
+from validateEntries import validateVideoGameID
 
 app = Flask(__name__)
 CORS(app)
 
-# Data Frames 
+# Load the .csv files 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
+RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames')
 
-# Load Rentals & Video Games
-df1 = pd.read_csv('Inventory/Rentals.csv')
-df2 = pd.read_csv('Inventory/VideoGames.csv')
+# Read .csv files into DataFrames 
+df1 = pd.read_csv(RENTAL_PATH)
+df2 = pd.read_csv(VIDEOGAME_PATH)
 
 # Functions
 
 # Filter Rental rows where VideoGameID matches VideoGameInput 
 def filter_rentals(VideoGameInput): 
+
     return df1[df1['VideoGameID'] == VideoGameInput].copy()
 # filter_rentals
 
-# Check whether Rentals of said videoGame exist
-def rental_exist(VideoGameInput): 
+# Check whether Rentals of said Video Game exist
+def rental_exist(VideoGameInput):
+
     return not filter_rentals(VideoGameInput).empty
 # rental_exist 
 
-# Organize Rental Information of VideoGameID
-def rental_info(VideoGameInput): 
+# Organize Rental Information of Video Game
+def rental_info(VideoGameInput):
+
     # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput) 
+    rentals = filter_rentals(VideoGameInput)
 
-    # Display Rental Registrations based on VideoGameID
-    info = "" 
-    for index, row in rentals.iterrows(): 
-        dic = row.to_dict() # Convert to dictionary 
-        for key, value in dic.items(): 
-            info += f"{key}: {value}\n"
-        info += '\n' # Add a newline between entries
+    # Separate rentals into active and inactive rentals 
+    activeRentals = rentals[rentals['Status'] == 'Active'].copy() 
+    inactiveRentals = rentals[rentals['Status'] == 'Inactive'].copy()
 
-    return info 
+    return rentals 
 # rental_info 
 
 # Calculate : Average Rental Time (Return - Start Date)

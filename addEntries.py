@@ -28,8 +28,6 @@ def VideoGameInput():
             available = checkAvailability(VideoGameID)
             if (available == True): 
                 confirmGameID = input("Enter 'y', if it is correct: ")
-        else: 
-            print("Invalid VideoGameID. Try Again!")
 
     return VideoGameID
 # VideoGameInput
@@ -47,8 +45,6 @@ def MemberInput():
             limitStat = checkRentalLimit(MemberID)
             if (limitStat == True): 
                 confirmMember = input("Enter 'y', if it is correct: ")
-        else: 
-            print("Invalid MemberID. Try Again!")
 
     return MemberID
 # MemberInput
@@ -69,9 +65,9 @@ MemberID = MemberInput()
 # therefore on the same date
 StartDate = generateDate()
 
-# Return date empty by default, because in practice a entry is made when the rental is checked out. 
-# Return date is now generated only when editing a entry with editEntry.py
-ReturnDate = ''
+# Return date "-1" by default, because in practice a entry is made when the rental is checked out. 
+# Return date is generated only when editing a entry with editEntry.py
+ReturnDate = '-1'
 
 Status = 'Active'
 

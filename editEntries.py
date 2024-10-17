@@ -4,12 +4,12 @@
 
 # Imports
 import pandas as pd 
-from validateEntries import validateRentalID
-from validateEntries import confirmRentalID
-from validateEntries import checkRentalStatus
-from validateEntries import generateDate
 from linkIDs import returnGame
 from linkIDs import decRentals
+from validateEntries import generateDate
+from validateEntries import confirmRentalID
+from validateEntries import validateRentalID
+from validateEntries import checkRentalStatus
 
 # Function
 

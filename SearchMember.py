@@ -127,7 +127,7 @@ def find_member(user_input):
 
     # Invalid MemberID
     else: 
-        return None
+        return empty, empty, empty
 # find_member
 
 #Flask endpoint to search member

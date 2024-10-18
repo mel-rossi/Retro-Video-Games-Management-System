@@ -12,23 +12,41 @@ CSV_FILE = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 
 df = pd.read_csv(CSV_FILE)
 
-def search_games(title, publisher, start_year, end_year, status):
-    if (start_year is None or end_year is None):
-        return df[df['Title'].str.contains(title, case=False, na=False)
-            & (df['Publisher'].str.contains(publisher, case=False, na=False))
-            & (df['Availability'].str.contains(status, case=True,na=False))]
-    else:
-        return df[df['Title'].str.contains(title, case=False, na=False)
-            & (df['Publisher'].str.contains(publisher, case=False, na=False))
-            & (df['Year'] >= start_year) & (df['Year'] <= end_year)
-            & (df['Availability'].str.contains(status, case=True,na=False))]
+# Filter Video Games based on input 
+def filter_games(title, publisher, start_year, end_year, status):
+
+    filters = ( )
+
+    # Filters 'Title'
+    if title is not None: 
+        filters &= df['Title'].str.contains(title, case=False, na=False)
+
+    # Filters 'Publisher'
+    if publisher is not None: 
+        filters &= df['Publisher'].str.contains(publisher, case=False, na=False)
+
+    if status is not None: 
+        filters &= df['Availability'].str.contains(status, case=True, na=False)
+
+    # Filters 'Year'
+    if start_year is not None: # based on start_year
+        filters &= (df['Year'] >= start_year)
+
+    if end_year is not None: # based on end_year 
+        filters &= (df['Year'] <= end_year) 
+
+    return df[filters]
+# filter_games
 
 @app.route('/search_game', methods=['POST'])
-def output():
+def search_game_route():
+
     data = request.json
     results = search_games(data.get('title'), data.get('publisher'), data.get('start_year'),
                                      data.get('end_year'), data.get('status'))
+
     return jsonify(results.to_dict(orient='records'))
+# search_game_route
 
 if __name__ == '__main__':
     app.run(debug=True)

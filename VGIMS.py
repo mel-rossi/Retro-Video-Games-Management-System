@@ -1,6 +1,5 @@
 from flask import Flask, render_template, send_from_directory
 import webbrowser
-import threading
 import subprocess
 import os
 import signal
@@ -39,6 +38,6 @@ def search_games_page():
     return render_template('availableGames.html')
 
 if __name__ == '__main__':
-    threading.Timer(1, webbrowser.open('http://127.0.0.1:5000/')).start() # opens browser
     run_services()
+    webbrowser.open('http://127.0.0.1:5000/') # opens browser
     app.run(port=5000) # runs on port 5000, other flask apps should run on different ports

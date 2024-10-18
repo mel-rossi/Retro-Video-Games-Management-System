@@ -13,27 +13,27 @@ CSV_FILE = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 df = pd.read_csv(CSV_FILE)
 
 # Filter Video Games based on input 
-def filter_games(title, publisher, start_year, end_year, status):
+def filter_games(title=None, publisher=None, start_year=None, end_year=None, status=None):
 
-    filters = ( )
+    filters = pd.Series([True] * len(df), index=df.index)
 
     # Filters 'Title'
     if title is not None: 
-        filters &= df['Title'].str.contains(title, case=False, na=False)
+        filters = filters & df['Title'].str.contains(title, case=False, na=False)
 
     # Filters 'Publisher'
     if publisher is not None: 
-        filters &= df['Publisher'].str.contains(publisher, case=False, na=False)
+        filters = filters & df['Publisher'].str.contains(publisher, case=False, na=False)
 
     if status is not None: 
-        filters &= df['Availability'].str.contains(status, case=True, na=False)
+        filters = filters & df['Availability'].str.contains(status, case=True, na=False)
 
     # Filters 'Year'
     if start_year is not None: # based on start_year
-        filters &= (df['Year'] >= start_year)
+        filters = filters & (df['Year'] >= start_year)
 
     if end_year is not None: # based on end_year 
-        filters &= (df['Year'] <= end_year) 
+        filters = filters & (df['Year'] <= end_year) 
 
     return df[filters]
 # filter_games
@@ -42,7 +42,7 @@ def filter_games(title, publisher, start_year, end_year, status):
 def search_game_route():
 
     data = request.json
-    results = search_games(data.get('title'), data.get('publisher'), data.get('start_year'),
+    results = filter_games(data.get('title'), data.get('publisher'), data.get('start_year'),
                                      data.get('end_year'), data.get('status'))
 
     return jsonify(results.to_dict(orient='records'))

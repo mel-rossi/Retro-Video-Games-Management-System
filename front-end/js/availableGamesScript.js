@@ -90,7 +90,7 @@ function searchGames(){
         'status': currStatusOption
     };
     
-    postRequestParams("search", params, generateGameCards);
+    postRequestParams("search_game", params, generateGameCards);
 }
 
 

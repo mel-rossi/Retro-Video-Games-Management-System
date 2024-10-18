@@ -52,7 +52,7 @@ function searchCustomer(){
 
     let params = {'option': errorResult[1]};
 
-    postRequestParams("search_member", params, generateRentalCards);
+    postRequestParams("member_rental", params, generateRentalCards);
 }
 
 function generateRentalCards(data){

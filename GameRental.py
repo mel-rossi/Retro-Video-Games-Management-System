@@ -49,43 +49,6 @@ def rental_info(rentals):
     return activeRentals, inactiveRentals 
 # rental_info 
 
-# Calculate : How many active rentals are there right now? 
-#def active_rentals(): 
-#
-#    active = 0
-#
-#    # Iterate through Status column in Rentals 
-#    for Status in df1['Status']: 
-#        if Status == 'Active': 
-#            active += 1
-#
-#    return active
-# active_rentals
-
-# Calculate : How many inactive rentals are there right now? 
-#def inactive_rentals(): 
-#
-#    inactive = 0
-#
-#    # Iterate through Status column in Rentals 
-#    for Status in df1['Status']:
-#        if Status == 'Inactive': 
-#            inactive += 1
-#
-#    return inactive
-# inactive_rentals
-
-# Calculate : How many rentals have there been ever? 
-#def all_rentals(): 
-#
-#    rentals = 0
-#
-#    for _, _ in df1.iterrows(): 
-#        rentals += 1
-#  
-#    return rentals
-# all_rentals
-
 # Rank Video Games based on number of times they have been rented out
 # def rank():
 #

@@ -261,6 +261,3 @@ def game_rental_route():
         return jsonify(data)
     else: 
         return jsonify({"error": "No video game found with the provided ID or title."}), 404
-
-if __name__ == '__main__':
-    app.run(debug=True)

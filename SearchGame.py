@@ -1,10 +1,10 @@
 import os
 import pandas as pd
-from flask import Flask, request, jsonify
+from flask import request, jsonify, Blueprint
 from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app)
+searchgame_bp = Blueprint('SearchGame', __name__)
+CORS(searchgame_bp)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
 INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')   
@@ -38,7 +38,7 @@ def filter_games(title=None, publisher=None, start_year=None, end_year=None, sta
     return df[filters]
 # filter_games
 
-@app.route('/search_game', methods=['POST'])
+@searchgame_bp.route('/search_game', methods=['POST'])
 def search_game_route():
 
     data = request.json
@@ -48,5 +48,3 @@ def search_game_route():
     return jsonify(results.to_dict(orient='records'))
 # search_game_route
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5001)

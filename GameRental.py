@@ -236,12 +236,11 @@ def route_input(userInput):
 
 # get_input
 
-@gamerental_bp.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
+@gamerental_bp.route('/game_rental', methods=['POST']) 
 def game_rental_route():
-    if request.method == 'POST': 
-        VideoGameID = request.json.get('option')
-    else: 
-        VideoGameID = request.args.get('option')
+    
+    data = request.json # Get json data from POST body 
+    user_input = data.get('option') # Extract 'option' field 
 
     activeRentals, inactiveRentals, rentalStats = route_input(VideoGameID)
 

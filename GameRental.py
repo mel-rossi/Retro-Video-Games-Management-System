@@ -94,99 +94,99 @@ def rent_num(VideoGameInput):
 # rent_num
 
 # Calculate : How many active rentals are there right now? 
-def active_rentals(): 
-
-    active = 0
-
-    # Iterate through Status column in Rentals 
-    for Status in df1['Status']: 
-        if Status == 'Active': 
-            active += 1
-
-    return active
+#def active_rentals(): 
+#
+#    active = 0
+#
+#    # Iterate through Status column in Rentals 
+#    for Status in df1['Status']: 
+#        if Status == 'Active': 
+#            active += 1
+#
+#    return active
 # active_rentals
 
 # Calculate : How many inactive rentals are there right now? 
-def inactive_rentals(): 
-
-    inactive = 0
-
-    # Iterate through Status column in Rentals 
-    for Status in df1['Status']:
-        if Status == 'Inactive': 
-            inactive += 1
-
-    return inactive
+#def inactive_rentals(): 
+#
+#    inactive = 0
+#
+#    # Iterate through Status column in Rentals 
+#    for Status in df1['Status']:
+#        if Status == 'Inactive': 
+#            inactive += 1
+#
+#    return inactive
 # inactive_rentals
 
 # Calculate : How many rentals have there been ever? 
-def all_rentals(): 
-
-    rentals = 0
-
-    for _, _ in df1.iterrows(): 
-        rentals += 1
-  
-    return rentals
+#def all_rentals(): 
+#
+#    rentals = 0
+#
+#    for _, _ in df1.iterrows(): 
+#        rentals += 1
+#  
+#    return rentals
 # all_rentals
 
 # Rank Video Games based on number of times they have been rented out
-def rank():
-
-    rentals = [] 
-
-    # Iterate through VideoGameID column in Video Games 
-    for VideoGameID in df2['VideoGameID']: 
-        exist = rental_exist(VideoGameID)  
-        numRentals = rent_num(VideoGameID) 
-        rentals.append((VideoGameID, numRentals)) 
-    
-    # Convert to DataFrame for easy sorting 
-    sortByRentals = pd.DataFrame(rentals, columns=['VideoGameID', 'rentNum'])
-
-    # Merge rentals with VideoGames DataFrame 
-    merge = pd.merge(df2, sortByRentals, on='VideoGameID', how='left')
-    merge['rentNum'] = merge['rentNum'].fillna(0) # Fill in no rentals with 0 
-
-    # Sort merged DataFrame by rentNum in descending order
-    sortedGames = merge.sort_values(by='rentNum', ascending=False)
-
-    # Drop the 'rentNum' column 
-    sortedGames = sortedGames.drop(columns=['rentNum'])
-
-    # Return sorted Games
-    return sortedGames
-# rank
+# def rank():
+#
+#    rentals = [] 
+#
+#    # Iterate through VideoGameID column in Video Games 
+#    for VideoGameID in df2['VideoGameID']: 
+#        exist = rental_exist(VideoGameID)  
+#        numRentals = rent_num(VideoGameID) 
+#        rentals.append((VideoGameID, numRentals)) 
+#    
+#    # Convert to DataFrame for easy sorting 
+#    sortByRentals = pd.DataFrame(rentals, columns=['VideoGameID', 'rentNum'])
+#
+#    # Merge rentals with VideoGames DataFrame 
+#    merge = pd.merge(df2, sortByRentals, on='VideoGameID', how='left')
+#    merge['rentNum'] = merge['rentNum'].fillna(0) # Fill in no rentals with 0 
+#
+#    # Sort merged DataFrame by rentNum in descending order
+#    sortedGames = merge.sort_values(by='rentNum', ascending=False)
+#
+#    # Drop the 'rentNum' column 
+#    sortedGames = sortedGames.drop(columns=['rentNum'])
+#
+#    # Return sorted Games
+#    return sortedGames
+# # rank
 
 def route_input(userInput):
 
     empty = pd.DataFrame()
 
-    # Rank Rentals based on numRentals 
-    if userInput.lower() == 'rank':
-        sortedRentals = rank() 
-        return sortedRentals, empty, "Ranked"
+    # # Rank Rentals based on numRentals 
+    #if userInput.lower() == 'rank':
+    #    sortedRentals = rank() 
+    #    return sortedRentals, empty, "Ranked"
 
-    # Number of total Rentals
-    elif userInput.lower() == 'rentals':
-        # Number of active Rentals
-        active = active_rentals()
-        active = pd.DataFrame([active], columns=['Active Total'])
+    # # Number of total Rentals
+    # elif userInput.lower() == 'rentals':
+    #    # Number of active Rentals
+    #    active = active_rentals()
+    #    active = pd.DataFrame([active], columns=['Active Total'])
 
-        # Number of inactive Rentals 
-        inactive = inactive_rentals()
-        inactive = pd.DataFrame([inactive], columns=['Inactive Total'])
+    #    # Number of inactive Rentals 
+    #    inactive = inactive_rentals()
+    #    inactive = pd.DataFrame([inactive], columns=['Inactive Total'])
 
-        # Number of all Rentals ever made 
-        rentalsEver = all_rentals() 
-        rentalsEver = pd.DataFrame([rentalsEver], columns=['Total Rentals'])
+    #    # Number of all Rentals ever made 
+    #    rentalsEver = all_rentals() 
+    #    rentalsEver = pd.DataFrame([rentalsEver], columns=['Total Rentals'])
 
-        # Merge active, inactive and rentalsEver into one row
-        numberRentals = pd.concat([active, inactive, rentalsEver], axis=1)
-        return numberRentals, empty, "Number of Rentals"
+    #    # Merge active, inactive and rentalsEver into one row
+    #    numberRentals = pd.concat([active, inactive, rentalsEver], axis=1)
+    #    return numberRentals, empty, "Number of Rentals"
 
     # Video Game ID input if only 4 digits
-    elif userInput.isdigit() and len(userInput) == 4: 
+    if userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
 
     # Video Game ID input with V + 4 digits
@@ -245,11 +245,11 @@ def game_rental_route():
 
     activeRentals, inactiveRentals, rentalStats = route_input(VideoGameID)
 
-    if isinstance(rentalStats, str):
-        data = {
-            f"{rentalStats}": activeRentals.to_dict(orient='records') 
-        }
-    elif not activeRentals.empty:
+    #if isinstance(rentalStats, str):
+    #    data = {
+    #        f"{rentalStats}": activeRentals.to_dict(orient='records') 
+    #    }
+    if not activeRentals.empty:
         data = { 
             "Active Rentals": activeRentals.to_dict(orient='records'), 
             "Inactive Rentals": inactiveRentals.to_dict(orient='records'), 
@@ -260,7 +260,7 @@ def game_rental_route():
     if not activeRentals.empty: 
         return jsonify(data)
     else: 
-        return jsonify({"error": "No special call nor video game with provided ID or name"}), 404
+        return jsonify({"error": "No video game found with the provided ID or title."}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

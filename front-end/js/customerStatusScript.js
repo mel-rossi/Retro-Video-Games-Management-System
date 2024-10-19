@@ -3,6 +3,16 @@ const regexEmail = new RegExp(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'
 const regexPhone = new RegExp(/(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/);
 
 const SEARCH_INPUT_ELEMENT = document.getElementById("searchInput");
+const CURRENT_RENTALS_ELEMENT = document.getElementById("currentRentals");
+const PAST_RENTALS_ELEMENT = document.getElementById("pastRentals");
+const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
+
+const RENTAL_TYPES = {
+    ACTIVE: 'active rentals',
+    INACTIVE: 'inactive rentals'
+};
+
+const RENTAL_INFO = {[RENTAL_TYPES.ACTIVE]: CURRENT_RENTALS_ELEMENT, [RENTAL_TYPES.INACTIVE]: PAST_RENTALS_ELEMENT};
 
 const INPUT_TYPES = Object.freeze({
     INVALID: -1,
@@ -10,13 +20,21 @@ const INPUT_TYPES = Object.freeze({
     PHONE: 1
 });
 
-function bodyOnLoad(){
-        
-}
+window.onload = () => {
+    //search container keydown check when enter to call search
+    SEARCH_CONTAINER_ELEMENT.onkeydown = (event) => {
+        if(event.key == 'Enter')
+        {
+           searchCustomer();
+        }
+    };
+};
 
 //return corresponding value to enum INPUT_TYPES for valid input
 //returns an array [emum value, first match result]
-function errorCheckInput(input){    
+function errorCheckInput(input){
+    //emails are lower case
+    input = input.toLowerCase();    
     const results = [regexEmail.exec(input), regexPhone.exec(input)];
     
     let validIndex = -1;
@@ -39,7 +57,8 @@ function searchCustomer(){
     switch(errorResult[0]){
         case INPUT_TYPES.INVALID:
             console.error("Invalid input do nothing");
-            return;            
+            alert("Invalid email or address provided");            
+            return; //do not do an ajax call since invalid option
         case INPUT_TYPES.EMAIL:
             console.log("email");
             break;
@@ -55,6 +74,63 @@ function searchCustomer(){
     postRequestParams("member_rental", params, generateRentalCards);
 }
 
-function generateRentalCards(data){
-    console.log(data);
+function generateRentalCards(customerData){
+    console.log(customerData);
+    
+    //clear containers for active & inactive
+    deleteRentalContainerValues();    
+    
+    //Add title for different rental status
+    RENTAL_INFO[RENTAL_TYPES.ACTIVE].appendChild(Object.assign(document.createElement("h3"), {innerText: "Currently Rented"}));
+    RENTAL_INFO[RENTAL_TYPES.INACTIVE].appendChild(Object.assign(document.createElement("h3"), {innerText: "Past Rentals"}));
+
+    //go through all the active games from the member
+    //only show title and rented date
+    customerData[RENTAL_TYPES.ACTIVE].forEach(rentedGame => {
+        addRentalCard(rentedGame, RENTAL_INFO[RENTAL_TYPES.ACTIVE], (appendElement) => {
+            appendElement("p", "Game: ", rentedGame.Title);
+            appendElement("p", "Rented on: ", new Date(rentedGame.StartDate).toDateString());
+        });
+    });
+
+    //go through all the inactive games from the member
+    //only show title, rented date, and return date
+    customerData[RENTAL_TYPES.INACTIVE].forEach(rentedGame => {
+        addRentalCard(rentedGame, RENTAL_INFO[RENTAL_TYPES.INACTIVE], (appendElement) => {
+            appendElement("p", "Game: ", rentedGame.Title);
+            appendElement("p", "Rented on: ", new Date(rentedGame.StartDate).toDateString());
+            appendElement("p", "Returned on: ", new Date(rentedGame.ReturnDate).toDateString());   
+        });
+    });
+}
+
+function addRentalCard(rentedGame, gameElement, appendInfo){
+    console.log(rentedGame);
+
+    let newGameInfo = document.createElement("div");
+    newGameInfo.id = rentedGame.RentalID;
+    newGameInfo.setAttribute("class", "rental-card");
+
+    const appendElement = (tag, label, text) => {
+        const element  = document.createElement(tag);        
+
+        //strong label for subtitle in game card
+        element.appendChild(Object.assign(document.createElement("strong"), {innerText: label}));
+
+        //info of the corresponding label
+        element.appendChild(document.createTextNode(text));
+        
+        newGameInfo.appendChild(element);
+    };
+
+    //call the passed information 
+    appendInfo(appendElement);
+
+    gameElement.appendChild(newGameInfo);
+}
+
+function deleteRentalContainerValues(){
+    for(let curr in RENTAL_INFO){
+        RENTAL_INFO[curr].innerHTML = "";
+    }
 }

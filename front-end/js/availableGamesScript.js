@@ -16,13 +16,22 @@ const END_YEAR_ELEMENT = document.getElementById("endYear");
 const SEARCH_FILTER_ELEMENT = document.getElementById("searchFilter");
 const SEARCH_STATUS_ELEMENT = document.getElementById("statusFilter");
 const GAME_CARD_CONTAINTER_ELEMENT = document.getElementById("gameList");
+const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
 
-function bodyOnLoad(){
+window.onload = () => {
     currSearchOption = SEARCH_FILTER_ELEMENT.selectedOptions[0].id;
     currStatusOption = SEARCH_STATUS_ELEMENT.selectedOptions[0].id;
 
     createYearSearch();
-}
+
+    //search container keydown check when enter to call search
+    SEARCH_CONTAINER_ELEMENT.onkeydown = (event) => {
+        if(event.key == 'Enter')
+        {
+           searchCustomer();
+        }
+    };
+};
 
 //create a start date and end date 
 function createYearSearch(){    

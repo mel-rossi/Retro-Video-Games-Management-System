@@ -8,6 +8,6 @@ Video Game Inventory Management System - An application where a user can view da
 
 ## Group Members : 
 - Mel Rossi Rodrigues
-- Alexander Leontiev
+- [Alexander Leontiev](https://github.com/alex45101)
 - Josh Penaojas
 - Maria Alexandra Lois Peralejo

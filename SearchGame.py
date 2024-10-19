@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-from flask import request, jsonify, Blueprint
 from flask_cors import CORS
+from flask import request, jsonify, Blueprint
 
 searchgame_bp = Blueprint('SearchGame', __name__)
 CORS(searchgame_bp)

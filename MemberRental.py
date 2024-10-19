@@ -2,8 +2,8 @@ import os
 import re
 import pandas as pd
 from flask_cors import CORS
-from flask import request, jsonify, Blueprint 
 from validateEntries import validateMemberID
+from flask import request, jsonify, Blueprint 
 
 memberrental_bp = Blueprint('MemberRental', __name__)
 CORS(memberrental_bp)

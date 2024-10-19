@@ -41,13 +41,7 @@ def inactive_filter(df=df):
     return df
 # inactive_filter 
 
-# Organize Rental Information : remove later  
-def rental_info(df=df): 
-    
-    return df
-# rental_info 
-
-def avg_rental_time(df): 
+def avg_rental_time(df=df): 
     
     # Replace empty (-1) ReturnDate with today's date 
     today = generateDate() 
@@ -74,13 +68,57 @@ def rent_num(Input, idName):
     num = 0
 
     # Iterate through the column 
-    for ID in df[idName]: 
-        if ID == Input: 
-            num += 1
+
+    # Unbiased 
+    if idName is None: 
+        num = len(df)
+
+    # Biased by ID of idName
+    else:
+        for ID in df[idName]: 
+            if ID == Input: 
+                num += 1
 
     num = pd.DataFrame([num], columns=['Numbers of Rentals']) 
 
     return num 
-# rent_num 
+# rent_num
+
+def route_input(status, df=df):
+
+    idName = None
+    idInput = None
+
+    if status.lower() == 'active': 
+        df = active_filter() 
+        idName = 'Status'
+        idInput = 'Active' 
+    elif status.lower() == 'inactive': 
+        df = inactive_filter()
+        idName = 'Status' 
+        idInput = 'Inactive'
+
+    # Calculate average Rental Time
+    average = avg_rental_time(df)
+
+    # Calculate how many rentals there have been 
+    numRentals = rent_num(idInput, idName)
+
+    # Merge average & numRentals into one row
+    rentalStats = pd.concat([average, numRentals], axis=1)
+
+    return df, rentalStats
+# route_input
+
+@rentalstat_bp.route('/rental_stat', methods=['POST']) 
+def rental_stat_route():
+
+    data = request.json # Get json data from POST body 
+    result = route_input(data.get('status'))
+
+    return jsonify(results.to_dict(orient='records'))
+# rental_stat_route
+
+
 
 

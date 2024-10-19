@@ -1,6 +1,6 @@
 function postRequestParams(link, params, runFunction, errorFunction) {
     let request = new XMLHttpRequest();
-    request.open('POST', 'http://127.0.0.1:5000/' + link, true);
+    request.open('POST', 'http://127.0.0.1:5500/' + link, true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.onload = function () {
         let data = null;

@@ -5,13 +5,11 @@
         <link rel="stylesheet" href="../css/shared-styles.css">
         <link rel="stylesheet" href="../css/available-games.css">
     </head>
-    <body onload="bodyOnLoad()">
-     
-
+    <body>
         <div class="header">
             <div class="inner-header flex">
                 <!-- Back Button -->
-                <button class="back-button" onclick="window.location.href='mainPage.html'">Back</button>
+                <button class="back-button" onclick="window.location.href='/VGIMS'">Back</button>
 
                 <!-- Title -->
                 <div class="title-container">
@@ -20,7 +18,7 @@
 
                 <!-- Search and Filter section -->
                 <div id="searchContainer" class="search-filter-container">                   
-                    <input type="text" id="searchBar" placeholder="Search games by title..." onchange="searchTextChange(this)">                 
+                    <input type="text" id="searchBar" placeholder="Search games by title...">                 
                     <select id="searchFilter" onchange="selectionChange(this)">
                         <option id="title">Title</option>
                         <option id="publisher">Publisher</option>                                             

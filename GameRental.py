@@ -43,8 +43,8 @@ def rental_exist(VideoGameInput):
 def rental_info(rentals):
 
     # Separate rentals into active and inactive rentals 
-    activeRentals = active_rental(rentals) 
-    inactiveRentals = inactive_rental(rentals) 
+    activeRentals = active_filter(rentals) 
+    inactiveRentals = inactive_filter(rentals) 
 
     return activeRentals, inactiveRentals 
 # rental_info 
@@ -136,7 +136,7 @@ def route_input(userInput):
         # There is at least one Rental with VideoGameID
         if exist: 
             # Rentals (active & inactive) rentals with this VideoGameID  
-            activeRentals, inactiveRentals = rental_info(userInput)
+            activeRentals, inactiveRentals = rental_info(rentals)
 
             # Calculate average Rental Time of said Video Game 
             average = avg_rental_time(rentals)

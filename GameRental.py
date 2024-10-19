@@ -5,7 +5,10 @@ import os
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
-from validateEntries import generateDate
+from RentalStat import rent_num
+from RentalStat import active_filter 
+from RentalStat import inactive_filter
+from RentalStat import avg_rental_time
 from flask import request, jsonify, Blueprint 
 from validateEntries import validateVideoGameID
 
@@ -37,61 +40,14 @@ def rental_exist(VideoGameInput):
 # rental_exist 
 
 # Organize Rental Information of Video Game
-def rental_info(VideoGameInput):
-
-    # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput)
+def rental_info(rentals):
 
     # Separate rentals into active and inactive rentals 
-    activeRentals = rentals[rentals['Status'] == 'Active'].copy() 
-    inactiveRentals = rentals[rentals['Status'] == 'Inactive'].copy()
-
-    # Drop the 'Status' column
-    activeRentals = activeRentals.drop(columns=['Status', 'ReturnDate']) # Additionally drop 'ReturnDate' column
-    inactiveRentals = inactiveRentals.drop(columns=['Status'])
+    activeRentals = active_rental(rentals) 
+    inactiveRentals = inactive_rental(rentals) 
 
     return activeRentals, inactiveRentals 
 # rental_info 
-
-# Calculate : Average Rental Time (Return - Start Date)
-def avg_rental_time(VideoGameInput):
-
-    # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput)
-
-    # Replace empty (-1) ReturnDate with today's date 
-    today = generateDate()
-    rentals['ReturnDate'] = rentals['ReturnDate'].replace('-1', today)
-
-    # Convert date columns to datetime
-    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
-    rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate'])
-
-    # Calculate rental duration in days
-    rentals['RentalDuration'] = (rentals['ReturnDate'] - rentals['StartDate']).dt.days
-
-    # Calculate the average rental duration 
-    average = rentals['RentalDuration'].mean()
-
-    return average
-# avg_rental_time 
-
-# Calculate : How many times VideoGameID has been rented out 
-def rent_num(VideoGameInput):
-
-    # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput) 
-
-    # Initialize number of rentals
-    num = 0
-
-    # Iterate through the column VideoGameID in Rentals 
-    for VideoGameID in df1['VideoGameID']: 
-        if VideoGameID == VideoGameInput: 
-            num += 1
-
-    return num
-# rent_num
 
 # Calculate : How many active rentals are there right now? 
 #def active_rentals(): 
@@ -199,40 +155,44 @@ def route_input(userInput):
         
         # Invalid Title input
         if len(userInput) <= 0: 
-            return empty, empty, empty
+            return empty, empty, empty, empty
         elif len(userInput) == 1: 
             userInput = userInput[0]
              
     # Video Game ID input validation
-    if validateVideoGameID(userInput): 
+    if validateVideoGameID(userInput):
+        # Retrieve Video Game details based on VideoGameID
+        game = df2[df2['VideoGameID'] == userInput] 
+
         # Check whether rentals of this VideoGameID exist 
         exist = rental_exist(userInput)
 
+        # Filter by Video Game 
+        rentals = filter_rentals(userInput) 
+
         # There is at least one Rental with VideoGameID
         if exist: 
-            # Rentals related to inputed VideoGameID 
+            # Rentals (active & inactive) rentals with this VideoGameID  
             activeRentals, inactiveRentals = rental_info(userInput)
 
             # Calculate average Rental Time of said Video Game 
-            average = avg_rental_time(userInput)
-            average = pd.DataFrame([average], columns=['Rental Time Average']) 
+            average = avg_rental_time(rentals)
 
             # Calcultae how many times said Video Game has been Rented Out 
-            numRentals = rent_num(userInput) 
-            numRentals = pd.DataFrame([numRentals], columns=['Number Of Rentals'])
+            numRentals = rent_num(userInput, 'VideoGameID') 
 
             # Merge average & numRentals into one row
             rentalStats = pd.concat([average, numRentals], axis=1)
 
-            return activeRentals, inactiveRentals, rentalStats
+            return game, activeRentals, inactiveRentals, rentalStats
 
         # No Rentals with VideoGameID 
         else:
-            return empty, empty, empty
+            return game, empty, empty, empty
 
     # Invalid VideoGameID 
     else: 
-        return empty, empty, empty
+        return empty, empty, empty, empty
 
 # get_input
 
@@ -242,21 +202,24 @@ def game_rental_route():
     data = request.json # Get json data from POST body 
     user_input = data.get('option') # Extract 'option' field 
 
-    activeRentals, inactiveRentals, rentalStats = route_input(VideoGameID)
+    game, activeRentals, inactiveRentals, rentalStats = route_input(user_input)
 
     #if isinstance(rentalStats, str):
     #    data = {
     #        f"{rentalStats}": activeRentals.to_dict(orient='records') 
-    #    }
-    if not activeRentals.empty:
-        data = { 
-            "Active Rentals": activeRentals.to_dict(orient='records'), 
-            "Inactive Rentals": inactiveRentals.to_dict(orient='records'), 
-            "Rental Stats": rentalStats.to_dict(orient='records'), 
-        } 
+    #    }i
 
+    data = {
+        "Video Game": game.to_dict(orient='records'), 
+        "Active Rentals": activeRentals.to_dict(orient='records'), 
+        "Inactive Rentals": inactiveRentals.to_dict(orient='records'), 
+        "Rental Stats": rentalStats.to_dict(orient='records'), 
+     } 
 
-    if not activeRentals.empty: 
+    # Valid Input 
+    if not game.empty: 
         return jsonify(data)
+
+    # Invalid Input
     else: 
         return jsonify({"error": "No video game found with the provided ID or title."}), 404

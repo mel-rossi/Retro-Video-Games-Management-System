@@ -2,8 +2,12 @@ import os
 import re
 import pandas as pd
 from flask_cors import CORS
-from validateEntries import validateMemberID
+from RentalStat import rent_num
+from RentalStat import active_filter 
+from RentalStat import inactive_filter
+from RentalStat import avg_rental_time 
 from validateEntries import generateDate
+from validateEntries import validateMemberID 
 from flask import request, jsonify, Blueprint 
 
 memberrental_bp = Blueprint('MemberRental', __name__)
@@ -54,49 +58,11 @@ def rental_info(rentals):
     rentals = pd.merge(rentals, titles, on='VideoGameID', how='left')
 
     # Separate rentals into active and inactive rentals 
-    activeRentals = rentals[rentals['Status'] == 'Active'].copy()  
-    inactiveRentals = rentals[rentals['Status'] == 'Inactive'].copy()
-
-    # Drop the 'Status' column 
-    activeRentals = activeRentals.drop(columns=['Status', 'ReturnDate']) # Additionally drop 'ReturnDate' column 
-    inactiveRentals = inactiveRentals.drop(columns=['Status'])
+    activeRentals = active_filter(rentals)  
+    inactiveRentals = inactive_filter(rentals)
 
     return activeRentals, inactiveRentals 
 # rental_info
-
-# Calculate : Average Rental Time (Return - Start Date) 
-def avg_rental_time(rentals): 
-
-    # Replace empty (-1) ReturnDate with today's date 
-    today = generateDate() 
-    rentals['ReturnDate'] = rentals['ReturnDate'].replace('-1', today) 
-
-    # Convert date columns to datetime 
-    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
-    rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate']) 
-
-    # Calculate rental duration in days 
-    rentals['RentalDuration'] = (rentals['ReturnDate'] - rentals['StartDate']).dt.days 
-
-    # Calculate the average rental duration 
-    average = rentals['RentalDuration'].mean() 
-
-    return average
-# avg_rental_time
-
-# Calculate : How many times VideoGameID has been rented out 
-def rent_num(MemberInput): 
-    
-    # Initialize number of rentals 
-    num = 0 
-
-    # Iterate through the column MemberID in Rentals 
-    for MemberID in df2['MemberID']: 
-        if MemberID == MemberInput: 
-            num += 1
-
-    return num
-# rent_num
 
 # Extract digits from the phone number 
 def extract_numbers(phone): 
@@ -157,14 +123,12 @@ def find_member(user_input):
 
             # Calculate average Rental Time of said Member 
             average = avg_rental_time(rentals) 
-            average = pd.DataFrame([average], columns=['Rental Time Average']) 
 
             # Calculate how many times said Video Game has been Rented Out 
-            numRentals = rent_num(user_input) 
-            numRentals = pd.DataFrame([numRentals], columns=['Number of Rentals'])
+            numRentals = rent_num(user_input, 'MemberID') 
 
             # Merge average & numRentals into Rental Stats 
-            rentalStats = pd.concat([average, numRentals], axis=1) 
+            rentalStats = pd.concat([average, numRentals], axis=1)
 
             return member, activeRentals, inactiveRentals, rentalStats
 
@@ -186,9 +150,9 @@ def member_rental_route():
     member, activeRentals, inactiveRentals, rentalStats = find_member(user_input)
 
     data = {
-        "member": member.to_dict(orient='records'),
-        "active rentals": activeRentals.to_dict(orient='records'),
-        "inactive rentals": inactiveRentals.to_dict(orient='records'),
+        "Member": member.to_dict(orient='records'),
+        "Active Rentals": activeRentals.to_dict(orient='records'),
+        "Inactive Rentals": inactiveRentals.to_dict(orient='records'),
         "Rental Stats": rentalStats.to_dict(orient='records') 
     }
    

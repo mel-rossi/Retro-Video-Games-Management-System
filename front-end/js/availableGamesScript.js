@@ -15,7 +15,8 @@ const START_YEAR_ELEMENT = document.getElementById("startYear");
 const END_YEAR_ELEMENT = document.getElementById("endYear");
 const SEARCH_FILTER_ELEMENT = document.getElementById("searchFilter");
 const SEARCH_STATUS_ELEMENT = document.getElementById("statusFilter");
-const GAME_CARD_CONTAINTER_ELEMENT = document.getElementById("gameList");
+const GAME_CARD_LIST_ELEMENT = document.getElementById("gameList");
+const GAME_CONTAINER_ELEMENT = document.getElementById("gameContainer");
 const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
 
 window.onload = () => {
@@ -31,6 +32,21 @@ window.onload = () => {
            searchCustomer();
         }
     };
+
+    
+    let scrollTimeout;
+
+    GAME_CONTAINER_ELEMENT.addEventListener("scroll", () => {
+        GAME_CONTAINER_ELEMENT.style.scrollbarColor = 'rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.1)';
+
+        clearTimeout(scrollTimeout);
+
+        scrollTimeout = setTimeout(() =>{
+            GAME_CONTAINER_ELEMENT.style.scrollbarColor = 'transparent transparent';
+            console.log('a');
+        }, 1500);
+
+    });
 };
 
 //create a start date and end date 
@@ -131,11 +147,11 @@ function addToGameContainer(gameInfo){
     appendElement("p", "Year: " + gameInfo.Year); //year
     appendElement("p", "Status: " + gameInfo.Availability); //status
     
-    GAME_CARD_CONTAINTER_ELEMENT.appendChild(newGameCard);
+    GAME_CARD_LIST_ELEMENT.appendChild(newGameCard);
 }
 
 //delete the game cards for when we do a new search
 function deleteGameContainerValues(){
     //reset the html for the container
-    GAME_CARD_CONTAINTER_ELEMENT.innerHTML = "";
+    GAME_CARD_LIST_ELEMENT.innerHTML = "";
 }

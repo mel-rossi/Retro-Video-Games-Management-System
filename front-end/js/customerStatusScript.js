@@ -7,6 +7,7 @@ const SEARCH_INPUT_ELEMENT = document.getElementById("searchInput");
 const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
 const CURRENT_RENTALS_ELEMENT = document.getElementById("currentRentals");
 const PAST_RENTALS_ELEMENT = document.getElementById("pastRentals");
+const RENTALS_CONTAINER_ELEMENT = document.getElementById("rentalResults");
 
 const RENTAL_TYPES = {
     ACTIVE: 'active rentals',
@@ -30,6 +31,20 @@ window.onload = () => {
             searchCustomer();
         }
     };
+
+    let scrollTimeout;
+
+    RENTALS_CONTAINER_ELEMENT.addEventListener("scroll", () => {
+        RENTALS_CONTAINER_ELEMENT.style.scrollbarColor = 'rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.1)';
+
+        clearTimeout(scrollTimeout);
+
+        scrollTimeout = setTimeout(() =>{
+            RENTALS_CONTAINER_ELEMENT.style.scrollbarColor = 'transparent transparent';
+            console.log('a');
+        }, 1500);
+
+    });
 };
 
 //return corresponding value to enum INPUT_TYPES for valid input
@@ -93,8 +108,6 @@ function errorHandling(errorData) {
 }
 
 function generateRentalCards(customerData) {
-    console.log(customerData);
-
     //clear containers for active & inactive
     deleteRentalContainerValues();
 
@@ -123,8 +136,6 @@ function generateRentalCards(customerData) {
 }
 
 function addRentalCard(rentedGame, gameElement, appendInfo) {
-    console.log(rentedGame);
-
     let newGameInfo = document.createElement("div");
     newGameInfo.id = rentedGame.RentalID;
     newGameInfo.setAttribute("class", "rental-card");

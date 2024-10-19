@@ -72,6 +72,8 @@ def extract_numbers(phone):
 
 # Process input
 def find_member(user_input):
+    # Empty DataFrame to return in place of rentals
+    empty = pd.DataFrame() 
 
     # Member ID input if only 4 digits
     if user_input.isdigit() and len(user_input) == 4:
@@ -120,9 +122,6 @@ def find_member(user_input):
 
         # No rentals with MemberID
         else:
-            # Empty DataFrame to return in place of rentals 
-            empty = pd.DataFrame() 
-
             return member, empty, empty
 
     # Invalid MemberID

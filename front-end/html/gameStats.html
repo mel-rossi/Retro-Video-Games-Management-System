@@ -4,7 +4,7 @@
         <title>Game Statistics</title>
         <link rel="stylesheet" href="../css/shared-styles.css">
         <link rel="stylesheet" href="../css/game-stats.css">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
     </head>
     <body>
         <div class="header">
@@ -22,22 +22,31 @@
                     <h2>The Last of Us Part II</h2>
 
                     <div class="charts-row">
-                        <!-- Rental History (LineChart)-->
-                         <div class="chart">
-                            <h3>Rental History</h3>
-                            <canvas id="rentalHistoryChart"></canvas>
-                         </div>
+                    <!-- Rank Information
+                    <div class="rank-container">
+                        Rank: <span>104</span><sup>th</sup> / 1540
+                    </div> -->
+                    <div class="charts-row-inner">
 
-                         <!-- Inventory (Pie Chart) -->
-                         <div class="chart">
+                        <!-- Rank Information -->
+                        <div class="rank-box">
+                            <h3>Rank</h3>
+                            <canvas id="rankBox"></canvas>
+
+                        </div>
+                        <!-- Rental History (LineChart)-->
+                        <div class="rental-box">
+                            <h3>Average Rental Time</h3>
+                            <canvas id="rentalHistoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                        <!-- Inventory (Pie Chart) -->
+                        <div class="inventory-box">
                             <h3>Inventory</h3>
                             <canvas id="inventoryChart"></canvas>
-                         </div>
+                        </div> 
                     </div>
-                    <!-- Rank Information -->
-                     <div class="rank-container">
-                        Rank: <span>104</span><sup>th</sup> / 1540
-                     </div>
                  </div>
                  
                  <!-- The animated waves -->
@@ -52,62 +61,13 @@
                      <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
                      <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
                  </g>
-             </svg>                  
+                </svg>                  
             </div>
         </div>
-        
-        <!-- Chart.js scripts for the charts -->
-         <script> 
-            // Rental History (Line Chart)
-            const ctx = document.getElementById('rentalHistoryChart').getContext('2d');
-            const rentalHistoryChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Days Rented',
-                        data: [5, 10, 15, 7, 10, 20, 5, 2, 15, 18, 20, 22],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#ff5733',
-                        pointBorderColor: '#fff',
-                        pointRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 30,
-                        }
-                    }
-                }
-            });
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="../js/gameStats.js"></script>
+        <script src="../js/ajax.js"></script>
 
-            // Inventory (Pie Chart)
-            const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-            const inventoryChart = new Chart(inventoryCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['In Stock', 'Rented'],
-                    datasets: [{
-                        data: [70,30], //Hardcoded inventory stats In stock 70, Rented 30
-                        backgroundColor: ['rgba(255, 99, 132, 20)', 'rgba(54, 162, 235, 20)'],
-                        /*backgroundColor:['#36a2eb','#ffcd56'],*/
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-        </script>
     </body>
 </html>

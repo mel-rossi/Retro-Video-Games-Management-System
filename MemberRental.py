@@ -151,6 +151,3 @@ def member_rental_route():
     else:
         return jsonify ({"error": "No member found with the provided ID, phone number, or email."}), 404
 # search_member_route
-    
-if __name__ == '__main__':
-    app.run(debug=True)

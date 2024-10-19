@@ -99,7 +99,7 @@ def find_member(user_input):
 
         # Invalid Phone Number or Email
         if len(user_input) <= 0:
-            return None
+            return empty, empty, empty
 
         # Valid Phone Number or Email 
         else: 

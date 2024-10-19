@@ -2,11 +2,11 @@ import os
 import re
 import pandas as pd
 from flask_cors import CORS
-from flask import Flask, jsonify, request
+from flask import request, jsonify, Blueprint 
 from validateEntries import validateMemberID
 
-app = Flask(__name__)
-CORS(app)
+memberrental_bp = Blueprint('MemberRental', __name__)
+CORS(memberrental_bp)
 
 # Load the .csv files
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -129,9 +129,7 @@ def find_member(user_input):
         return empty, empty, empty
 # find_member
 
-#Flask endpoint to search member
-
-@app.route('/member_rental', methods=['POST'])
+@memberrental_bp.route('/member_rental', methods=['POST'])
 def member_rental_route():
 
     data = request.json # Get json data from POST body

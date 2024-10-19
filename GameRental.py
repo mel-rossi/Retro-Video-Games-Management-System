@@ -6,11 +6,11 @@ import numpy as np
 import pandas as pd
 from flask_cors import CORS
 from validateEntries import generateDate
-from flask import Flask, jsonify, request
+from flask import request, jsonify, Blueprint 
 from validateEntries import validateVideoGameID
 
-app = Flask(__name__)
-CORS(app)
+gamerental_bp = Blueprint('GameRental', __name__)
+CORS(gamerental_bp)
 
 # Load the .csv files 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -236,7 +236,7 @@ def route_input(userInput):
 
 # get_input
 
-@app.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
+@gamerental_bp.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
 def game_rental_route():
     if request.method == 'POST': 
         VideoGameID = request.json.get('option')

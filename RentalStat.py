@@ -20,43 +20,50 @@ df = pd.read_csv(RENTAL_PATH)
 # Functions 
 
 # Filter rentals by active rentals 
-def active_filter(df=df):
+def active_filter(rentals):
     
-    df[df['Status'] == 'Active'].copy() 
+    rentals = rentals[rentals['Status'] == 'Active'].copy() 
 
     # Drop the 'Status' and 'ReturnDate' columns 
-    df = df.drop(columns=['Status', 'ReturnDate'])
+    rentals = rentals.drop(columns=['Status', 'ReturnDate'])
     
-    return df
+    return rentals
 # active_filter 
 
 # Filter rentals by inactive rentals 
-def inactive_filter(df=df): 
+def inactive_filter(rentals): 
 
-    df[df['Status']== 'Inactive'].copy 
+    rentals = rentals[rentals['Status'] == 'Inactive'].copy() 
 
-    # Drop the 'Status column 
-    df = df.drop(columns=['Status']) 
+    # Drop the 'Status' column 
+    #rentals = rentals.drop(columns=['Status']) 
 
-    return df
+    return rentals
 # inactive_filter 
 
-def avg_rental_time(df=df): 
-    
-    # Replace empty (-1) ReturnDate with today's date 
-    today = generateDate() 
-    df['ReturnDate'] = df['ReturnDate'].replace('-1', today) 
+# Calculate : Average Rental Time ([Return - Start Date] mean) 
+def avg_rental_time(rentals): 
+
+    today = generateDate()
 
     # Convert date columns to datetime 
-    df['StartDate'] = pd.to_datetime(df['StartDate']) 
-    df['ReturnDate'] = pd.to_datetime(df['ReturnDate']) 
+    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
+    startDate = rentals['StartDate']
+
+    # Replace empty ReturnDate with today's date
+    if 'ReturnDate' not in df.columns or (df['ReturnDate'] == '-1').any(): 
+        returnDate = pd.to_datetime(today)
+        
+    else:
+        rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate']) 
+        returnDate = rentals['ReturnDate'] 
 
     # Calculate rental duration in days 
-    df['RentalDuration'] = (df['ReturnDate'] - df['StartDate']).dt.days 
+    rentals['RentalDuration'] = (returnDate - startDate).dt.days 
 
-    average = df['RentalDuration'].mean()
+    average = rentals['RentalDuration'].mean()
 
-    average = pd.DataFrame([average], columns=['Rental Time Average']) 
+    average = pd.DataFrame([average], columns=['Rental Time Average'])
 
     return average 
 # avg_rental_time 
@@ -84,39 +91,52 @@ def rent_num(Input, idName):
     return num 
 # rent_num
 
-def route_input(status, df=df):
+def route_input(status):
 
-    idName = None
+    rentals = df
+    idName = None 
     idInput = None
 
-    if status.lower() == 'active': 
-        df = active_filter() 
-        idName = 'Status'
-        idInput = 'Active' 
-    elif status.lower() == 'inactive': 
-        df = inactive_filter()
-        idName = 'Status' 
-        idInput = 'Inactive'
+    if status is not None:
+        # If filtered by 'Active' Rentals 
+        if status.lower() == 'active': 
+            idName = 'Status'
+            idInput = 'Active'
+        # If filtered by 'Inactive' Rentals 
+        elif status.lower() == 'inactive': 
+            rentals = inactive_filter(rentals)
+            idName = 'Status' 
+            idInput = 'Inactive'
 
     # Calculate average Rental Time
-    average = avg_rental_time(df)
+    average = avg_rental_time(rentals)
 
     # Calculate how many rentals there have been 
     numRentals = rent_num(idInput, idName)
 
+    # Drop 'RentalDuration' column 
+    rentals = rentals.drop(columns=['RentalDuration'])
+    
     # Merge average & numRentals into one row
     rentalStats = pd.concat([average, numRentals], axis=1)
 
-    return df, rentalStats
+    return rentals, rentalStats
 # route_input
 
 @rentalstat_bp.route('/rental_stat', methods=['POST']) 
 def rental_stat_route():
 
     data = request.json # Get json data from POST body 
-    result = route_input(data.get('status'))
+    user_input = data.get('status') # Extract 'status' field
 
-    return jsonify(results.to_dict(orient='records'))
+    rentals, rentalStats = route_input(user_input) 
+
+    data = { 
+        "Rentals": rentals.to_dict(orient='records'), 
+        "Rental Stats": rentalStats.to_dict(orient='records') 
+    } 
+
+    return jsonify(data)
 # rental_stat_route
 
 

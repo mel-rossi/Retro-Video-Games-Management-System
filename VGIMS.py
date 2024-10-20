@@ -5,6 +5,7 @@ import signal
 from SearchGame import searchgame_bp
 from GameRental import gamerental_bp
 from MemberRental import memberrental_bp
+from RentalStat import rentalstat_bp
 
 # this program serves as the main entry point for the webapp
 # when ran, opens main page and runs all the flask apps on startup
@@ -15,6 +16,7 @@ app = Flask(__name__, template_folder='front-end/html')
 app.register_blueprint(searchgame_bp, url_prefix='')
 app.register_blueprint(gamerental_bp, url_prefix='')
 app.register_blueprint(memberrental_bp, url_prefix='')
+app.register_blueprint(rentalstat_bp, url_prefix='') 
 
 @app.route('/css/<path:filename>') # needed to handle multiple static folders 
 def serve_css(filename):

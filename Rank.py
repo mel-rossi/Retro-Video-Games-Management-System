@@ -26,8 +26,8 @@ df3 = pd.read_csv(VIDEOGAME_PATH)
 
 # Functions
 
-# Rank Video Games based on number of times they have been rented out 
-def rank(rankType):
+# Rank CSVs based on rental time
+def rank(rankType, top):
 
     # Rank Rentals : default 
     idName = 'RentalID'
@@ -67,16 +67,18 @@ def rank(rankType):
         # Drop 'score' column 
         df = df.drop(columns=['score'])
 
-        return df
+    # Limit the amount of ranked output 
+    if top is not None: 
+        df = df.head(top)
+
+    return df
 
 # rank
 
 @rank_bp.route('/rank', methods=['POST']) 
 def rank_route(): 
     data = request.json # Get json data from POST body 
-    user_input = data.get('type') # Extract 'rank' field 
-
-    ranked = rank(user_input) 
+    ranked = rank(data.get('rank'), data.get('top'))
 
     data = { 
         "Ranked": ranked.to_dict(orient='records') 

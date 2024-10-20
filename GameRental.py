@@ -52,42 +52,9 @@ def rental_info(rentals):
     return activeRentals, inactiveRentals 
 # rental_info 
 
-# Rank Video Games based on number of times they have been rented out
-# def rank():
-#
-#    rentals = [] 
-#
-#    # Iterate through VideoGameID column in Video Games 
-#    for VideoGameID in df2['VideoGameID']: 
-#        exist = rental_exist(VideoGameID)  
-#        numRentals = rent_num(VideoGameID) 
-#        rentals.append((VideoGameID, numRentals)) 
-#    
-#    # Convert to DataFrame for easy sorting 
-#    sortByRentals = pd.DataFrame(rentals, columns=['VideoGameID', 'rentNum'])
-#
-#    # Merge rentals with VideoGames DataFrame 
-#    merge = pd.merge(df2, sortByRentals, on='VideoGameID', how='left')
-#    merge['rentNum'] = merge['rentNum'].fillna(0) # Fill in no rentals with 0 
-#
-#    # Sort merged DataFrame by rentNum in descending order
-#    sortedGames = merge.sort_values(by='rentNum', ascending=False)
-#
-#    # Drop the 'rentNum' column 
-#    sortedGames = sortedGames.drop(columns=['rentNum'])
-#
-#    # Return sorted Games
-#    return sortedGames
-# # rank
-
 def route_input(userInput):
 
     empty = pd.DataFrame()
-
-    # # Rank Rentals based on numRentals 
-    #if userInput.lower() == 'rank':
-    #    sortedRentals = rank() 
-    #    return sortedRentals, empty, "Ranked"
 
     # Video Game ID input if only 4 digits
     if userInput.isdigit() and len(userInput) == 4: 
@@ -152,11 +119,6 @@ def game_rental_route():
     user_input = data.get('option') # Extract 'option' field 
 
     game, activeRentals, inactiveRentals, rentalStats = route_input(user_input)
-
-    #if isinstance(rentalStats, str):
-    #    data = {
-    #        f"{rentalStats}": activeRentals.to_dict(orient='records') 
-    #    }i
 
     data = {
         "Video Game": game.to_dict(orient='records'), 

@@ -17,7 +17,13 @@ RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 # Read .csv file into DataFrame 
 df = pd.read_csv(RENTAL_PATH)
 
-# Functions 
+# Functions
+
+# Filter by rental ID 
+def rental_filter(RentalInput): 
+    
+    return df[df['RentalID'] == RentalInput].copy() 
+# rental_filter
 
 # Filter rentals by active rentals 
 def active_filter(rentals):

@@ -36,7 +36,7 @@ def inactive_filter(rentals):
     rentals = rentals[rentals['Status'] == 'Inactive'].copy() 
 
     # Drop the 'Status' column 
-    #rentals = rentals.drop(columns=['Status']) 
+    rentals = rentals.drop(columns=['Status']) 
 
     return rentals
 # inactive_filter 
@@ -44,7 +44,7 @@ def inactive_filter(rentals):
 # Calculate : Average Rental Time ([Return - Start Date] mean) 
 def avg_rental_time(rentals): 
 
-    today = generateDate()
+    today = pd.to_datetime(generateDate())
 
     # Convert date columns to datetime 
     rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
@@ -52,15 +52,14 @@ def avg_rental_time(rentals):
 
     # Replace empty ReturnDate with today's date
     if 'ReturnDate' not in df.columns or (df['ReturnDate'] == '-1').any(): 
-        returnDate = pd.to_datetime(today)
+        returnDate = today
         
     else:
         rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate']) 
-        returnDate = rentals['ReturnDate'] 
+        returnDate = rentals['ReturnDate']
 
     # Calculate rental duration in days 
     rentals['RentalDuration'] = (returnDate - startDate).dt.days 
-
     average = rentals['RentalDuration'].mean()
 
     average = pd.DataFrame([average], columns=['Rental Time Average'])
@@ -119,6 +118,9 @@ def route_input(status):
     
     # Merge average & numRentals into one row
     rentalStats = pd.concat([average, numRentals], axis=1)
+
+    # Ensure date columns are formatted consistently
+    rentals['StartDate'] = rentals['StartDate'].dt.strftime('%Y-%m-%d')
 
     return rentals, rentalStats
 # route_input

@@ -125,7 +125,7 @@ def find_member(user_input):
             average = avg_rental_time(rentals) 
 
             # Calculate how many times said Video Game has been Rented Out 
-            numRentals = rent_num(user_input, 'MemberID') 
+            numRentals = rent_num(rentals) 
 
             # Merge average & numRentals into Rental Stats 
             rentalStats = pd.concat([average, numRentals], axis=1)

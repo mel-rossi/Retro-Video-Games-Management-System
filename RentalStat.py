@@ -68,23 +68,12 @@ def avg_rental_time(rentals):
 # avg_rental_time 
 
 # Calculate : How many times it has been rented out 
-def rent_num(Input, idName): 
+def rent_num(rentals): 
 
-    # Initialize number of rentals 
-    num = 0
+    # Number of rentals 
+    num = len(rentals)
 
-    # Iterate through the column 
-
-    # Unbiased 
-    if idName is None: 
-        num = len(df)
-
-    # Biased by ID of idName
-    else:
-        for ID in df[idName]: 
-            if ID == Input: 
-                num += 1
-
+    # Convert to DataFrame 
     num = pd.DataFrame([num], columns=['Numbers of Rentals']) 
 
     return num 
@@ -93,25 +82,21 @@ def rent_num(Input, idName):
 def route_input(status):
 
     rentals = df
-    idName = None 
-    idInput = None
 
     if status is not None:
         # If filtered by 'Active' Rentals 
-        if status.lower() == 'active': 
-            idName = 'Status'
-            idInput = 'Active'
+        if status.lower() == 'active':
+            rentals = active_filter(rentals) 
+
         # If filtered by 'Inactive' Rentals 
         elif status.lower() == 'inactive': 
             rentals = inactive_filter(rentals)
-            idName = 'Status' 
-            idInput = 'Inactive'
 
     # Calculate average Rental Time
     average = avg_rental_time(rentals)
 
     # Calculate how many rentals there have been 
-    numRentals = rent_num(idInput, idName)
+    numRentals = rent_num(rentals)
 
     # Drop 'RentalDuration' column 
     rentals = rentals.drop(columns=['RentalDuration'])

@@ -42,6 +42,9 @@ def rental_exist(VideoGameInput):
 # Organize Rental Information of Video Game
 def rental_info(rentals):
 
+    # Drop the 'VideoGameID' column 
+    rentals = rentals.drop(columns=['VideoGameID'])
+
     # Separate rentals into active and inactive rentals 
     activeRentals = active_filter(rentals) 
     inactiveRentals = inactive_filter(rentals) 
@@ -86,24 +89,6 @@ def route_input(userInput):
     #    sortedRentals = rank() 
     #    return sortedRentals, empty, "Ranked"
 
-    # # Number of total Rentals
-    # elif userInput.lower() == 'rentals':
-    #    # Number of active Rentals
-    #    active = active_rentals()
-    #    active = pd.DataFrame([active], columns=['Active Total'])
-
-    #    # Number of inactive Rentals 
-    #    inactive = inactive_rentals()
-    #    inactive = pd.DataFrame([inactive], columns=['Inactive Total'])
-
-    #    # Number of all Rentals ever made 
-    #    rentalsEver = all_rentals() 
-    #    rentalsEver = pd.DataFrame([rentalsEver], columns=['Total Rentals'])
-
-    #    # Merge active, inactive and rentalsEver into one row
-    #    numberRentals = pd.concat([active, inactive, rentalsEver], axis=1)
-    #    return numberRentals, empty, "Number of Rentals"
-
     # Video Game ID input if only 4 digits
     if userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
@@ -113,7 +98,8 @@ def route_input(userInput):
         pass
 
     # Video Game Title input 
-    else: 
+    else:
+        # Retrieve VideoGameID associated with Title
         userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
         
         # Invalid Title input
@@ -130,7 +116,7 @@ def route_input(userInput):
         # Check whether rentals of this VideoGameID exist 
         exist = rental_exist(userInput)
 
-        # Filter by Video Game 
+        # Filter Rentals by Video Game 
         rentals = filter_rentals(userInput) 
 
         # There is at least one Rental with VideoGameID
@@ -142,7 +128,7 @@ def route_input(userInput):
             average = avg_rental_time(rentals)
 
             # Calcultae how many times said Video Game has been Rented Out 
-            numRentals = rent_num(userInput, 'VideoGameID') 
+            numRentals = rent_num(rentals) 
 
             # Merge average & numRentals into one row
             rentalStats = pd.concat([average, numRentals], axis=1)

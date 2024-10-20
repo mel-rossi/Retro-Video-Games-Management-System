@@ -3,6 +3,8 @@ import pandas as pd
 from flask_cors import CORS
 from flask import request, jsonify, Blueprint
 
+# This program searches through Video Games based on filters indicated through user input
+
 searchgame_bp = Blueprint('SearchGame', __name__)
 CORS(searchgame_bp)
 
@@ -41,7 +43,7 @@ def filter_games(title=None, publisher=None, start_year=None, end_year=None, sta
 @searchgame_bp.route('/search_game', methods=['POST'])
 def search_game_route():
 
-    data = request.json
+    data = request.json # Get json data from POST body
     results = filter_games(data.get('title'), data.get('publisher'), data.get('start_year'),
                                      data.get('end_year'), data.get('status'))
 

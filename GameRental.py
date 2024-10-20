@@ -1,6 +1,3 @@
-# This program Shows History based off of the Video Game
-
-# Imports 
 import os
 import numpy as np
 import pandas as pd
@@ -11,6 +8,8 @@ from RentalStat import inactive_filter
 from RentalStat import avg_rental_time
 from flask import request, jsonify, Blueprint 
 from validateEntries import validateVideoGameID
+
+# This program Outputs Rental History based off of Video Game (ID or Title) 
 
 gamerental_bp = Blueprint('GameRental', __name__)
 CORS(gamerental_bp)
@@ -25,13 +24,11 @@ VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 df1 = pd.read_csv(RENTAL_PATH)
 df2 = pd.read_csv(VIDEOGAME_PATH)
 
-# Functions
-
-# Filter Rental rows where VideoGameID matches VideoGameInput 
+# Filter Rentals by Video Game 
 def game_filter(VideoGameInput): 
 
     return df1[df1['VideoGameID'] == VideoGameInput].copy()
-# filter_rentals
+# game_filter
 
 # Check whether Rentals of said Video Game exist
 def rental_exist(VideoGameInput):
@@ -52,7 +49,8 @@ def rental_info(rentals):
     return activeRentals, inactiveRentals 
 # rental_info 
 
-def route_input(userInput):
+# Process Input
+def find_game(userInput):
 
     empty = pd.DataFrame()
 
@@ -109,8 +107,7 @@ def route_input(userInput):
     # Invalid VideoGameID 
     else: 
         return empty, empty, empty, empty
-
-# get_input
+# find_game
 
 @gamerental_bp.route('/game_rental', methods=['POST']) 
 def game_rental_route():
@@ -118,7 +115,7 @@ def game_rental_route():
     data = request.json # Get json data from POST body 
     user_input = data.get('option') # Extract 'option' field 
 
-    game, activeRentals, inactiveRentals, rentalStats = route_input(user_input)
+    game, activeRentals, inactiveRentals, rentalStats = find_games(user_input)
 
     data = {
         "Video Game": game.to_dict(orient='records'), 

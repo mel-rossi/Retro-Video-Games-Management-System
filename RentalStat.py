@@ -1,10 +1,12 @@
-# This program calculate Rental Stats 
-
 import os 
 import pandas as pd 
 from flask_cors import CORS
 from validateEntries import generateDate
-from flask import request, jsonify, Blueprint 
+from flask import request, jsonify, Blueprint
+
+# This program Outputs Rental History :  
+# Retrieves Rentals : unbiased, active or inactive 
+# Calculates Rental Stats : Number of Rentals & Average Rental Time 
 
 rentalstat_bp = Blueprint('RentalStat', __name__) 
 CORS(rentalstat_bp) 
@@ -17,9 +19,7 @@ RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 # Read .csv file into DataFrame 
 df = pd.read_csv(RENTAL_PATH)
 
-# Functions
-
-# Filter by rental ID 
+# Filter Rentals by Rental ID 
 def rental_filter(RentalInput): 
     
     return df[df['RentalID'] == RentalInput].copy() 
@@ -85,8 +85,10 @@ def rent_num(rentals):
     return num 
 # rent_num
 
-def route_input(status):
+# Organize Rental Information
+def rental_info(status):
 
+    # Unbiased Rentals : default
     rentals = df
 
     if status is not None:
@@ -114,7 +116,7 @@ def route_input(status):
     rentals['StartDate'] = rentals['StartDate'].dt.strftime('%Y-%m-%d')
 
     return rentals, rentalStats
-# route_input
+# rental_info
 
 @rentalstat_bp.route('/rental_stat', methods=['POST']) 
 def rental_stat_route():
@@ -122,7 +124,7 @@ def rental_stat_route():
     data = request.json # Get json data from POST body 
     user_input = data.get('status') # Extract 'status' field
 
-    rentals, rentalStats = route_input(user_input) 
+    rentals, rentalStats = rental_info(user_input) 
 
     data = { 
         "Rentals": rentals.to_dict(orient='records'), 

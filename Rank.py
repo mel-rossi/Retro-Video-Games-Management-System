@@ -24,9 +24,7 @@ df1 = pd.read_csv(MEMBER_PATH)
 df2 = pd.read_csv(RENTAL_PATH) 
 df3 = pd.read_csv(VIDEOGAME_PATH) 
 
-# Functions
-
-# Rank CSVs based on rental time
+# Sort .csv information based on Rental Time (Average Rental Time * Number of Rentals) 
 def rank(rankType, top):
 
     # Rank Rentals : default 

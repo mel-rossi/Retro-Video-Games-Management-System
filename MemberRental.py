@@ -8,7 +8,9 @@ from RentalStat import inactive_filter
 from RentalStat import avg_rental_time 
 from validateEntries import generateDate
 from validateEntries import validateMemberID 
-from flask import request, jsonify, Blueprint 
+from flask import request, jsonify, Blueprint
+
+# This program Outputs Rental History based off of Member (ID, Phone Number, or Email) 
 
 memberrental_bp = Blueprint('MemberRental', __name__)
 CORS(memberrental_bp)
@@ -27,11 +29,11 @@ df3 = pd.read_csv(VIDEOGAME_PATH)
 
 # Functions
 
-# Filter Rental rows where MemberID matches MemberInput 
+# Filter Rentals by Member 
 def member_filter(MemberInput): 
 
     return df2[df2['MemberID'] == MemberInput].copy()
-# filter_rentals
+# member_filter
 
 # Check whether Rentals of said Member exist
 def rental_exist(MemberInput):
@@ -43,7 +45,13 @@ def rental_exist(MemberInput):
 def game_title():
 
     return df3[['VideoGameID', 'Title']]
-# game_title 
+# game_title
+
+# Extract digits from the phone number 
+def extract_numbers(phone): 
+
+    return re.sub(r'\D', '', phone)
+# extract_numbers
 
 # Organize Rental Information of MemberID  
 def rental_info(rentals):
@@ -63,12 +71,6 @@ def rental_info(rentals):
 
     return activeRentals, inactiveRentals 
 # rental_info
-
-# Extract digits from the phone number 
-def extract_numbers(phone): 
-
-    return re.sub(r'\D', '', phone)
-# extract_numbers
 
 # Process input
 def find_member(user_input):
@@ -163,4 +165,4 @@ def member_rental_route():
     # Invalid Input 
     else:
         return jsonify ({"error": "No member found with the provided ID, phone number, or email."}), 404
-# search_member_route
+# member_rental_route

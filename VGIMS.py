@@ -1,16 +1,16 @@
-from flask import Flask, render_template, send_from_directory
-import webbrowser
 import os
 import signal
+import webbrowser
+from Rank import rank_bp
 from SearchGame import searchgame_bp
 from GameRental import gamerental_bp
-from MemberRental import memberrental_bp
 from RentalStat import rentalstat_bp
-from Rank import rank_bp
+from MemberRental import memberrental_bp
+from flask import Flask, render_template, send_from_directory
 
-# this program serves as the main entry point for the webapp
-# when ran, opens main page and runs all the flask apps on startup
-# also makes the url pretty instead of '.html'
+# This program serves as the main entry point for the Web Application
+# When ran, opens main page and runs all the flask apps on startup
+# Also makes the url pretty instead of '.html'
 
 app = Flask(__name__, template_folder='front-end/html')
 
@@ -20,15 +20,15 @@ app.register_blueprint(memberrental_bp, url_prefix='')
 app.register_blueprint(rentalstat_bp, url_prefix='') 
 app.register_blueprint(rank_bp, url_prefix='')
 
-@app.route('/css/<path:filename>') # needed to handle multiple static folders 
+@app.route('/css/<path:filename>') # handle multiple static folders 
 def serve_css(filename):
     return send_from_directory('front-end/css', filename)
 
-@app.route('/js/<path:filename>') # needed to handle multiple static folders 
+@app.route('/js/<path:filename>') # handle multiple static folders 
 def serve_js(filename):
     return send_from_directory('front-end/js', filename)
 
-@app.route('/shutdown', methods=['POST']) # should be called when javascript detects the tab/app has been closed
+@app.route('/shutdown', methods=['POST']) # called when javascript detects the tab/app was closed
 def shutdown(): # shuts down flask apps
     os.kill(os.getpid(), signal.SIGTERM)
     return 'Shutting down app'

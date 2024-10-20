@@ -28,7 +28,7 @@ df3 = pd.read_csv(VIDEOGAME_PATH)
 # Functions
 
 # Filter Rental rows where MemberID matches MemberInput 
-def filter_rentals(MemberInput): 
+def member_filter(MemberInput): 
 
     return df2[df2['MemberID'] == MemberInput].copy()
 # filter_rentals
@@ -36,7 +36,7 @@ def filter_rentals(MemberInput):
 # Check whether Rentals of said Member exist
 def rental_exist(MemberInput):
 
-    return not filter_rentals(MemberInput).empty
+    return not member_filter(MemberInput).empty
 # rental_exist
 
 # Grab only 'VideoGameID' and 'Title' from Video Game details
@@ -114,7 +114,7 @@ def find_member(user_input):
         exist = rental_exist(user_input)
 
         # Filter Rentals by Member
-        rentals = filter_rentals(user_input) 
+        rentals = member_filter(user_input) 
 
         # There is at least one rental with MemberID
         if exist:  

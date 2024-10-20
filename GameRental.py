@@ -28,7 +28,7 @@ df2 = pd.read_csv(VIDEOGAME_PATH)
 # Functions
 
 # Filter Rental rows where VideoGameID matches VideoGameInput 
-def filter_rentals(VideoGameInput): 
+def game_filter(VideoGameInput): 
 
     return df1[df1['VideoGameID'] == VideoGameInput].copy()
 # filter_rentals
@@ -36,7 +36,7 @@ def filter_rentals(VideoGameInput):
 # Check whether Rentals of said Video Game exist
 def rental_exist(VideoGameInput):
 
-    return not filter_rentals(VideoGameInput).empty
+    return not game_filter(VideoGameInput).empty
 # rental_exist 
 
 # Organize Rental Information of Video Game
@@ -117,7 +117,7 @@ def route_input(userInput):
         exist = rental_exist(userInput)
 
         # Filter Rentals by Video Game 
-        rentals = filter_rentals(userInput) 
+        rentals = game_filter(userInput) 
 
         # There is at least one Rental with VideoGameID
         if exist: 

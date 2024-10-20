@@ -66,7 +66,10 @@ def rank(rankType, top):
         df = df.drop(columns=['score'])
 
     # Limit the amount of ranked output 
-    if top is not None: 
+    if top is not None and (isinstance(top, int) or top.isdigit()):
+        if top.isdigit(): 
+            top = int(top)
+
         df = df.head(top)
 
     return df

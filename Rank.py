@@ -1,4 +1,4 @@
-# This program sorts .CSVs by
+# This program sorts .CSVs
 import os 
 import pandas as pd 
 from flask_cors import CORS 
@@ -25,24 +25,7 @@ df2 = pd.read_csv(RENTAL_PATH)
 df3 = pd.read_csv(VIDEOGAME_PATH) 
 
 # Sort .csv information based on Rental Time (Average Rental Time * Number of Rentals) 
-def rank(rankType, top):
-
-    # Rank Rentals : default 
-    idName = 'RentalID'
-    filters = rental_filter
-    df = df2
-
-    # Rank Video Games 
-    if rankType.lower() == 'game': 
-        idName = 'VideoGameID'
-        filters = game_filter
-        df = df3
-
-    # Rank Members 
-    elif rankType.lower() == 'member': 
-        idName = 'MemberID' 
-        filters = member_filter
-        df = df1
+def ranking(idName, filters, df):
     
     # Iterate through DataFrame 
     for ID in df[idName]:
@@ -56,30 +39,69 @@ def rank(rankType, top):
         # Calculate score 
         score = numRentals * average
 
-        # Assign score back to df3
+        # Assign score back to df
         df.loc[df[idName] == ID, 'score'] = score
 
-        # Sort by score 
-        df = df.sort_values(by='score', ascending=False) 
+    # Sort by score 
+    df = df.sort_values(by='score', ascending=False) 
 
-        # Drop 'score' column 
-        df = df.drop(columns=['score'])
+    # Drop 'score' column 
+    df = df.drop(columns=['score'])
 
-    # Limit the amount of ranked output 
-    if top is not None and (isinstance(top, int) or top.isdigit()):
+    return df
+# ranking
+
+# Limit amount of ranked output 
+def limitOut(df, top):
+
+    df = df.head(top) 
+
+    return df
+# limitOut
+
+# Process Input
+def sortMethod(rankType, sortBy, top): 
+
+    # Determine the table / .csv to be ranked  
+
+    # Rank Video Games 
+    if (rankType.lower() == 'game'): 
+        idName = 'VideoGameID' 
+        filters = game_filter
+        df = df3
+
+    # Rank Members 
+    elif (rankType.lower() == 'member'): 
+        idName = 'MemberID'
+        filters = member_filter 
+        df = df1
+
+    # Default = Rank Rentals
+    else: 
+        idName = 'RentalID'
+        filters = rental_filter 
+        df = df2
+
+    # Determine what ranking / sorting is based on
+
+    # Default = Sorted by Ranking 
+    ranked = ranking(idName, filters, df)
+
+    # Limit output
+
+    if top is not None and (isinstance(top, int) or top.isdigit()): 
         if top.isdigit(): 
             top = int(top)
 
-        df = df.head(top)
+        ranked = limitOut(ranked, top)
 
-    return df
-
-# rank
+    return ranked
+# sortMethod 
 
 @rank_bp.route('/rank', methods=['POST']) 
 def rank_route(): 
     data = request.json # Get json data from POST body 
-    ranked = rank(data.get('rank'), data.get('top'))
+    ranked = sortMethod(data.get('rank'), data.get('base'), data.get('top'))
 
     data = { 
         "Ranked": ranked.to_dict(orient='records') 

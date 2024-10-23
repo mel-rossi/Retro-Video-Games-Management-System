@@ -68,8 +68,6 @@ def avg_rental_time(rentals):
     rentals['RentalDuration'] = (returnDate - startDate).dt.days 
     average = rentals['RentalDuration'].mean()
 
-    average = pd.DataFrame([average], columns=['Rental Time Average'])
-
     return average 
 # avg_rental_time 
 
@@ -79,38 +77,37 @@ def rent_num(rentals):
     # Number of rentals 
     num = len(rentals)
 
-    # Convert to DataFrame 
-    num = pd.DataFrame([num], columns=['Numbers of Rentals']) 
-
     return num 
 # rent_num
 
 # Organize Rental Information
 def rental_info(status):
 
-    # Unbiased Rentals : default
-    rentals = df
+    # 'Active' Rental Stats 
+    if status.lower() == 'active':
+        rentals = active_filter(rentals) 
 
-    if status is not None:
-        # If filtered by 'Active' Rentals 
-        if status.lower() == 'active':
-            rentals = active_filter(rentals) 
+    # 'Inactive' Rental Stats
+    elif status.lower() == 'inactive': 
+        rentals = inactive_filter(rentals)
 
-        # If filtered by 'Inactive' Rentals 
-        elif status.lower() == 'inactive': 
-            rentals = inactive_filter(rentals)
+    # Default : Unbiased Rental Stats
+    else: 
+        rentals = df
 
     # Calculate average Rental Time
     average = avg_rental_time(rentals)
+    average = pd.DataFrame([average], columns=['Rental Time Average']) # Convert to DataFrame 
 
     # Calculate how many rentals there have been 
-    numRentals = rent_num(rentals)
+    num = rent_num(rentals)
+    num = pd.DataFrame([num], columns=['Numbers of Rentals']) # Convert to DataFrame 
 
     # Drop 'RentalDuration' column 
     rentals = rentals.drop(columns=['RentalDuration'])
     
     # Merge average & numRentals into one row
-    rentalStats = pd.concat([average, numRentals], axis=1)
+    rentalStats = pd.concat([average, num], axis=1)
 
     # Ensure date columns are formatted consistently
     rentals['StartDate'] = rentals['StartDate'].dt.strftime('%Y-%m-%d')

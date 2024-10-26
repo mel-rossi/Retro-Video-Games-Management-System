@@ -43,7 +43,7 @@ def ranking(idName, filters, df):
         df.loc[df[idName] == ID, 'score'] = score
 
     # Sort by score 
-    df = df.sort_values(by='score', ascending=False) 
+    df = sort(df, 'score') 
 
     # Drop 'score' column 
     df = df.drop(columns=['score'])
@@ -59,8 +59,14 @@ def limitOut(df, top):
     return df
 # limitOut
 
+# Sorts dataframe by valueID
+def sort(df, valueID):
+    return df.sort_values(by=valueID, ascending=False)
+# sort
+
+
 # Process Input
-def sortMethod(rankType, sortBy, top): 
+def sortingMethod(rankType, sortBy, top): 
 
     # Determine the table / .csv to be ranked  
 
@@ -96,12 +102,12 @@ def sortMethod(rankType, sortBy, top):
         ranked = limitOut(ranked, top)
 
     return ranked
-# sortMethod 
+# sortingMethod 
 
 @rank_bp.route('/rank', methods=['POST']) 
 def rank_route(): 
     data = request.json # Get json data from POST body 
-    ranked = sortMethod(data.get('rank'), data.get('base'), data.get('top'))
+    ranked = sortingMethod(data.get('rank'), data.get('base'), data.get('top'))
 
     data = { 
         "Ranked": ranked.to_dict(orient='records') 

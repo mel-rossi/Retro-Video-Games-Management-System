@@ -115,7 +115,7 @@ def game_rental_route():
     data = request.json # Get json data from POST body 
     user_input = data.get('option') # Extract 'option' field 
 
-    game, activeRentals, inactiveRentals, rentalStats = find_games(user_input)
+    game, activeRentals, inactiveRentals, rentalStats = find_game(user_input)
 
     data = {
         "Video Game": game.to_dict(orient='records'), 

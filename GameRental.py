@@ -47,10 +47,18 @@ def rental_info(rentals):
     inactiveRentals = inactive_filter(rentals) 
 
     return activeRentals, inactiveRentals 
-# rental_info 
+# rental_info
+
+def game_num(rentals): 
+    return df1['VideoGameID'].nunique() 
+# game_num
 
 # Process Input
-def find_game(userInput):
+def find_game(userInput, output):
+
+    if userInput.lower() == 'rented': 
+        num = 
+        
 
     empty = pd.DataFrame()
 
@@ -85,15 +93,23 @@ def find_game(userInput):
         rentals = game_filter(userInput) 
 
         # There is at least one Rental with VideoGameID
-        if exist: 
-            # Rentals (active & inactive) rentals with this VideoGameID  
-            activeRentals, inactiveRentals = rental_info(rentals)
+        if exist:
+            
+            # Only Video Game Stat is desired 
+            if out.lower() == 'stat': 
+                activeRentals = empty 
+                inactiveRentals = empty
+            else: 
+                # Rentals (active & inactive) rentals with this VideoGameID 
+                activeRentals, inactiveRentals = rental_info(rentals) 
 
             # Calculate average Rental Time of said Video Game 
             average = avg_rental_time(rentals)
+            average = pd.DataFrame([average], columns=['Rental Time Average'])
 
             # Calcultae how many times said Video Game has been Rented Out 
             numRentals = rent_num(rentals) 
+            numRentals = pd.DataFrame([numRentals], columns=['Numbers of Rentals'])
 
             # Merge average & numRentals into one row
             rentalStats = pd.concat([average, numRentals], axis=1)
@@ -113,16 +129,22 @@ def find_game(userInput):
 def game_rental_route():
     
     data = request.json # Get json data from POST body 
-    user_input = data.get('option') # Extract 'option' field 
+    user_input = data.get('option', 'out') # Extract 'option' field 
 
-    game, activeRentals, inactiveRentals, rentalStats = find_games(user_input)
-
-    data = {
-        "Video Game": game.to_dict(orient='records'), 
-        "Active Rentals": activeRentals.to_dict(orient='records'), 
-        "Inactive Rentals": inactiveRentals.to_dict(orient='records'), 
-        "Rental Stats": rentalStats.to_dict(orient='records'), 
-     } 
+    game, activeRentals, inactiveRentals, rentalStats = find_game(user_input)
+   
+    if activeRentals.empty and inactiveRentals.empty: 
+        data = { 
+            "Video Game": game.to_dict(orient='records'), 
+            "Rental Stats": rentalStats.to_dict(orient='records')
+        } 
+    else: 
+        data = {
+            "Video Game": game.to_dict(orient='records'), 
+            "Active Rentals": activeRentals.to_dict(orient='records'), 
+            "Inactive Rentals": inactiveRentals.to_dict(orient='records'), 
+            "Rental Stats": rentalStats.to_dict(orient='records'), 
+        } 
 
     # Valid Input 
     if not game.empty: 

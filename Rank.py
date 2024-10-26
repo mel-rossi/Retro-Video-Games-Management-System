@@ -46,7 +46,7 @@ def ranking(idName, filters, df):
     df = sort(df, 'score') 
 
     # Drop 'score' column 
-    df = df.drop(columns=['score'])
+    #df = df.drop(columns=['score'])
 
     return df
 # ranking
@@ -70,18 +70,19 @@ def sortingMethod(rankType, sortBy, top):
 
     # Determine the table / .csv to be ranked  
 
-    # Rank Video Games 
-    if (rankType.lower() == 'game'): 
+    # Default = Rank Rentals
+
+    # Rank Video Games
+    if not rankType == None and rankType.lower() == 'game': 
         idName = 'VideoGameID' 
         filters = game_filter
         df = df3
 
     # Rank Members 
-    elif (rankType.lower() == 'member'): 
+    elif not rankType == None and rankType.lower() == 'member': 
         idName = 'MemberID'
         filters = member_filter 
         df = df1
-
     # Default = Rank Rentals
     else: 
         idName = 'RentalID'

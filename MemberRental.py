@@ -124,10 +124,12 @@ def find_member(user_input):
             activeRentals, inactiveRentals = rental_info(rentals)
 
             # Calculate average Rental Time of said Member 
-            average = avg_rental_time(rentals) 
+            average = avg_rental_time(rentals)
+            average = pd.DataFrame([average], columns=['Rental Time Average']) # Convert to DataFrame 
 
             # Calculate how many times said Video Game has been Rented Out 
-            numRentals = rent_num(rentals) 
+            numRentals = rent_num(rentals)
+            numRentals = pd.DataFrame([numRentals], columns=['Numbers of Rentals']) # Convert to DataFrame 
 
             # Merge average & numRentals into Rental Stats 
             rentalStats = pd.concat([average, numRentals], axis=1)

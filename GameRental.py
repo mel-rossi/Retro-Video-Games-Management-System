@@ -49,16 +49,14 @@ def rental_info(rentals):
     return activeRentals, inactiveRentals 
 # rental_info
 
-def game_num(rentals): 
-    return df1['VideoGameID'].nunique() 
+# Number of unique Video Game IDs rented out 
+def game_num(df): 
+    rentals = active_filter(df)
+    return len(rentals)
 # game_num
 
 # Process Input
 def find_game(userInput=None, output=None):
-
-    #if userInput.lower() == 'rented': 
-        #num = 
-        
 
     empty = pd.DataFrame()
 
@@ -107,12 +105,16 @@ def find_game(userInput=None, output=None):
             average = avg_rental_time(rentals)
             average = pd.DataFrame([average], columns=['Rental Time Average'])
 
-            # Calcultae how many times said Video Game has been Rented Out 
+            # Calculate how many times said Video Game has been Rented Out 
             numRentals = rent_num(rentals) 
             numRentals = pd.DataFrame([numRentals], columns=['Numbers of Rentals'])
 
+            # Calculate how many copies of said Video Game has been Rented out 
+            rentedNum = game_num(rentals)
+            rentedNum = pd.DataFrame([rentedNum], columns=['Number of Copies Rented Out']) 
+
             # Merge average & numRentals into one row
-            rentalStats = pd.concat([average, numRentals], axis=1)
+            rentalStats = pd.concat([average, numRentals, rentedNum], axis=1)
 
             return game, activeRentals, inactiveRentals, rentalStats
 

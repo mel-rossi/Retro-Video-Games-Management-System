@@ -54,10 +54,10 @@ def game_num(rentals):
 # game_num
 
 # Process Input
-def find_game(userInput, output):
+def find_game(userInput=None, output=None):
 
-    if userInput.lower() == 'rented': 
-        num = 
+    #if userInput.lower() == 'rented': 
+        #num = 
         
 
     empty = pd.DataFrame()
@@ -96,7 +96,7 @@ def find_game(userInput, output):
         if exist:
             
             # Only Video Game Stat is desired 
-            if out.lower() == 'stat': 
+            if not output == None and output.lower() == 'stat': 
                 activeRentals = empty 
                 inactiveRentals = empty
             else: 
@@ -129,9 +129,7 @@ def find_game(userInput, output):
 def game_rental_route():
     
     data = request.json # Get json data from POST body 
-    user_input = data.get('option', 'out') # Extract 'option' field 
-
-    game, activeRentals, inactiveRentals, rentalStats = find_game(user_input)
+    game, activeRentals, inactiveRentals, rentalStats = find_game(data.get('option'), data.get('out'))
    
     if activeRentals.empty and inactiveRentals.empty: 
         data = { 

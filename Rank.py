@@ -22,7 +22,7 @@ MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
 # Read .csv files into DataFrames 
 df1 = pd.read_csv(MEMBER_PATH) 
 df2 = pd.read_csv(RENTAL_PATH) 
-df3 = pd.read_csv(VIDEOGAME_PATH) 
+df3 = pd.read_csv(VIDEOGAME_PATH)
 
 # Sort .csv information based on Rental Time (Average Rental Time * Number of Rentals) 
 def ranking(idName, filters, df):
@@ -64,25 +64,41 @@ def sort(df, valueID):
     return df.sort_values(by=valueID, ascending=False)
 # sort
 
+# Check whether the input for 'base' is valid 
+def validBase(base, rank): 
+    valid = False 
+
+    if base.lower() == 'id': 
+        valid = True 
+    elif base.lower() == 'name':
+        if rank.lower() == 'member' or rank.lower() == 'game':  
+            valid = True
+    elif rank.lower() == 'game': 
+        if base.lower() == 'year' or base.lower() == 'genre':
+            valid = True
+ 
+    return valid
+# validBase 
 
 # Process Input
 def sortingMethod(rankType, sortBy, top): 
 
     # Determine the table / .csv to be ranked  
 
-    # Default = Rank Rentals
-
     # Rank Video Games
     if not rankType == None and rankType.lower() == 'game': 
         idName = 'VideoGameID' 
         filters = game_filter
         df = df3
+        valueID = 'Title'
 
     # Rank Members 
     elif not rankType == None and rankType.lower() == 'member': 
         idName = 'MemberID'
         filters = member_filter 
         df = df1
+        valueID = 'FirstName'
+
     # Default = Rank Rentals
     else: 
         idName = 'RentalID'
@@ -91,8 +107,26 @@ def sortingMethod(rankType, sortBy, top):
 
     # Determine what ranking / sorting is based on
 
-    # Default = Sorted by Ranking 
-    ranked = ranking(idName, filters, df)
+    # Default = Sorted by Ranking
+    if validBase(sortBy, rankType) == False: 
+        ranked = ranking(idName, filters, df) 
+    # Other Cases
+    else:
+        # Rank by ID
+        if sortBy.lower() == 'id': 
+            ranked = sort(df, idName)
+
+        # Rank by Name = Games : Title / Publisher || Member : First / Last Name 
+        elif sortBy.lower() == 'name': 
+            ranked = sort(df, valueID)
+       
+        # Rank Games by Year
+        elif sortBy.lower() == 'year': 
+            ranked = sort(df, 'Year')
+
+        # Rank Games by Genre 
+        elif sortBy.lower() == 'genre': 
+            ranked = sort(df, 'Genre') 
 
     # Limit output
 

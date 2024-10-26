@@ -91,9 +91,11 @@ def find_game(userInput):
 
             # Calculate average Rental Time of said Video Game 
             average = avg_rental_time(rentals)
+            average = pd.DataFrame([average], columns=['Rental Time Average'])
 
             # Calcultae how many times said Video Game has been Rented Out 
             numRentals = rent_num(rentals) 
+            num = pd.DataFrame([num], columns=['Numbers of Rentals'])
 
             # Merge average & numRentals into one row
             rentalStats = pd.concat([average, numRentals], axis=1)

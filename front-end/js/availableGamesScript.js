@@ -22,8 +22,7 @@ const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
 window.onload = () => {
     //search container keydown check when enter to call search
     SEARCH_CONTAINER_ELEMENT.onkeydown = (event) => {        
-        if (event.key == 'Enter') {
-            SEARCH_HOLDERS[currSearchOption][0] = SEARCH_BAR_ELEMENT.value;
+        if (event.key == 'Enter') {            
             searchGames();
         }
     };
@@ -96,6 +95,8 @@ function searchGames() {
     const startYear = parseInt(START_YEAR_ELEMENT.value);
     const endYear = parseInt(END_YEAR_ELEMENT.value);
 
+    SEARCH_HOLDERS[currSearchOption][0] = SEARCH_BAR_ELEMENT.value;
+
     //error handling for invalid start and end years
     if (startYear > endYear) {
         alert("End year must be greater than or equal to start year.")
@@ -103,7 +104,7 @@ function searchGames() {
     }
 
     let params = {
-        'option': "all_params",
+        //'option': "all_params",
         'title': SEARCH_HOLDERS["title"][0],
         'publisher': SEARCH_HOLDERS["publisher"][0],
         'start_year': startYear,

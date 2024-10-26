@@ -53,11 +53,11 @@ def avg_rental_time(rentals):
     today = pd.to_datetime(generateDate())
 
     # Convert date columns to datetime 
-    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
+    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'], errors='coerce')
     startDate = rentals['StartDate']
 
     # Replace empty ReturnDate with today's date
-    if 'ReturnDate' not in df.columns or (df['ReturnDate'] == '-1').any(): 
+    if 'ReturnDate' not in rentals.columns or (rentals['ReturnDate'] == '-1').any(): 
         returnDate = today
         
     else:

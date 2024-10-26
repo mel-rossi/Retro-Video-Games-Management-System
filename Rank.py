@@ -46,7 +46,7 @@ def ranking(idName, filters, df):
     df = sort(df, 'score') 
 
     # Drop 'score' column 
-    #df = df.drop(columns=['score'])
+    df = df.drop(columns=['score'])
 
     return df
 # ranking

@@ -15,7 +15,7 @@ CSV_FILE = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 df = pd.read_csv(CSV_FILE)
 
 # Filter Video Games based on input 
-def filter_games(title=None, publisher=None, start_year=None, end_year=None, status=None):
+def filter_games(title=None, publisher=None, start_year=None, end_year=None, status=None, genre=None):
 
     filters = pd.Series([True] * len(df), index=df.index)
 
@@ -37,6 +37,13 @@ def filter_games(title=None, publisher=None, start_year=None, end_year=None, sta
     if end_year is not None: # based on end_year 
         filters = filters & (df['Year'] <= end_year) 
 
+    # Filters 'Genre'
+    if genre is not None: # based on genre
+        # genre input could be an array of genre terms such as ['action', 'adventure', 'shooter', etc...]
+        genre = '|'.join(genre)
+        filters = filters & df['Genre'].str.contains(genre, case=False, na=False, regex=True)
+        # for games with multiple genres, entering one genre will return an entry
+
     return df[filters]
 # filter_games
 
@@ -45,7 +52,7 @@ def search_game_route():
 
     data = request.json # Get json data from POST body
     results = filter_games(data.get('title'), data.get('publisher'), data.get('start_year'),
-                                     data.get('end_year'), data.get('status'))
+                                     data.get('end_year'), data.get('status'), data.get('genre'))
 
     return jsonify(results.to_dict(orient='records'))
 # search_game_route

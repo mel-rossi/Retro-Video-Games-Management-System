@@ -42,7 +42,7 @@ def filter_games(title=None, publisher=None, start_year=None, end_year=None, sta
         # genre input could be an array of genre terms such as ['action', 'adventure', 'shooter', etc...]
         genre = '|'.join(genre)
         filters = filters & df['Genre'].str.contains(genre, case=False, na=False, regex=True)
-        # for games with multiple genres, entering one genre will return an entry
+        # for games with multiple genres, entering one genre will return entries with that contain that genre
 
     return df[filters]
 # filter_games

@@ -65,9 +65,9 @@ MemberID = MemberInput()
 # therefore on the same date
 StartDate = generateDate()
 
-# Return date empty by default, because in practice a entry is made when the rental is checked out. 
-# Return date is now generated only when editing a entry with editEntry.py
-ReturnDate = ''
+# Return date "-1" by default, because in practice a entry is made when the rental is checked out. 
+# Return date is generated only when editing a entry with editEntry.py
+ReturnDate = '-1'
 
 Status = 'Active'
 

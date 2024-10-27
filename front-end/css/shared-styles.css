@@ -45,7 +45,7 @@ p {
 }
 
 .inner-header {
-  height:65vh;
+  height:85vh;
   width:100%;
   margin: 0;
   padding: 0;
@@ -96,6 +96,7 @@ p {
   animation-delay: -5s;
   animation-duration: 20s;
 }
+
 @keyframes move-forever {
   0% {
    transform: translate3d(-90px,0,0);

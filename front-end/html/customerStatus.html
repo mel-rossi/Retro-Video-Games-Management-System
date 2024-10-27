@@ -9,7 +9,7 @@
         <div class="header">
             <div class="inner-header flex">
                 <!-- Back Button -->
-                <button class="back-button" onclick="window.location.href='mainPage.html'">Back</button>
+                <button class="back-button" onclick="window.location.href='/VGIMS'">Back</button>
 
                 <!-- Title -->
                 <div class="title-container">
@@ -17,7 +17,7 @@
                 </div>
 
                 <!-- Search Section -->
-                <div class="search-section">
+                <div id="searchContainer" class="search-section">
                     <input type="text" id="searchInput" placeholder="Phone number or email">
                     <button class="search-button" onclick="searchCustomer()">Search</button>
                 </div>
@@ -25,40 +25,11 @@
                 <!-- Rental History Section -->
                 <div class="rental-history">
                     <h2>Rental History</h2>
-                    <div id="rentalResults" class="rental-results">
-                        <!-- The current rented games and rental history will appear here -->
-                            <!-- Currently Rented Games -->
-                        <div class="current-rentals">
-                            <h3>Currently Rented</h3>
-                            <div class="rental-card">
-                                <p><strong>Game:</strong> The Legend of Zelda: Breath of the Wild</p>
-                                <p><strong>Rented on:</strong> September 20, 2024</p>
-                            </div>
-                            <div class="rental-card">
-                                <p><strong>Game:</strong> Red Dead Redemption 2</p>
-                                <p><strong>Rented on:</strong> October 2, 2024</p>
-                            </div>
-                        </div>
-
+                    <div id="rentalResults" class="rental-results">                        
+                        <!-- Currently Rented Games -->
+                        <div id="currentRentals" class="current-rentals"></div>
                         <!-- Rental History -->
-                        <div class="rental-history">
-                            <h3>Past Rentals</h3>
-                            <div class="rental-card">
-                                <p><strong>Game:</strong> Super Mario Odyssey</p>
-                                <p><strong>Rented on:</strong> August 5, 2024</p>
-                                <p><strong>Returned on:</strong> August 15, 2024</p>
-                            </div>
-                            <div class="rental-card">
-                                <p><strong>Game:</strong> Cyberpunk 2077</p>
-                                <p><strong>Rented on:</strong> July 10, 2024</p>
-                                <p><strong>Returned on:</strong> July 20, 2024</p>
-                            </div>
-                            <div class="rental-card">
-                                <p><strong>Game:</strong> The Last of Us Part II</p>
-                                <p><strong>Rented on:</strong> June 1, 2024</p>
-                                <p><strong>Returned on:</strong> June 10, 2024</p>
-                            </div>
-                        </div>
+                        <div id="pastRentals" class="rental-history"></div>
                     </div>
                 </div>
             </div>
@@ -77,5 +48,10 @@
                 </g>
             </svg>
         </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="../js/customerStatusScript.js"></script>
+        <script src="../js/ajax.js"></script>
+
     </body>
 </html>

@@ -75,13 +75,17 @@
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    width: 90%;
+    width: 450px;
     max-width: 800px;
     margin: 0 auto;
     height: 300px;
-    overflow-y: auto;
-    scrollbar-width: none;
+    overflow-y: auto;    
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    /* Hide scrollbar initially */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.5s;
 }
 
 /* Rental Cards Styling */

@@ -25,7 +25,7 @@ df2 = pd.read_csv(RENTAL_PATH)
 df3 = pd.read_csv(VIDEOGAME_PATH)
 
 # Sort .csv information based on Rental Time (Average Rental Time * Number of Rentals) 
-def ranking(idName, filters, df):
+def ranking(idName, filters, df, bias):
     
     # Iterate through DataFrame 
     for ID in df[idName]:
@@ -43,7 +43,7 @@ def ranking(idName, filters, df):
         df.loc[df[idName] == ID, 'score'] = score
 
     # Sort by score 
-    df = sort(df, 'score') 
+    df = sort(df, 'score', bias) 
 
     # Drop 'score' column 
     df = df.drop(columns=['score'])
@@ -60,8 +60,8 @@ def limitOut(df, top):
 # limitOut
 
 # Sorts dataframe by valueID
-def sort(df, valueID):
-    return df.sort_values(by=valueID, ascending=False)
+def sort(df, valueID, bias):
+    return df.sort_values(by=valueID, ascending=bias)
 # sort
 
 # Check whether the input for 'base' is valid 
@@ -81,7 +81,14 @@ def validBase(base, rank):
 # validBase 
 
 # Process Input
-def sortingMethod(rankType, sortBy, top): 
+def sortingMethod(rankType, sortBy, top, bias):
+
+    # Determine the orientation of the sorting 
+
+    if not bias == None and bias.lower() == 'flip': 
+        bias = True
+    else: 
+        bias = False
 
     # Determine the table / .csv to be ranked  
 
@@ -114,19 +121,19 @@ def sortingMethod(rankType, sortBy, top):
     else:
         # Rank by ID
         if sortBy.lower() == 'id': 
-            ranked = sort(df, idName)
+            ranked = sort(df, idName, bias)
 
         # Rank by Name = Games : Title / Publisher || Member : First / Last Name 
         elif sortBy.lower() == 'name': 
-            ranked = sort(df, valueID)
+            ranked = sort(df, valueID, bias)
        
         # Rank Games by Year
         elif sortBy.lower() == 'year': 
-            ranked = sort(df, 'Year')
+            ranked = sort(df, 'Year', bias)
 
         # Rank Games by Genre 
         elif sortBy.lower() == 'genre': 
-            ranked = sort(df, 'Genre') 
+            ranked = sort(df, 'Genre', bias) 
 
     # Limit output
 
@@ -142,7 +149,8 @@ def sortingMethod(rankType, sortBy, top):
 @rank_bp.route('/rank', methods=['POST']) 
 def rank_route(): 
     data = request.json # Get json data from POST body 
-    ranked = sortingMethod(data.get('rank'), data.get('base'), data.get('top'))
+    ranked = sortingMethod(data.get('rank'), data.get('base'), data.get('top'), 
+                           data.get('trend'))
 
     data = { 
         "Ranked": ranked.to_dict(orient='records') 

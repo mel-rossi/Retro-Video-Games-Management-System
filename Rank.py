@@ -78,14 +78,15 @@ def validRank(rank):
 def validBase(base, rank): 
     valid = False 
 
-    if base.lower() == 'id': 
-        valid = True 
-    elif base.lower() == 'name':
-        if validRank(rank):  
-            valid = True
-    elif rank.lower() == 'game': 
-        if base.lower() == 'year' or base.lower() == 'genre':
-            valid = True
+    if base is not None: 
+        if base.lower() == 'id': 
+            valid = True 
+        elif base.lower() == 'name':
+            if validRank(rank):  
+                valid = True
+        elif rank.lower() == 'game': 
+            if base.lower() == 'year' or base.lower() == 'genre':
+                valid = True
  
     return valid
 # validBase
@@ -184,7 +185,7 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
     
     # Default = Sorted by Ranking 
     else:
-        ranked = ranking(idName, filters, df)
+        ranked = ranking(idName, filters, df, bias)
 
     # Limit output
 

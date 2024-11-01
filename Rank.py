@@ -93,7 +93,7 @@ def validBase(base, rank):
 def validSort(rank, base, sort): 
     valid = False 
 
-    if validBase(base, rank): 
+    if validBase(base, rank) and sort is not None: 
         if base.lower() == 'name': 
             if rank.lower() == 'game' and sort.lower() == 'publisher': 
                 valid = True

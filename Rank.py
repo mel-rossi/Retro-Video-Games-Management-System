@@ -91,6 +91,7 @@ def validBase(base, rank):
     return valid
 # validBase
 
+# Check whether the input for 'sort' is valid
 def validSort(rank, base, sort): 
     valid = False 
 
@@ -99,7 +100,7 @@ def validSort(rank, base, sort):
             if rank.lower() == 'game' and sort.lower() == 'publisher': 
                 valid = True
 
-            if rank.lower() == 'member' and sort.lower() == 'surname':
+            elif rank.lower() == 'member' and sort.lower() == 'surname':
                 valid = True
 
         elif base.lower() == 'id': 
@@ -107,8 +108,16 @@ def validSort(rank, base, sort):
                 valid = True
 
     return valid
+# validSort
 
-# validSort 
+# Check whether the input for 'top' is valid 
+def validTop(top): 
+
+    if top is not None and (isinstance(top, int) or top.isdigit()):
+        return True 
+
+    return False
+# validTop 
 
 # Process Input
 def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None):
@@ -164,8 +173,6 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
 
     # Determine ranking / sorting to perform 
 
-    # Default = Sorted by Ranking
-
     if validBase(sortBy, rankType):
         # Sorted by ID
         if sortBy.lower() == 'id': 
@@ -189,9 +196,9 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
 
     # Limit output
 
-    if top is not None and (isinstance(top, int) or top.isdigit()): 
-        if top.isdigit(): 
-            top = int(top)
+    if validTop(top):  
+        if top.isdigit():  
+            top = int(top) # Convert digit to int 
 
         ranked = limitOut(ranked, top)
 

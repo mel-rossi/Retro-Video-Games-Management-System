@@ -64,6 +64,16 @@ def sort(df, valueID, bias):
     return df.sort_values(by=valueID, ascending=bias)
 # sort
 
+# Check whether the input for 'rank' is valid 
+def validRank(rank): 
+    valid = False
+
+    if rank is not None and (rank.lower() == 'game' or rank.lower() == 'member'): 
+        valid = True
+
+    return valid
+# validRank
+
 # Check whether the input for 'base' is valid 
 def validBase(base, rank): 
     valid = False 
@@ -71,17 +81,36 @@ def validBase(base, rank):
     if base.lower() == 'id': 
         valid = True 
     elif base.lower() == 'name':
-        if rank.lower() == 'member' or rank.lower() == 'game':  
+        if validRank(rank):  
             valid = True
     elif rank.lower() == 'game': 
         if base.lower() == 'year' or base.lower() == 'genre':
             valid = True
  
     return valid
-# validBase 
+# validBase
+
+def validSort(rank, base, sort): 
+    valid = False 
+
+    if validBase(base, rank): 
+        if base.lower() == 'name': 
+            if rank.lower() == 'game' and sort.lower() == 'publisher': 
+                valid = True
+
+            if rank.lower() == 'member' and sort.lower() == 'surname':
+                valid = True
+
+        elif base.lower() == 'id': 
+            if sort.lower() == 'game' or sort.lower() == 'member': 
+                valid = True
+
+    return valid
+
+# validSort 
 
 # Process Input
-def sortingMethod(rankType, sortBy, top, bias):
+def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None):
 
     # Determine the orientation of the sorting 
 
@@ -91,20 +120,21 @@ def sortingMethod(rankType, sortBy, top, bias):
         bias = False
 
     # Determine the table / .csv to be ranked  
+    
+    if validRank(rankType): 
+        # Rank Video Games 
+        if rankType.lower() == 'game': 
+            idName = 'VideoGameID' 
+            filters = game_filter
+            df = df3
+            valueID = 'Title'
 
-    # Rank Video Games
-    if not rankType == None and rankType.lower() == 'game': 
-        idName = 'VideoGameID' 
-        filters = game_filter
-        df = df3
-        valueID = 'Title'
-
-    # Rank Members 
-    elif not rankType == None and rankType.lower() == 'member': 
-        idName = 'MemberID'
-        filters = member_filter 
-        df = df1
-        valueID = 'FirstName'
+        # Rank Members 
+        elif rankType.lower() == 'member': 
+            idName = 'MemberID'
+            filters = member_filter 
+            df = df1
+            valueID = 'FirstName'
 
     # Default = Rank Rentals
     else: 
@@ -112,28 +142,49 @@ def sortingMethod(rankType, sortBy, top, bias):
         filters = rental_filter 
         df = df2
 
-    # Determine what ranking / sorting is based on
+    # Determine additional sorting factors 
+
+    if validSort(rankType, sortBy, sortAdd): 
+        # (Rentals) by Video Game ID instead of Rental ID
+        if sortAdd.lower() == 'game': 
+            idName = 'VideoGameID'
+
+        # (Rentals) by Member ID instead of Rental ID
+        elif sortAdd.lower() == 'member': 
+            idName = 'MemberID' 
+
+        # (Games) by Publisher instead of Title
+        elif sortAdd.lower() == 'publisher': 
+            valueID = 'Publisher'
+
+        # (Member) by Last Name instead of First Name
+        elif sortAdd.lower() == 'surname': 
+            valueID = 'LastName'
+
+    # Determine ranking / sorting to perform 
 
     # Default = Sorted by Ranking
-    if validBase(sortBy, rankType) == False: 
-        ranked = ranking(idName, filters, df) 
-    # Other Cases
-    else:
-        # Rank by ID
+
+    if validBase(sortBy, rankType):
+        # Sorted by ID
         if sortBy.lower() == 'id': 
             ranked = sort(df, idName, bias)
 
-        # Rank by Name = Games : Title / Publisher || Member : First / Last Name 
-        elif sortBy.lower() == 'name': 
+        # (Games or Members) Sorted by Name / Title 
+        elif sortBy.lower() == 'name':
             ranked = sort(df, valueID, bias)
        
-        # Rank Games by Year
+        # (Games) Sorted by Year
         elif sortBy.lower() == 'year': 
             ranked = sort(df, 'Year', bias)
 
-        # Rank Games by Genre 
+        # (Games) Sorted by Genre 
         elif sortBy.lower() == 'genre': 
-            ranked = sort(df, 'Genre', bias) 
+            ranked = sort(df, 'Genre', bias)
+    
+    # Default = Sorted by Ranking 
+    else:
+        ranked = ranking(idName, filters, df)
 
     # Limit output
 
@@ -149,8 +200,8 @@ def sortingMethod(rankType, sortBy, top, bias):
 @rank_bp.route('/rank', methods=['POST']) 
 def rank_route(): 
     data = request.json # Get json data from POST body 
-    ranked = sortingMethod(data.get('rank'), data.get('base'), data.get('top'), 
-                           data.get('trend'))
+    ranked = sortingMethod(data.get('rank'), data.get('base'), data.get('sort'), 
+                           data.get('top'), data.get('trend'))
 
     data = { 
         "Ranked": ranked.to_dict(orient='records') 

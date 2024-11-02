@@ -45,6 +45,10 @@ def search_games_page():
 def customer_status_page():
     return render_template('customerStatus.html')
 
+@app.route('/VGIMS/stats') # opens game stats page
+def game_stats_page():
+    return render_template('gameStats.html')
+
 if __name__ == '__main__':
     webbrowser.open('http://127.0.0.1:5500/VGIMS') # opens browser
     app.run(port=5500) # runs on port 5500

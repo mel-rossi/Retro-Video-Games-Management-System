@@ -81,7 +81,10 @@ def rent_num(rentals):
 # rent_num
 
 # How many times a game was rented by month
-def game_rent_by_month(rentals): 
+def game_rent_by_month(VideoGameID):
+    from GameRental import game_filter
+
+    rentals = game_filter(VideoGameID) 
 
     # Convert StartDate to date time 
     rentals['StartDate'] = pd.to_datetime(df['StartDate'], errors='coerce') 
@@ -133,11 +136,12 @@ def rental_info(status):
     num = pd.DataFrame([num], columns=['Numbers of Rentals']) # Convert to DataFrame
 
     # Testing game_rent_by_month 
-    from GameRental import game_filter
     # Calculate how many rentals there have been per month
-    for GameID in rentals['VideoGameID']: 
-        gameRen = game_filter(GameID)
-        numMonth = game_rent_by_month(gameRen) 
+    IDs = { 'id': ['V0055', 'V0188', 'V0002', 'V0797', 'V0770', 'V1790', 'V0790', 'V0109', 'V0072', 'V1008', 
+                  'V0089', 'V0111', 'V0011', 'V0080', 'V0190', 'V0998', 'V0820', 'V0189', 'V0371', 'V1792', 
+                  'V0486', 'V0281', 'V0036', 'V0021', 'V0030', 'V0668', 'V0090', 'V0283', 'V0902', 'V0001'] } 
+    for GameID in IDs['id']: 
+        numMonth = game_rent_by_month(GameID) 
         print(f'{GameID} : {numMonth}') 
 
     # Drop 'RentalDuration' column 

@@ -69,6 +69,12 @@
     font-size: 16px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
     color: rgba(0, 0, 0, 0.727);
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    height: 30%;
+    margin-top: 10px;
+    margin-left: 10px;
 }
 .inventory-box {
     grid-column: 2;
@@ -83,11 +89,11 @@
 
 }
 
-canvas { /*AvgRental, Rank, & Inventory boxes */
+canvas { /*AvgRental & Inventory boxes */
     background-color: white;
     border-radius: 10px;
     width:61%;
-
+    margin-bottom: 20px;
     margin-left: 10px;
 }
 

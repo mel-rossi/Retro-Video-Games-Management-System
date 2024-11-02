@@ -1,9 +1,10 @@
- //Consts
+ // variables
  const RANK_BOX_ELEMENT = document.getElementById('rankBox'); 
  const AVG_RENTAL_ELEMENT = document.getElementById('rentalHistoryChart').getContext('2d');
  const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
  const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
  const TOTAL_VIDEO_GAMES = 1589;
+ 
 
  window.onload = game_stats_page;
 
@@ -15,17 +16,19 @@
     let rank_params = {
         'rank': 'game',
         'base': 'VideoGameID',
-        //'top': 'Default',
+        'top': 'Default',
         //'trend': 'Default'
     }
     postRequestParams("game_rental", rental_params, generateInventoryChart, () => { });
     postRequestParams("game_rental", rental_params, generateRentalChart, () => { });
     postRequestParams("rank", rank_params, generateRankBox, () => { });
  }
-
+ 
   // Rental History (Line Chart)
   /* bar chart: how many times a game was rented that month */
 function generateRentalChart(data){
+    const GAME_TITLE = data['Video Game'][0]['Title'];
+    document.getElementById('gameTitle').innerText = GAME_TITLE;
     const RENTAL_AVERAGE = data['Rental Stats'][0]['Rental Time Average'];
     const RENTAL_CHART = new Chart(AVG_RENTAL_ELEMENT, {
     type: 'line',
@@ -103,7 +106,9 @@ function generateInventoryChart(data){
     INVENTORY_ELEMENT.drawImage(tempCanvas, tempCanvas.width, tempCanvas.height);
 }
 // Rank Box
-function generateRankBox(ranking){
-    
+function generateRankBox(data){
+    let rank = document.createElement("H3");
+    rank.innerText = data['VideoGameID'][0]['Rank'];
+    RANK_BOX_ELEMENT.appendChild(rank);
 }
 

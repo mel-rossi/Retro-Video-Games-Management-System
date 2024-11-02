@@ -2,27 +2,30 @@ import os
 import signal
 import webbrowser
 from Rank import rank_bp
+from Rank import sortingMethod
+from AddRentals import addrentals_bp
 from SearchGame import searchgame_bp
 from GameRental import gamerental_bp
 from RentalStat import rentalstat_bp
 from SearchMember import searchmember_bp
 from MemberRental import memberrental_bp
-from flask import Flask, request, render_template, send_from_directory
-from Rank import sortingMethod
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, request, render_template, send_from_directory
 
 # This program serves as the main entry point for the Web Application
 # When ran, opens main page and runs all the flask apps on startup
 # Also makes the url pretty instead of '.html'
 
 app = Flask(__name__, template_folder='front-end/html')
+app.secret_key = 'supersecretkey' # Set secret key
 
 app.register_blueprint(searchgame_bp, url_prefix='')
 app.register_blueprint(gamerental_bp, url_prefix='')
 app.register_blueprint(memberrental_bp, url_prefix='')
 app.register_blueprint(rentalstat_bp, url_prefix='') 
 app.register_blueprint(rank_bp, url_prefix='')
-app.register_blueprint(searchmember_bp, url_prefix='') 
+app.register_blueprint(searchmember_bp, url_prefix='')
+app.register_blueprint(addrentals_bp, url_prefix='') 
 
 def rank_update(): # updates/resorts videogames.csv by rank in ascending order
     ranked = sortingMethod('game','','','') # sort the file by score

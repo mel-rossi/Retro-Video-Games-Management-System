@@ -40,9 +40,9 @@ def validateVideoGameID(VideoGameInput):
 # Confirm if the VideoGameID entered is the correct one 
 def confirmVideoGameID(VideoGameInput): 
     # Display Video Game information based on ID
-    print("This is the Video Game registration of the corresponding ID: ")
+    # print("This is the Video Game registration of the corresponding ID: ")
     result = df2.loc[df2.iloc[:, 0] == VideoGameInput]
-    print(result)
+    return result
 # confirmVideoGameID
 
 # Check Validation of MemberID input 
@@ -58,9 +58,9 @@ def validateMemberID(MemberInput):
 # Confirm if the MemberID entered is the correct one 
 def confirmMemberID(MemberInput): 
     # Display Member information based on ID
-    print("This is the Member registration of the corresponding ID: ")
+    #print("This is the Member registration of the corresponding ID: ")
     result = df3.loc[df3.iloc[:, 0] == MemberInput] 
-    print(result)
+    return result
 # confirmMemberID
 
 # Check Validation of RentalID input 
@@ -76,23 +76,23 @@ def validateRentalID(RentalInput):
 # Confirm if the RentalID entered is the correct one 
 def confirmRentalID(RentalInput): 
     # Display Rental information based on ID
-    print("This is the Rental registration of the corresponding ID: ")
+    # print("This is the Rental registration of the corresponding ID: ")
     result = df1.loc[df1.iloc[:, 0] == RentalInput]
-    print(result)
+    return result
 # confirmRentalID
 
-# Generate today's date: YYYY-MM-DD
+# Generate today's date
 def generateDate(): 
     return pd.Timestamp.today().date()
 # generateDate
 
 # Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
-    row = df2.loc[df2.iloc[:, 0] == VideoGameInput] # Find correct Row 
-    if row.iloc[:, -2].eq('Available').any(): # Find the value of the last column : -1 = last column 
+    row = df2[df2['VideoGameID'] == VideoGameInput] # Find correct Row 
+    if row['Availability'].any(): # Find the value of the last column : -1 = last column 
                                               # check if said value == 'Available'
         return True # Available 
-    print("VideoGame " + VideoGameInput + " is unavailable.")
+    #print("VideoGame " + VideoGameInput + " is unavailable.")
     return False # Unavailable 
 # checkAvailibility
 
@@ -102,7 +102,7 @@ def checkRentalLimit(MemberInput):
     if row.iloc[:, -1].item() < 5: # Find if value of last column is less than 5 : -1 = last column 
                                    # check if said value < 5
         return True # Limit Not Reached
-    print("Member " + MemberInput + " has reached their Rental Limit(5).")
+    #print("Member " + MemberInput + " has reached their Rental Limit(5).")
     return False # Limit Reached
 # checkRentalLimit
 

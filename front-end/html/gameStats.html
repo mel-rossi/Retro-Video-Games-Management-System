@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game Statistics</title>
+        <link rel="stylesheet" href="../css/shared-styles.css">
+        <link rel="stylesheet" href="../css/game-stats.css">
+        
+    </head>
+    <body>
+        <div class="header">
+            <div class="inner-header flex">
+                <!-- Back Button -->
+                 <button class="back-button" onclick="window.location.href='availableGames.html'">Back</button>
+
+                <!-- Title -->
+                <div class="title-container">
+                    <h1>Game Stats</h1>
+                </div>
+
+                <!-- Game Stats Section -->
+                 <div class="stats-container">
+                    <h2 id="gameTitle"></h2>
+
+                    <div class="charts-row">
+                    <!-- Rank Information
+                    <div class="rank-container">
+                        Rank: <span>104</span><sup>th</sup> / 1540
+                    </div> -->
+                    <div class="charts-row-inner">
+
+                        <!-- Rank Information -->
+                        <h3>Rank</h3>
+                        <div class="rank-box">
+                            <div id="rankBox"></div>
+                            <!-- <canvas id="rankBox"></canvas> -->
+
+                        </div>
+                        <!-- Rental History (LineChart)-->
+                        <div class="rental-box">
+                            <h3>Average Rental Time</h3>
+                            <canvas id="rentalHistoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                        <!-- Inventory (Pie Chart) -->
+                        <div class="inventory-box">
+                            <h3>Inventory</h3>
+                            <canvas id="inventoryChart"></canvas>
+                        </div> 
+                    </div>
+                 </div>
+            </div>
+                 
+                 <!-- The animated waves -->
+                 <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                 <defs>
+                     <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                 </defs>
+                 <g class="parallax">
+                     <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
+                     <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                     <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                     <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                 </g>
+                </svg>                  
+            
+        </div>
+        <script src="../js/ajax.js"></script>
+        <script src="../js/gameStats.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+        
+
+    </body>
+</html>

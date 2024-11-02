@@ -80,16 +80,44 @@ def rent_num(rentals):
     return num 
 # rent_num
 
+# How many times a game was rented by month
+def game_rent_by_month(rentals): 
+
+    # Start Date to date time 
+    rentals['StartDate'] = pd.to_datetime(df['StartDate'], errors='coerce') 
+
+    # Extract Month from Date 
+    rentals['Month'] = rentals['StartDate'].dt.month
+
+    # Count by month 
+    count = rentals['Month'].value_counts().sort_index() 
+
+    # Dictionary with month names 
+    months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+
+    # Map count to months 
+    count.index = count.index.map(months)
+
+    # Convert to dataFrame than to dictionary
+    count = count.reset_index().rename(columns={'index': 'Month'}) 
+    countDict = { 
+        "Rentals by Month": [{row['Month']: row['count']} for _, row in count.iterrows()]
+    }
+
+    return countDict
+# game_rent_by_month 
+
 # Organize Rental Information
 def rental_info(status):
 
-    # 'Active' Rental Stats 
-    if status.lower() == 'active':
-        rentals = active_filter(rentals) 
+    if status is not None: 
+        # 'Inactive' Rental Stats
+        if status.lower() == 'active':
+            rentals = active_filter(rentals) 
 
-    # 'Inactive' Rental Stats
-    elif status.lower() == 'inactive': 
-        rentals = inactive_filter(rentals)
+        # 'Inactive' Rental Stats
+        elif status.lower() == 'inactive': 
+            rentals = inactive_filter(rentals)
 
     # Default : Unbiased Rental Stats
     else: 
@@ -101,7 +129,15 @@ def rental_info(status):
 
     # Calculate how many rentals there have been 
     num = rent_num(rentals)
-    num = pd.DataFrame([num], columns=['Numbers of Rentals']) # Convert to DataFrame 
+    num = pd.DataFrame([num], columns=['Numbers of Rentals']) # Convert to DataFrame
+
+    # Testing game_rent_by_month 
+    from GameRental import game_filter
+    # Calculate how many rentals there have been per month
+    for GameID in rentals['VideoGameID']: 
+        gameRen = game_filter(GameID)
+        numMonth = game_rent_by_month(gameRen) 
+        print(f'{GameID} : {numMonth}') 
 
     # Drop 'RentalDuration' column 
     rentals = rentals.drop(columns=['RentalDuration'])

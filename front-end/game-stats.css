@@ -1,0 +1,99 @@
+/* Back Button Styling */
+.back-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    top: 30px;
+    left: 20px;
+}
+
+.back-button:hover {
+    background-color: #45a049;
+}
+
+/* Title Styling */
+.title-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.title-container h1 {
+    font-size: 40px;
+    color: white;
+}
+
+.stats-container {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
+    color: rgba(0, 0, 0, 0.727);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* .charts-row {
+    display:flex;
+    justify-content: space-between;
+    align-items:flex-start;
+    margin-top: -20px;
+}*/
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.chart {
+    width: 45%;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    
+}
+
+.rank-box {
+    float: left;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
+    color: rgba(0, 0, 0, 0.727);
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    height: 30%;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.inventory-box {
+    grid-column: 2;
+    flex: 1;
+    float:right;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
+    color: rgba(0, 0, 0, 0.727);
+    margin-bottom: 10px;
+
+}
+
+canvas { /*AvgRental & Inventory boxes */
+    background-color: white;
+    border-radius: 10px;
+    width:61%;
+    margin-bottom: 20px;
+    margin-left: 10px;
+}
+

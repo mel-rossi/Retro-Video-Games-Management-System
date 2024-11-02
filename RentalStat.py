@@ -81,23 +81,43 @@ def rent_num(rentals):
 # rent_num
 
 # How many times a game was rented by month
-def game_rent_by_month(VideoGameID):
+def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
     from GameRental import game_filter
 
-    rentals = game_filter(VideoGameID) 
+    rentals = game_filter(VideoGameID) # Filter rentals by Video Game
 
-    # Convert StartDate to date time 
-    rentals['StartDate'] = pd.to_datetime(df['StartDate'], errors='coerce') 
+    if rentals.empty: 
+        count = pd.Series(0, index=range(1, 13))
+    else: 
+        # Convert StartDate to date time 
+        rentals['StartDate'] = pd.to_datetime(df['StartDate'], errors='coerce')
 
-    # Extract Month from StartDate 
-    rentals['Month'] = rentals['StartDate'].dt.month
+        # Extract Year and Month from StartDate 
+        rentals['Year'] = rentals['StartDate'].dt.year
+        rentals['Month'] = rentals['StartDate'].dt.month
 
-    # Count by month 
-    count = rentals['Month'].value_counts().sort_index() 
+        # If range is provided 
+        if rangeM and rangeY: 
+            # Parse month range and year range
+            start_month, end_month = map(int, rangeM.split('-')) 
+            start_year, end_year = map(int, rangeY.split('-')) 
+
+            # Filter rentals by the range 
+            rentals = rentals[ 
+                ((rentals['Year'] == start_year) & (rentals['Month'] >= start_month)) | 
+                ((rentals['Year'] == end_year) & (rentals['Month'] <= end_month)) | 
+                ((rentals['Year'] > start_year) & (rentals['Year'] < end_year)) 
+            ]
+
+
+        # Count by month
+        count = rentals['Month'].value_counts().sort_index() 
 
     # Dictionary with month names 
-    months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 
-              7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+    months = { 
+        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 
+        7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec' 
+    }
 
     # Ensure all months are included, even if count is 0
     allMonths = pd.Series(0, index=months.keys()).rename(index=months)
@@ -108,7 +128,7 @@ def game_rent_by_month(VideoGameID):
         "Rentals by Month": [{month: int(count[month])} for month in months.values()]
     }
 
-    return countDict
+    return jsonify(countDict)
 # game_rent_by_month 
 
 # Organize Rental Information
@@ -137,12 +157,12 @@ def rental_info(status):
 
     # Testing game_rent_by_month 
     # Calculate how many rentals there have been per month
-    IDs = { 'id': ['V0055', 'V0188', 'V0002', 'V0797', 'V0770', 'V1790', 'V0790', 'V0109', 'V0072', 'V1008', 
-                  'V0089', 'V0111', 'V0011', 'V0080', 'V0190', 'V0998', 'V0820', 'V0189', 'V0371', 'V1792', 
-                  'V0486', 'V0281', 'V0036', 'V0021', 'V0030', 'V0668', 'V0090', 'V0283', 'V0902', 'V0001'] } 
-    for GameID in IDs['id']: 
-        numMonth = game_rent_by_month(GameID) 
-        print(f'{GameID} : {numMonth}') 
+    #IDs = { 'id': ['V0055', 'V0188', 'V0002', 'V0797', 'V0770', 'V1790', 'V0790', 'V0109', 'V0072', 'V1008', 
+    #              'V0089', 'V0111', 'V0011', 'V0080', 'V0190', 'V0998', 'V0820', 'V0189', 'V0371', 'V1792', 
+    #              'V0486', 'V0281', 'V0036', 'V0021', 'V0030', 'V0668', 'V0090', 'V0283', 'V0902', 'V0001'] }
+    #for GameID in IDs['id']: 
+    #    numMonth = game_rent_by_month(GameID, '8-9', '2021-2023') 
+    #    print(f'{GameID} : {numMonth}') 
 
     # Drop 'RentalDuration' column 
     rentals = rentals.drop(columns=['RentalDuration'])

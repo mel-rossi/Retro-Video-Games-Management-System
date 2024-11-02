@@ -97,18 +97,23 @@ def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
         rentals['Month'] = rentals['StartDate'].dt.month
 
         # If range is provided 
-        if rangeM and rangeY: 
-            # Parse month range and year range
-            start_month, end_month = map(int, rangeM.split('-')) 
-            start_year, end_year = map(int, rangeY.split('-')) 
+        if rangeM or rangeY:
+            # Parse range 
+            if rangeM: 
+                start_month, end_month = map(int, rangeM.split('-')) # parse month range 
+                filters = ((rentals['Month'] >= start_month) & (rentals['Month'] <= end_month))
+
+            if rangeY: 
+                start_year, end_year = map(int, rangeY.split('-')) # Parse year range 
+                filters = ((rentals['Year'] >= start_year) & (rentals['Month'] <= end_year)) 
+
+            if rangeY and rangeM:
+                filters = ((rentals['Year'] == start_year) & (rentals['Month'] >= start_month)) 
+                filters |= ((rentals['Year'] == end_year) & (rentals['Month'] <= end_month))
+                filters |= ((rentals['Year'] > start_year) & (rentals['Year'] < end_year)) 
 
             # Filter rentals by the range 
-            rentals = rentals[ 
-                ((rentals['Year'] == start_year) & (rentals['Month'] >= start_month)) | 
-                ((rentals['Year'] == end_year) & (rentals['Month'] <= end_month)) | 
-                ((rentals['Year'] > start_year) & (rentals['Year'] < end_year)) 
-            ]
-
+            rentals = rentals[filters]
 
         # Count by month
         count = rentals['Month'].value_counts().sort_index() 
@@ -128,6 +133,7 @@ def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
         "Rentals by Month": [{month: int(count[month])} for month in months.values()]
     }
 
+    #return countDict # for Testing purposes
     return jsonify(countDict)
 # game_rent_by_month 
 
@@ -161,7 +167,7 @@ def rental_info(status):
     #              'V0089', 'V0111', 'V0011', 'V0080', 'V0190', 'V0998', 'V0820', 'V0189', 'V0371', 'V1792', 
     #              'V0486', 'V0281', 'V0036', 'V0021', 'V0030', 'V0668', 'V0090', 'V0283', 'V0902', 'V0001'] }
     #for GameID in IDs['id']: 
-    #    numMonth = game_rent_by_month(GameID, '8-9', '2021-2023') 
+    #    numMonth = game_rent_by_month(GameID, '8-9', None) 
     #    print(f'{GameID} : {numMonth}') 
 
     # Drop 'RentalDuration' column 

@@ -4,7 +4,7 @@ from flask_cors import CORS
 from validateEntries import generateDate
 from flask import request, jsonify, Blueprint
 
-# This program Outputs Rental History :  
+# This program Outputs Rental Statistics and (optionally) Rental History :  
 # Retrieves Rentals : unbiased, active or inactive 
 # Calculates Rental Stats : Number of Rentals & Average Rental Time 
 

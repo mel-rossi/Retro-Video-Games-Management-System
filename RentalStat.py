@@ -83,25 +83,26 @@ def rent_num(rentals):
 # How many times a game was rented by month
 def game_rent_by_month(rentals): 
 
-    # Start Date to date time 
+    # Convert StartDate to date time 
     rentals['StartDate'] = pd.to_datetime(df['StartDate'], errors='coerce') 
 
-    # Extract Month from Date 
+    # Extract Month from StartDate 
     rentals['Month'] = rentals['StartDate'].dt.month
 
     # Count by month 
     count = rentals['Month'].value_counts().sort_index() 
 
     # Dictionary with month names 
-    months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+    months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 
+              7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
-    # Map count to months 
-    count.index = count.index.map(months)
+    # Ensure all months are included, even if count is 0
+    allMonths = pd.Series(0, index=months.keys()).rename(index=months)
+    count = allMonths.add(count.rename(index=months), fill_value=0).astype(int) 
 
-    # Convert to dataFrame than to dictionary
-    count = count.reset_index().rename(columns={'index': 'Month'}) 
+    # Convert to DataFrame then to dictionary
     countDict = { 
-        "Rentals by Month": [{row['Month']: row['count']} for _, row in count.iterrows()]
+        "Rentals by Month": [{month: int(count[month])} for month in months.values()]
     }
 
     return countDict

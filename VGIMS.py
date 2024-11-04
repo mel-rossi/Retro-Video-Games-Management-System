@@ -3,7 +3,7 @@ import signal
 import webbrowser
 from Rank import rank_bp
 from Rank import sortingMethod
-from AddRentals import addrentals_bp
+from AddRental import addrental_bp
 from SearchGame import searchgame_bp
 from GameRental import gamerental_bp
 from RentalStat import rentalstat_bp
@@ -25,7 +25,7 @@ app.register_blueprint(memberrental_bp, url_prefix='')
 app.register_blueprint(rentalstat_bp, url_prefix='') 
 app.register_blueprint(rank_bp, url_prefix='')
 app.register_blueprint(searchmember_bp, url_prefix='')
-app.register_blueprint(addrentals_bp, url_prefix='') 
+app.register_blueprint(addrental_bp, url_prefix='') 
 
 def rank_update(): # updates/resorts videogames.csv by rank in ascending order
     ranked = sortingMethod('game','','','') # sort the file by score

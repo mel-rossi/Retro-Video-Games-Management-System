@@ -1,15 +1,11 @@
-# This file allows the user to edit entries in the Rentals table
-# For pratical purposes it currently only generates the return date 
-# and changes the Status of the Rental 
-
-# Imports
 import pandas as pd 
 from linkIDs import returnGame
 from linkIDs import decRentals
-from validateEntries import generateDate
-from validateEntries import confirmRentalID
-from validateEntries import validateRentalID
-from validateEntries import checkRentalStatus
+from flask import request, jsonify, Blueprint, session
+from validateEntries import generateDate, confirmRentalID
+from validateEntries import validateRentalID, checkRentalStatus
+
+# This file allows the user to close Rental Transactions (Registration --> Status => "Inactive") 
 
 # Function
 

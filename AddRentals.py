@@ -18,8 +18,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
 CSV_FILE = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 
-# Run through Input Validation 
-def confirm_entry(VideoGameID, MemberID): 
+# Dry Run : Initial Input Validation 
+def dry_run_entry(VideoGameID, MemberID): 
     
     # Validate VideoGameID 
     if not validateVideoGameID(VideoGameID): 
@@ -44,10 +44,14 @@ def confirm_entry(VideoGameID, MemberID):
         "Message": "Please confirm the details"
     }), 200
 
-# confirm_entry
+# dry_run_entry
 
-# Process Validated Input 
+# Primary Validation : Process Input and perform modification if appropriate 
 def add_entry(VideoGameID, MemberID):
+
+    # Primary Validation 
+    if not validateVideoGameID(VideoGameID) or not checkAvailability(VideoGameID) or not validateMemberID(MemberID) or not checkRentalLimit(MemberID):
+           return jsonify({"error": "Primary Validation Failed!"})
 
     # Generate the valid next RentalID for the Rental being added
     RentalID = generateRentalID() 
@@ -93,11 +97,11 @@ def add_rentals_route():
 
     data = request.json # Get json data from POST body 
 
-    # Initial validation and confirmation 
+    # Dry Run: Initial validation and confirmation 
     if 'Confirm' not in data: 
-        return confirm_entry(data.get('VideoGameID'), data.get('MemberID'))
+        return dry_run_entry(data.get('VideoGameID'), data.get('MemberID'))
 
-    # Confirm and prooceed with adding entry
+    # Confirm: Primary validation and prooceed with adding entry if appropriate 
     if data.get('Confirm').lower() == 'confirmed':
         VideoGameID = session.get('VideoGameID') 
         MemberID = session.get('MemberID') 

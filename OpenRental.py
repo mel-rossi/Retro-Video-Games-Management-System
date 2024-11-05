@@ -10,16 +10,16 @@ from validateEntries import confirmVideoGameID, validateVideoGameID
 
 # This file allows the user to add new entries to the Rentals Table
 
-addrental_bp = Blueprint('AddRental', __name__)
-CORS(addrental_bp)
-addrental_bp.secret_key = 'supersecretkey' # Session Management 
+openrental_bp = Blueprint('OpenRental', __name__)
+CORS(openrental_bp)
+openrental_bp.secret_key = 'supersecretkey' # Session Management 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
 CSV_FILE = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 
 # Dry Run : Initial Input Validation 
-def dry_run_entry(VideoGameID, MemberID): 
+def dry_run_open_entry(VideoGameID, MemberID): 
     
     # Validate VideoGameID 
     if not validateVideoGameID(VideoGameID): 
@@ -47,7 +47,7 @@ def dry_run_entry(VideoGameID, MemberID):
 # dry_run_entry
 
 # Primary Validation : Process Input and perform modification if appropriate 
-def add_entry(VideoGameID, MemberID):
+def open_entry(VideoGameID, MemberID):
 
     # Primary Validation 
     if not validateVideoGameID(VideoGameID) or not checkAvailability(VideoGameID) or not validateMemberID(MemberID) or not checkRentalLimit(MemberID):
@@ -92,20 +92,20 @@ def add_entry(VideoGameID, MemberID):
     return jsonify(df.to_dict(orient='records')), 200
 # add_entry
 
-@addrental_bp.route('/add_rentals', methods=['POST']) 
-def add_rental_route(): 
+@openrental_bp.route('/open_rental', methods=['POST']) 
+def open_rental_route(): 
 
     data = request.json # Get json data from POST body 
 
     # Dry Run: Initial validation and confirmation 
     if 'Confirm' not in data: 
-        return dry_run_entry(data.get('VideoGameID'), data.get('MemberID'))
+        return dry_run_open_entry(data.get('VideoGameID'), data.get('MemberID'))
 
     # Confirm: Primary validation and prooceed with adding entry if appropriate 
     if data.get('Confirm').lower() == 'confirmed':
         VideoGameID = session.get('VideoGameID') 
         MemberID = session.get('MemberID') 
-        return add_entry(VideoGameID, MemberID) 
+        return open_entry(VideoGameID, MemberID) 
     else: 
         return jsonify({"message": "Operation cancelled"}), 200
 # add_rental_route

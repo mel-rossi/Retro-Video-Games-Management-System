@@ -1,4 +1,4 @@
-# Validation & Generation Methods 
+# This program contains Validation & Generation Methods 
 
 import pandas as pd
 
@@ -113,3 +113,4 @@ def checkRentalStatus(RentalInput):
         return True # Active 
     #print("Rental " + RentalInput + " is inactive.")
     return False # Inactive
+# checkRentalStatus

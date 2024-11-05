@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from flask_cors import CORS
 from linkIDs import returnGame, decRentals
+from fetchDetails import gameTitle, memberName
+from fetchDetails import rentalGameID, rentalMemberID
 from flask import request, jsonify, Blueprint, session
 from validateEntries import generateDate, confirmRentalID
 from validateEntries import validateRentalID, checkRentalStatus
@@ -28,8 +30,13 @@ def dry_run_close_entry(RentalID):
 
     session['RentalID'] = RentalID
 
+    VideoGameID = rentalGameID(RentalID) # Extract VideoGameID  
+    MemberID = rentalMemberID(RentalID) # Extract MemberID 
+
     return jsonify({
         "Rental Registration": confirmRentalID(RentalID).to_dict(orient='records'),
+        "Registered Video Game (Title)": gameTitle(VideoGameID),
+        "Registered Member (Name)": memberName(MemberID),       
         "Message": "Please confirm the details"
     }), 200
 # dry_run_close_entry
@@ -48,10 +55,10 @@ def close_entry(RentalID):
     # Read CSV file into DataFrame 
     df = pd.read_csv(CSV_FILE)
 
-    # Update dependent columns on files VideoGames.csv and Members.csv 
-    VideoGameID = df.loc[df.iloc[:, 0] == RentalID].iloc[0, 1] # Extract VideoGameID
-    MemberID = df.loc[df.iloc[:, 0] == RentalID].iloc[0, 2] # Extract MemberID
+    VideoGameID = rentalGameID(RentalID) # Extract VideoGameID  
+    MemberID = rentalMemberID(RentalID) # Extract MemberID   
 
+    # Update dependent columns on files VideoGames.csv and Members.csv 
     returnGame(VideoGameID) 
     decRentals(MemberID)
 

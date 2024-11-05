@@ -25,7 +25,7 @@ def gameTitle(VideoGameID):
 def memberName(MemberID): 
 
     first = df3.loc[df3['MemberID'] == MemberID, 'FirstName'].values[0]
-    last = df3.loc[df3['MemberID'] == MemberID, 'LastName'].values[0] 
+    last = df3.loc[df3['MemberID'] == MemberID, 'LastName'].values[0]
 
     name = f"{last}, {first}" 
 
@@ -43,7 +43,7 @@ def rentalGameID(RentalID):
 # Fetch MemberID of corresponding RentalID 
 def rentalMemberID(RentalID): 
 
-    MemberID = df1.loc[df1['RentalID'] == RentalID, 'VideoGameID'].values[0] 
+    MemberID = df1.loc[df1['RentalID'] == RentalID, 'MemberID'].values[0] 
 
     return MemberID
 # rentalMemberID

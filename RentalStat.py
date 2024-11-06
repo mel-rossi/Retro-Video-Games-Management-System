@@ -2,6 +2,7 @@ import os
 import pandas as pd 
 from flask_cors import CORS
 from validateEntries import generateDate
+from validateEntries import validateVideoGameID
 from flask import request, jsonify, Blueprint
 
 # This program Outputs Rental Statistics and Rental History :
@@ -82,6 +83,7 @@ def rent_num(rentals):
 
 # How many times a game was rented by month
 def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
+
     from GameRental import game_filter
 
     rentals = game_filter(VideoGameID) # Filter rentals by Video Game
@@ -135,7 +137,6 @@ def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
 
     return countDict
     #return countDict # for Testing purposes
-    #return jsonify(countDict)
 # game_rent_by_month 
 
 # Organize Rental Information
@@ -161,15 +162,6 @@ def rental_info(status):
     num = rent_num(rentals)
     num = pd.DataFrame([num], columns=['Numbers of Rentals']) # Convert to DataFrame
 
-    # Testing game_rent_by_month 
-    # Calculate how many rentals there have been per month
-    #IDs = { 'id': ['V0055', 'V0188', 'V0002', 'V0797', 'V0770', 'V1790', 'V0790', 'V0109', 'V0072', 'V1008', 
-    #              'V0089', 'V0111', 'V0011', 'V0080', 'V0190', 'V0998', 'V0820', 'V0189', 'V0371', 'V1792', 
-    #              'V0486', 'V0281', 'V0036', 'V0021', 'V0030', 'V0668', 'V0090', 'V0283', 'V0902', 'V0001'] }
-    #for GameID in IDs['id']: 
-    #    numMonth = game_rent_by_month(GameID, '8-9', None) 
-    #    print(f'{GameID} : {numMonth}') 
-
     # Drop 'RentalDuration' column 
     rentals = rentals.drop(columns=['RentalDuration'])
     
@@ -187,27 +179,35 @@ def rental_stat_route():
 
     data = request.json # Get json data from POST body 
 
-    option = data.get('option').lower()
+    option = data.get('option')
 
-    if option is not None: # Check if option is provided
-        if option == 'history': # Get rental history
-            game_id = data.get('id')
-            month_range = data.get('month_range')
-            year_range = data.get('year_range')
-            data = game_rent_by_month(game_id, month_range, year_range)
+    # Option given 
+    if option is not None: 
+        status = data.get('status') # Extract 'status' field
 
-        elif option == 'rental': # Get rental info
-            user_input = data.get('status') # Extract 'status' field
-            rentals, rentalStats = rental_info(user_input)
-            data = { 
-                "Rentals": rentals.to_dict(orient='records'), 
-                "Rental Stats": rentalStats.to_dict(orient='records') 
-            }       
-        else:
-            return jsonify({ "error": "Invalid option provided" }), 400
+        rentals, rentalStats = rental_info(status) 
+
+        # Get Rental Stats : Option Default
+        data = { 
+            "Rental Stats": rentalStats.to_dict(orient='records') 
+        } 
+
+        # Get History (Rental) Log + Rental Stats
+        if option.lower() == 'log': 
+            data.update({ 
+                "Rental Log": rentals.to_dict(orient='records'), 
+            })
+
+    # No option given (Default) : Get Game Rentals by Month
     else:
-        return jsonify({ "error": "No option provided" }), 400
+        gameID = data.get('id') 
+        monthRange = data.get('month_range') 
+        yearRange = data.get('year_range') 
 
+        if not validateVideoGameID(gameID): 
+            data = {"error": "Invalid Video Game ID entered"}
+        else: 
+            data = game_rent_by_month(gameID, monthRange, yearRange) 
 
     return jsonify(data)
 # rental_stat_route

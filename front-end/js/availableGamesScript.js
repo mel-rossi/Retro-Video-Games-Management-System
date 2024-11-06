@@ -1,6 +1,8 @@
 var currSearchOption = undefined;
 var currStatusOption = undefined;
 
+const GENRE_OPTIONS = [ "Sports", "Platformer/Racing", "Shooter", "Action/Adventure", "RPG", "Puzzle", "Adventure", "Simulation", "Strategy", "Fighting", "Racing" ];
+
 //magic numbers from data set
 const START_YEAR = 1977;
 const END_YEAR = 2020;
@@ -15,6 +17,7 @@ const START_YEAR_ELEMENT = document.getElementById("startYear");
 const END_YEAR_ELEMENT = document.getElementById("endYear");
 const SEARCH_FILTER_ELEMENT = document.getElementById("searchFilter");
 const SEARCH_STATUS_ELEMENT = document.getElementById("statusFilter");
+const SEARCH_GENRE_ELEMENT = document.getElementById("genreFilter");
 const GAME_CARD_LIST_ELEMENT = document.getElementById("gameList");
 const GAME_CONTAINER_ELEMENT = document.getElementById("gameContainer");
 const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
@@ -31,6 +34,7 @@ window.onload = () => {
     currStatusOption = SEARCH_STATUS_ELEMENT.selectedOptions[0].id;
 
     createYearSearch();
+    createGenreSelector(SEARCH_GENRE_ELEMENT);
 
     let scrollTimeout;
 
@@ -72,6 +76,16 @@ function createYearSelector(element, startYear, endYear) {
     }
 }
 
+function createGenreSelector(element){
+
+    GENRE_OPTIONS.map((e) => {
+        let option = document.createElement("option");
+        option.value = e;
+        option.innerText = e;
+        element.appendChild(option); 
+    });    
+}
+
 //function called when selection box's change value
 function selectionChange(element) {
     if (element.id == "searchFilter") { //change for search type
@@ -109,7 +123,8 @@ function searchGames() {
         'publisher': SEARCH_HOLDERS["publisher"][0],
         'start_year': startYear,
         'end_year': endYear,
-        'status': currStatusOption
+        'status': currStatusOption,
+        'genre' : 'RPG'
     };
 
     postRequestParams("search_game", params, generateGameCards, () => { });
@@ -141,7 +156,8 @@ function addToGameContainer(gameInfo) {
 
     appendElement("h3", gameInfo.Title); //title    
     appendElement("p", "Id: " + gameInfo.VideoGameID); //video game id    
-    appendElement("p", "Publisher: " + gameInfo.Publisher); //publisher    
+    appendElement("p", "Publisher: " + gameInfo.Publisher); //publisher   
+    appendElement("p", "Genre: " + gameInfo.Genre) 
     appendElement("p", "Year: " + gameInfo.Year); //year
     appendElement("p", "Status: " + gameInfo.Availability); //status
 

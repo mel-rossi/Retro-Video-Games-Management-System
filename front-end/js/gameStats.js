@@ -1,4 +1,5 @@
  // variables
+ const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
  const RANK_BOX_ELEMENT = document.getElementById('rankBox'); 
  const AVG_RENTAL_ELEMENT = document.getElementById('rentalHistoryChart').getContext('2d');
  const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
@@ -7,9 +8,13 @@
  
 
  window.onload = game_stats_page;
+
  function game_stats_page() {
+
+    let videoGameID = GAME_CONTAINER_ELEMENT.getAttribute("data-videogame-id");
+
     let rental_params = {
-        'option': 'V0055',
+        'option': videoGameID,
         'out': 'stat'
     }
     let rank_params = {

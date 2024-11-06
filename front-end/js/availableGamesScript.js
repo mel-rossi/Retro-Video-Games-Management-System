@@ -1,8 +1,19 @@
 var currSearchOption = undefined;
 var currStatusOption = undefined;
 
-const GENRE_OPTIONS = [ "Sports", "Platformer/Racing", "Shooter", "Action/Adventure", "RPG", "Puzzle", "Adventure", "Simulation", "Strategy", "Fighting", "Racing" ];
-
+const GENRE_OPTIONS = {
+    "Sports": false,
+    "Platformer/Racing": false,
+    "Shooter": false,
+    "Action/Adventure": false,
+    "RPG": false,
+    "Puzzle": false,
+    "Adventure": false,
+    "Simulation": false,
+    "Strategy": false,
+    "Fighting": false,
+    "Racing": false
+};
 //magic numbers from data set
 const START_YEAR = 1977;
 const END_YEAR = 2020;
@@ -17,15 +28,15 @@ const START_YEAR_ELEMENT = document.getElementById("startYear");
 const END_YEAR_ELEMENT = document.getElementById("endYear");
 const SEARCH_FILTER_ELEMENT = document.getElementById("searchFilter");
 const SEARCH_STATUS_ELEMENT = document.getElementById("statusFilter");
-const SEARCH_GENRE_ELEMENT = document.getElementById("genreFilter");
+const SEARCH_GENRE_ELEMENT = document.getElementById("genreDropdownContent");
 const GAME_CARD_LIST_ELEMENT = document.getElementById("gameList");
 const GAME_CONTAINER_ELEMENT = document.getElementById("gameContainer");
 const SEARCH_CONTAINER_ELEMENT = document.getElementById("searchContainer");
 
 window.onload = () => {
     //search container keydown check when enter to call search
-    SEARCH_CONTAINER_ELEMENT.onkeydown = (event) => {        
-        if (event.key == 'Enter') {            
+    SEARCH_CONTAINER_ELEMENT.onkeydown = (event) => {
+        if (event.key == 'Enter') {
             searchGames();
         }
     };
@@ -76,14 +87,21 @@ function createYearSelector(element, startYear, endYear) {
     }
 }
 
-function createGenreSelector(element){
+function createGenreSelector(element) {
+    Object.keys(GENRE_OPTIONS).forEach((e) => {
+        let outer = document.createElement("label");
+        outer.innerText = " " + e;
 
-    GENRE_OPTIONS.map((e) => {
-        let option = document.createElement("option");
-        option.value = e;
-        option.innerText = e;
-        element.appendChild(option); 
-    });    
+        let inner = document.createElement("input");
+        inner.type = "checkbox";
+        inner.value = e;
+        inner.addEventListener("change", () => { //everytime its checked change the value in the dict
+            GENRE_OPTIONS[e] = inner.checked;            
+        });
+
+        outer.appendChild(inner);
+        element.appendChild(outer);
+    });   
 }
 
 //function called when selection box's change value
@@ -117,6 +135,9 @@ function searchGames() {
         return;
     }
 
+    //get all the genres where the value is true
+    let genreParam = Object.keys(GENRE_OPTIONS).filter((e) => GENRE_OPTIONS[e] == true);
+
     let params = {
         //'option': "all_params",
         'title': SEARCH_HOLDERS["title"][0],
@@ -124,7 +145,7 @@ function searchGames() {
         'start_year': startYear,
         'end_year': endYear,
         'status': currStatusOption,
-        'genre' : 'RPG'
+        'genre': genreParam
     };
 
     postRequestParams("search_game", params, generateGameCards, () => { });
@@ -157,7 +178,7 @@ function addToGameContainer(gameInfo) {
     appendElement("h3", gameInfo.Title); //title    
     appendElement("p", "Id: " + gameInfo.VideoGameID); //video game id    
     appendElement("p", "Publisher: " + gameInfo.Publisher); //publisher   
-    appendElement("p", "Genre: " + gameInfo.Genre) 
+    appendElement("p", "Genre: " + gameInfo.Genre)
     appendElement("p", "Year: " + gameInfo.Year); //year
     appendElement("p", "Status: " + gameInfo.Availability); //status
 

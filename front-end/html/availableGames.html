@@ -32,9 +32,11 @@
                         <option id="Available">In Stock</option>
                         <option id="Unavailable">Out of Stock</option>
                     </select>
-                    <select id="genreFilter">
-                        <option id="">All Genres</option>
-                    </select>
+                    <div id="genreFilter" class="dropdown">
+                        <button>Select Genres</button>
+                        <div class="dropdown-content" id="genreDropdownContent">                            
+                        </div>
+                    </div>                 
                     <button class="search-button" onclick="searchGames()">Search</button>
                 </div>
 

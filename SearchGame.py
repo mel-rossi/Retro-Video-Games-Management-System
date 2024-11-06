@@ -16,7 +16,7 @@ df = pd.read_csv(CSV_FILE)
 
 # Filter Video Games based on input 
 def filter_games(title=None, publisher=None, start_year=None, end_year=None, status=None, genre=None):
-
+    
     filters = pd.Series([True] * len(df), index=df.index)
 
     # Filters 'Title'

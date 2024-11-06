@@ -133,12 +133,16 @@ def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
         "Rentals by Month": [{month: int(count[month])} for month in months.values()]
     }
 
+    return countDict
     #return countDict # for Testing purposes
-    return jsonify(countDict)
+    #return jsonify(countDict)
 # game_rent_by_month 
 
 # Organize Rental Information
 def rental_info(status):
+
+    # Default : Unbiased Rental Stats
+    rentals = df
 
     if status is not None: 
         # 'Inactive' Rental Stats
@@ -148,10 +152,6 @@ def rental_info(status):
         # 'Inactive' Rental Stats
         elif status.lower() == 'inactive': 
             rentals = inactive_filter(rentals)
-
-    # Default : Unbiased Rental Stats
-    else: 
-        rentals = df
 
     # Calculate average Rental Time
     average = avg_rental_time(rentals)
@@ -186,18 +186,28 @@ def rental_info(status):
 def rental_stat_route():
 
     data = request.json # Get json data from POST body 
-    user_input = data.get('status') # Extract 'status' field
 
-    rentals, rentalStats = rental_info(user_input) 
+    option = data.get('option').lower()
 
-    data = { 
-        "Rentals": rentals.to_dict(orient='records'), 
-        "Rental Stats": rentalStats.to_dict(orient='records') 
-    } 
+    if option is not None: # Check if option is provided
+        if option == 'history': # Get rental history
+            game_id = data.get('id')
+            month_range = data.get('month_range')
+            year_range = data.get('year_range')
+            data = game_rent_by_month(game_id, month_range, year_range)
+
+        elif option == 'rental': # Get rental info
+            user_input = data.get('status') # Extract 'status' field
+            rentals, rentalStats = rental_info(user_input)
+            data = { 
+                "Rentals": rentals.to_dict(orient='records'), 
+                "Rental Stats": rentalStats.to_dict(orient='records') 
+            }       
+        else:
+            return jsonify({ "error": "Invalid option provided" }), 400
+    else:
+        return jsonify({ "error": "No option provided" }), 400
+
 
     return jsonify(data)
 # rental_stat_route
-
-
-
-

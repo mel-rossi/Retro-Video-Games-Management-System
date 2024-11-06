@@ -128,9 +128,10 @@ function generateGameCards(games) {
 
 //create a game card element with the given game information
 function addToGameContainer(gameInfo) {
-    let newGameCard = document.createElement("div");
+    let newGameCard = document.createElement("a");
     newGameCard.id = gameInfo.VideoGameID;
     newGameCard.setAttribute("class", "game-card");
+    newGameCard.setAttribute("href", "gamestats?ID=" + gameInfo.VideoGameID);
 
     const appendElement = (tag, text) => {
         const element = document.createElement(tag);

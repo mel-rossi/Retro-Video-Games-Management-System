@@ -1,7 +1,7 @@
  // variables
  const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
  const RANK_BOX_ELEMENT = document.getElementById('rankBox'); 
- const AVG_RENTAL_ELEMENT = document.getElementById('rentalHistoryChart').getContext('2d');
+ const RENTAL_HISTORY_CHART = document.getElementById('rentalHistoryChart').getContext('2d');
  const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
  const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
  const TOTAL_VIDEO_GAMES = 1589;
@@ -14,18 +14,14 @@
     let videoGameID = GAME_CONTAINER_ELEMENT.getAttribute("data-videogame-id");
 
     let inventory_params = {
-        'option': 'V0055',
+        'option': videoGameID,
         'out': 'stat'
     }
-    let history_params = {
-        'option': 'history',
-        'id': 'V0055',
+    let rental_params = {
+        //'option': 'log',
+        'id': videoGameID,
         'month_range': '',
         'year_range': ''
-    }
-    let rental_params = {
-        'option': 'rental',
-        'status': ''
     }
     let rank_params = {
         'rank': 'game',
@@ -34,8 +30,8 @@
         //'trend': 'Default'
     }
     postRequestParams("game_rental", inventory_params, generateInventoryChart, () => { });
-    postRequestParams("rental_stat", history_params, collectingRentalStats, () => {});
-    postRequestParams("rental_stat", rental_params, collectingRentalStats, () => {});
+    //postRequestParams("rental_stat", history_params, collectingRentalStats, () => {});
+    postRequestParams("rental_stat", rental_params, generateRentalChart, () => {});
     postRequestParams("rank", rank_params, generateRankBox, () => { });
  }
  
@@ -56,36 +52,41 @@ function collectingRentalStats(data){
   // Rental History (Line Chart)
   /* bar chart: how many times a game was rented that month */
 function generateRentalChart(data){
-    const RENTAL_AVERAGE = data['Rentals'][0]['Rental Stats'];
-    const RENTAL_CHART = new Chart(AVG_RENTAL_ELEMENT, {
+    const RENTALS_BY_MONTH = data['Rentals by Month'];
+    
+    const MONTH_LABELS = [];
+    const RENTAL_COUNTS = [];
+
+    RENTALS_BY_MONTH.forEach((rentals) => {
+        MONTH_LABELS.push(rentals);
+        RENTAL_COUNTS.push(rentals['Count']);
+    });
+
+    //const RENTAL_AVERAGE = data['Rentals'][0]['Rental Stats'];
+    const RENTAL_CHART = new Chart(RENTAL_HISTORY_CHART, {
     type: 'line',
     data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: Object.keys(MONTH_LABELS),
         datasets: [{
-            label: "Days",
-            data: [5, 10, 15, 7, 10, 20, 5, 2, 15, 18, 20, 22],
+            label: 'Number of Rentals',
+            data: (Object.values(RENTAL_COUNTS)),
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 2,
             pointBackgroundColor: '#ff5733',
             pointBorderColor: '#fff',
             pointRadius: 5
-        }]       
+        }]
     },
     options: {
-        responsive: true,
         scales: {
             y: {
-                beginAtZero: true,
-                max: 30,
+                beginAtZero: true
             }
         }
     }
-
-});
+    });
 }
-
-
 // Inventory (Pie Chart)
 function generateInventoryChart(data){
     const GAME_TITLE = data['Video Game'][0]['Title'];

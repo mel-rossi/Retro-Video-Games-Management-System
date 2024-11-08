@@ -1,6 +1,7 @@
 import os
 import signal
 import webbrowser
+import bcrypt
 from Rank import rank_bp
 from Rank import sortingMethod
 from OpenRental import openrental_bp
@@ -11,7 +12,7 @@ from CloseRental import closerental_bp
 from SearchMember import searchmember_bp
 from MemberRental import memberrental_bp
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, render_template, send_from_directory
+from flask import Flask, request, render_template, send_from_directory, jsonify
 
 # This program serves as the main entry point for the Web Application
 # When ran, opens main page and runs all the flask apps on startup
@@ -73,10 +74,49 @@ def customer_status_page():
 def gamestats_route():
     id = request.args.get('ID')
     return render_template('gameStats.html', videogame_id=id)
+# sends videogame_id as a parameter to gamestats_html
 # gamestats_route
+
+@app.route('/VGIMS/login') # opens login page
+def manage_login_page():
+    return render_template('mainPage.html')  # set to open main page temporarily
+
+@app.route('/VGIMS/manage') # opens manage page for editing/adding entries
+def manage_page():
+    return render_template('name of manage file')
+
+@app.route('/authenticator', methods=['POST']) # call route to check password when logging in
+def authenticator():
+    data = request.json # parameters: {'password': [INSERT PASSWORD]}
+    with open('encrypted_keys', 'rb') as f:
+        for pw in f:
+            if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
+                state = 'Success'
+            else:
+                state = 'Failed'
+    f.close()
+    return jsonify(state)
+# authenticator route
+
+# call route to change passwords (admin or employee)
+# when logged in admins should only have a button to call this route
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    data = request.json 
+    # parameters: {'change_type': ['employee' else admin], 'password': [INSERT PASSWORD]}
+    pw = bcrypt.hashpw(data.get('password').encode(), bcrypt.gensalt())
+    f = open('encrypted_keys', 'rb')
+    lines = f.readlines()
+    if data.get('change_type') == 'employee':
+        lines[1] = pw
+    else:
+        lines[0] = pw + b'\n'
+    f = open('encrypted_keys', 'wb')
+    f.writelines(lines)
+    f.close()
+# change password route
 
 if __name__ == '__main__':
     init_scheduler() # updates videogames.csv ranking at midnight 00:00
-    webbrowser.open('http://127.0.0.1:5500/VGIMS') # opens browser
-    # sends videogame_id as a parameter to gamestats_html
+    webbrowser.open('http://127.0.0.1:5500/VGIMS/login') # opens browser
     app.run(port=5500) # runs on port 5500

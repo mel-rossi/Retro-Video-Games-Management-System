@@ -50,43 +50,45 @@ function collectingRentalStats(data){
 }
 
   // Rental History (Line Chart)
-  /* bar chart: how many times a game was rented that month */
-function generateRentalChart(data){
+  function generateRentalChart(data){
     const RENTALS_BY_MONTH = data['Rentals by Month'];
     
     const MONTH_LABELS = [];
     const RENTAL_COUNTS = [];
 
     RENTALS_BY_MONTH.forEach((rentals) => {
-        MONTH_LABELS.push(rentals);
-        RENTAL_COUNTS.push(rentals['Count']);
+        const MONTH = Object.keys(rentals)[0];
+        const COUNT = rentals[MONTH];
+        MONTH_LABELS.push(MONTH);
+        RENTAL_COUNTS.push(COUNT);
     });
 
-    //const RENTAL_AVERAGE = data['Rentals'][0]['Rental Stats'];
     const RENTAL_CHART = new Chart(RENTAL_HISTORY_CHART, {
-    type: 'line',
-    data: {
-        labels: Object.keys(MONTH_LABELS),
-        datasets: [{
-            label: 'Number of Rentals',
-            data: (Object.values(RENTAL_COUNTS)),
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 2,
-            pointBackgroundColor: '#ff5733',
-            pointBorderColor: '#fff',
-            pointRadius: 5
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+        type: 'bar',
+        data: {
+            labels: MONTH_LABELS,
+            datasets: [{
+                label: 'Number of Rentals',
+                data: RENTAL_COUNTS,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        stepSize: 1
+                    }
+                }
             }
         }
-    }
     });
-}
+  }
+
 // Inventory (Pie Chart)
 function generateInventoryChart(data){
     const GAME_TITLE = data['Video Game'][0]['Title'];
@@ -112,7 +114,7 @@ function generateInventoryChart(data){
             }
         }
     });
-
+/*Also for Rank both should show the stats I think, like rank number, avg rental*/
 
    /* let percentage = document.createElement("p");
     const PERCENTAGE_VALUE = (CURR_RENTALS / INVENTORY) * 100

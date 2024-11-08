@@ -28,6 +28,9 @@
 }
 
 .stats-container {
+    dsiplay: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     font-family: 'Lato', sans-serif;
     font-size: 16px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
@@ -42,12 +45,6 @@
     margin: 0 auto;
 }
 
-/* .charts-row {
-    display:flex;
-    justify-content: space-between;
-    align-items:flex-start;
-    margin-top: -20px;
-}*/
 .charts-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -61,8 +58,25 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     
 }
+.rental-box {
+    grid-column: 1;
+}
 
-.rank-box {
+.inventory-box {
+    grid-column: 2;
+}
+
+canvas { /*AvgRental & Inventory boxes */
+    background-color: white;
+    border-radius: 10px;
+    width:50%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.text-box {
     float: left;
     padding: 10px;
     border-radius: 10px;
@@ -71,29 +85,10 @@
     color: rgba(0, 0, 0, 0.727);
     background-color: white;
     border-radius: 10px;
-    width: 90%;
-    height: 30%;
-    margin-top: 10px;
-    margin-left: 10px;
-}
-.inventory-box {
-    grid-column: 2;
-    flex: 1;
-    float:right;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 16px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
-    color: rgba(0, 0, 0, 0.727);
-    margin-bottom: 10px;
-
-}
-
-canvas { /*AvgRental & Inventory boxes */
-    background-color: white;
-    border-radius: 10px;
-    width:61%;
+    width: 89%;
+    height: 25%;
+    margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 10px;
+    margin-right: 10px;
 }
-

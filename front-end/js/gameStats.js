@@ -1,7 +1,7 @@
  // variables
  const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
- const RANK_BOX_ELEMENT = document.getElementById('rankBox'); 
- const RENTAL_HISTORY_CHART = document.getElementById('rentalHistoryChart').getContext('2d');
+ const TEXT_BOX_ELEMENT = document.getElementById('textBox'); 
+ const RENTAL_HISTORY_CHART = document.getElementById('monthlyRentalChart').getContext('2d');
  const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
  const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
  const TOTAL_VIDEO_GAMES = 1589;
@@ -10,9 +10,8 @@
  window.onload = game_stats_page;
 
  function game_stats_page() {
-
     let videoGameID = GAME_CONTAINER_ELEMENT.getAttribute("data-videogame-id");
-
+    
     let inventory_params = {
         'option': videoGameID,
         'out': 'stat'
@@ -23,33 +22,13 @@
         'month_range': '',
         'year_range': ''
     }
-    let rank_params = {
-        'rank': 'game',
-        'base': 'VideoGameID',
-        'top': 'Default',
-        //'trend': 'Default'
-    }
+
     postRequestParams("game_rental", inventory_params, generateInventoryChart, () => { });
-    //postRequestParams("rental_stat", history_params, collectingRentalStats, () => {});
     postRequestParams("rental_stat", rental_params, generateRentalChart, () => {});
-    postRequestParams("rank", rank_params, generateRankBox, () => { });
+    
  }
  
- var rentalStatsCounter = 0;
- var rentalHistoryData = {};
-function collectingRentalStats(data){
-    let firstKey = Object.keys(data)[0];
-
-    rentalHistoryData[firstKey] = data[firstKey];
-    rentalStatsCounter++;
-
-    if(rentalStatsCounter == 2){
-        console.log("got all the data");
-        generateRentalChart(rentalHistoryData);
-    }
-}
-
-  // Rental History (Line Chart)
+  // Rentals by Month (Bar Chart)
   function generateRentalChart(data){
     const RENTALS_BY_MONTH = data['Rentals by Month'];
     
@@ -87,8 +66,28 @@ function collectingRentalStats(data){
             }
         }
     });
-  }
 
+    // Stats Text Box
+    //like rank number, avg rental
+    //Average Rental Time
+    let averageRental = document.createElement("H3");
+    averageRental.innerText = data['Average Rental'];
+    TEXT_BOX_ELEMENT.appendChild(averageRental);
+
+    //Ranking
+    let rank_params = {
+        'rank': 'game',
+        'base': 'VideoGameID',
+        'top': 'Default',
+    }
+    postRequestParams("rank", rank_params, getRank, () => { });
+
+    function getRank(data){
+        let rank = document.createElement("H3");
+        rank.innerText = data['Ranked'][0]['Rank'];
+        TEXT_BOX_ELEMENT.appendChild(rank);
+    }
+  }
 // Inventory (Pie Chart)
 function generateInventoryChart(data){
     const GAME_TITLE = data['Video Game'][0]['Title'];
@@ -114,33 +113,4 @@ function generateInventoryChart(data){
             }
         }
     });
-/*Also for Rank both should show the stats I think, like rank number, avg rental*/
-
-   /* let percentage = document.createElement("p");
-    const PERCENTAGE_VALUE = (CURR_RENTALS / INVENTORY) * 100
-    percentage.innerText =  PERCENTAGE_VALUE.toFixed(0) + "% rented";
-    PERCENTAGE_TEXT.appendChild(percentage);*/
-    //INVENTORY_CHART.appendChild(percentage);
-
-    //Alex WIP need to make 2 seperate canvases one for chart and one for text
-    //Then draw them in the order you want to display them at
-    /*const tempCanvas = document.createElement("canvas");
-    const tempTextCanvas = tempCanvas.getContext("2d");
-
-    //const percentageText = PERCENTAGE_VALUE.toFixed(0) + "% rented";
-    
-    tempCanvas.width = tempTextCanvas.measureText(percentageText).width + 20; //20 pixels for padding
-    tempCanvas.height = 40;
-    
-    tempTextCanvas.textAlign = "center";
-    tempTextCanvas.fillText(percentageText, tempCanvas.width / 2, tempCanvas.height / 2);
-    
-    INVENTORY_ELEMENT.drawImage(tempCanvas, tempCanvas.width, tempCanvas.height);*/
 }
-// Rank Box
-function generateRankBox(data){
-    let rank = document.createElement("H3");
-    rank.innerText = data['Ranked'][0]['Rank'];
-    RANK_BOX_ELEMENT.appendChild(rank);
-}
-

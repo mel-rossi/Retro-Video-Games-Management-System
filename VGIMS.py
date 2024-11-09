@@ -12,13 +12,24 @@ from CloseRental import closerental_bp
 from SearchMember import searchmember_bp
 from MemberRental import memberrental_bp
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, render_template, send_from_directory, jsonify
+from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, session
+from flask_session import Session
+from datetime import timedelta
 
 # This program serves as the main entry point for the Web Application
 # When ran, opens main page and runs all the flask apps on startup
 # Also makes the url pretty instead of '.html'
 
+SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions') 
+
 app = Flask(__name__, template_folder='front-end/html')
+app.config['SESSION_PERMANENT'] = False
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1) # automatically deletes session after 30 mins
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = SESSIONS
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  
+app.config['SESSION_COOKIE_SECURE'] = True
+Session(app)
 app.secret_key = 'supersecretkey' # Set secret key
 
 app.register_blueprint(searchgame_bp, url_prefix='')
@@ -78,7 +89,7 @@ def gamestats_route():
 # gamestats_route
 
 @app.route('/VGIMS/login') # opens login page
-def manage_login_page():
+def login_page():
     return render_template('mainPage.html')  # set to open main page temporarily
 
 @app.route('/VGIMS/manage') # opens manage page for editing/adding entries
@@ -91,11 +102,10 @@ def authenticator():
     with open('encrypted_keys', 'rb') as f:
         for pw in f:
             if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
-                state = 'Success'
+                session['logged_in'] = True # creates session if password is correct
+                return jsonify({'redirect_url' : '/VGIMS'})
             else:
-                state = 'Failed'
-    f.close()
-    return jsonify(state)
+                return jsonify('Login failed.')
 # authenticator route
 
 # call route to change passwords (admin or employee)
@@ -115,6 +125,12 @@ def change_password():
     f.writelines(lines)
     f.close()
 # change password route
+
+@app.route('/logout', methods=['POST']) # route for manual logout button click
+def logout():
+    session.pop('logged_in', None)  # clears current session
+    return jsonify({'redirect_url' : '/VGIMS/login'})  # Redirect to login page
+# logout route
 
 if __name__ == '__main__':
     init_scheduler() # updates videogames.csv ranking at midnight 00:00

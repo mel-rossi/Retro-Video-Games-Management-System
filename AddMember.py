@@ -1,6 +1,7 @@
 import os 
 import pandas as pd 
 from flask_cors import CORS
+from validateEntries import generateMemberID
 from validateEntries import validateNameFormat
 from validateEntries import validateEmailFormat
 from validateEntries import validatePhoneFormat
@@ -58,6 +59,41 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
 
 # dry_run_add_member
 
+# Primary Validation : Process Input and perform modification if appropriate 
+def add_member(FirstName, LastName, PhoneNumber, Email): 
+
+    # Primary Validation
+    if not validateNameFormat(FirstName) or not validateNameFormat(LastName) or not validatePhoneFormat(PhoneNumber) or not validateEmailFormat(Email): 
+        return jsonify({"error": "Primary Validation Failed!"})
+
+    # Generate the valid next MemberID for the Member being added 
+    MemberID = generateMemberID() 
+
+    # Set Number of Current Rentals to 0 
+    CurRentals = 0 
+
+    # Read CSV file into a DataFrame 
+    df = pd.read_csv(CSV_FILE)
+
+    # Make a new row (registration) 
+    row = { 'MemberID': MemberID, 
+            'FirstName': FirstName, 
+            'LastName': LastName, 
+            'PhoneNumber': PhoneNumber, 
+            'Email': Email, 
+            'CurRentals': CurRentals
+    }
+
+    row = pd.DataFrame(row, index=[0]) # convert to DataFrame 
+
+    df = pd.concat([df, row], ignore_index=True) 
+
+    # Write the updated DataFram back to the CSV file 
+    df.to_csv(CSV_FILE, index=False)
+
+    # Return the updated row as JSON 
+    return jsonify({"Registration Added": row.to_dict(orient='records')}), 200
+
 # add_member 
 
 @addmember_bp.route('/add_member', methods=['POST']) 
@@ -73,4 +109,14 @@ def add_member_route():
                                   data.get('Email')) 
 
     # Confirm: Primary validation and prooceed with adding entry if appropriate
+    if data.get('Confirm').lower() == 'confirmed': 
+        FirstName = session.get('FirstName')
+        LastName = session.get('LastName') 
+        PhoneNumber = session.get('PhoneNumber') 
+        Email = session.get('Email') 
+        return add_member(FirstName, LastName, PhoneNumber, Email)
+
+    else: 
+        return jsonify({"message": "Operation cancelled"}), 200 
+
 # add_member_route

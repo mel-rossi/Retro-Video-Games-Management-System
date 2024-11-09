@@ -4,7 +4,6 @@ import webbrowser
 import bcrypt
 from Rank import rank_bp
 from Rank import sortingMethod
-from AddMember import addmember_bp
 from OpenRental import openrental_bp
 from SearchGame import searchgame_bp
 from GameRental import gamerental_bp
@@ -24,7 +23,7 @@ from datetime import timedelta
 SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions') 
 
 app = Flask(__name__, template_folder='front-end/html')
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1) # automatically deletes session after 30 mins
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = SESSIONS
@@ -40,8 +39,7 @@ app.register_blueprint(rentalstat_bp, url_prefix='')
 app.register_blueprint(rank_bp, url_prefix='')
 app.register_blueprint(searchmember_bp, url_prefix='')
 app.register_blueprint(openrental_bp, url_prefix='')
-app.register_blueprint(closerental_bp, url_prefix='')
-app.register_blueprint(addmember_bp, url_prefix='') 
+app.register_blueprint(closerental_bp, url_prefix='') 
 
 def rank_update(): # updates/resorts videogames.csv by rank in ascending order
     ranked = sortingMethod('game','','','') # sort the file by score
@@ -105,7 +103,7 @@ def authenticator():
         for pw in f:
             if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
                 session['logged_in'] = True # creates session if password is correct
-                return jsonify({'redirect_url' : '/VGIMS'})
+                return jsonify({'redirect_url' : '/VGIMS'}) # sends redirection route as a param
             else:
                 return jsonify('Login failed.')
 # authenticator route
@@ -131,8 +129,30 @@ def change_password():
 @app.route('/logout', methods=['POST']) # route for manual logout button click
 def logout():
     session.pop('logged_in', None)  # clears current session
-    return jsonify({'redirect_url' : '/VGIMS/login'})  # Redirect to login page
+    return jsonify({'redirect_url' : '/VGIMS/login'})  # sends redirection route as a param
 # logout route
+
+@app.before_request # check session expiration before each request is sent
+def check_session():
+    excluded_routes = ['authenticator'] # routes not effected
+    if request.endpoint in excluded_routes:
+        return None
+    if request.path.startswith('/css') or request.path.startswith('/js'): 
+        return None
+    if 'logged_in' not in session and request.path != '/VGIMS/login':
+        return redirect('/VGIMS/login') # send to login page if expired
+
+ # check session expiration at specific intervals
+ # javascript frontend needs to call this route and handle logic    
+@app.route('/heartbeat', methods=['GET'])
+def heartbeat():
+    excluded_routes = ['authenticator'] # routes not effected
+    if request.endpoint in excluded_routes:
+        return None
+    if request.path.startswith('/css') or request.path.startswith('/js'): 
+        return None
+    if 'logged_in' not in session and request.path != '/VGIMS/login':
+        return redirect('/VGIMS/login') # send to login page if expired
 
 if __name__ == '__main__':
     init_scheduler() # updates videogames.csv ranking at midnight 00:00

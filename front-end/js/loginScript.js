@@ -1,5 +1,13 @@
 const LOGIN_BAR = document.getElementById("loginBar");
 
+window.onload = () => {
+    LOGIN_BAR.onkeydown = (event) => {
+        if(event.key == 'Enter'){
+            login();
+        }
+    };
+};
+
 function login(){
     let params = {
         'password': LOGIN_BAR.value

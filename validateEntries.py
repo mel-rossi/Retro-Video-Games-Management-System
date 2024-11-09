@@ -152,4 +152,33 @@ def validateEmailFormat(Email):
 
     return validateStringFormat(pattern, Email) 
 
-# validateEmail 
+# validateEmail
+
+# Generate the next valid MemberID 
+def generateMemberID():
+    # Iterate through the column MemberID
+    for memberID in df3['MemberID']: 
+        pass
+   
+    # Separate the letter and the number 
+    letter = memberID[0]
+    number = int(memberID[1:])
+
+    number += 1
+    return 'M' + format(number, '04') 
+# generateMemberID
+
+# Generate the next valid VideoGameID 
+def generateVideoGameID(): 
+   # Iterate through the column VideoGameID
+    for gameID in df2['VideoGameID']: 
+        pass
+   
+    # Separate the letter and the number 
+    letter = gameID[0]
+    number = int(gameID[1:])
+
+    number += 1
+    return 'V' + format(number, '04') 
+# generateMemberID
+ 

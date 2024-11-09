@@ -26,24 +26,21 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
         return jsonify({"error": "Last Name Missing"}), 400
 
     if not validateNameFormat(FirstName) or not validateNameFormat(LastName): 
-        return jsonify({"error": "Invalid Name Format: 
-                        Only Alpha Characters & Spaces Accepted"}), 400
+        return jsonify({"error": "Invalid Name Format"}), 400
 
     # Validate PhoneNumber
     if PhoneNumber is None: 
         return jsonify({"error": "Phone Number Missing"}), 400
 
     if not validatePhoneFormat(PhoneNumber): 
-        return jsonify({"error": "Invalid Phone Number Format: 
-                        Valid Format: '###-####-####'"}) 
+        return jsonify({"error": "Invalid Phone Number Format"}) 
 
     # Validate Email
     if Email is None: 
         return jsonify({"error": "Email Missing"}), 400
 
     if not validateEmail(Email): 
-        return jsonify({"error": "Invalid Email Format:
-                        Valid Format: '[string]@gmail.com"}), 400
+        return jsonify({"error": "Invalid Email Format:"}), 400
 
     session['FirstName'] = FirstName
     session['LastName'] = LastName 

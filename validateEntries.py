@@ -1,5 +1,6 @@
 # This program contains Validation & Generation Methods 
 
+import re
 import pandas as pd
 
 # Data Frames 
@@ -114,3 +115,70 @@ def checkRentalStatus(RentalInput):
     #print("Rental " + RentalInput + " is inactive.")
     return False # Inactive
 # checkRentalStatus
+
+def validateStringFormat(pattern, string):
+
+    if not isinstance(string, str): 
+        return False
+
+    if re.match(pattern, string): 
+        return True
+    else: 
+        return False
+# validateStringFormat 
+
+# Check Whether the Name is in a valid format 
+def validateNameFormat(Name): 
+    
+    pattern = r'^(?! )[A-Z][a-z]*(?: [A-Z][a-z]*)*$'
+
+    return validateStringFormat(pattern, Name) 
+
+# checkNameFormat
+
+# Check Whether the Phone Number is in valid format 
+def validatePhoneFormat(Phone):
+
+    pattern = r'^\d{3}-\d{3}-\d{4}$'
+    
+    return validateStringFormat(pattern, Phone) 
+
+# validatePhoneFormat
+
+# Check Whether the Email is in valid format 
+def validateEmailFormat(Email):
+
+    pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
+
+    return validateStringFormat(pattern, Email) 
+
+# validateEmail
+
+# Generate the next valid MemberID 
+def generateMemberID():
+    # Iterate through the column MemberID
+    for memberID in df3['MemberID']: 
+        pass
+   
+    # Separate the letter and the number 
+    letter = memberID[0]
+    number = int(memberID[1:])
+
+    number += 1
+    return 'M' + format(number, '04') 
+# generateMemberID
+
+# Generate the next valid VideoGameID 
+def generateVideoGameID(): 
+   # Iterate through the column VideoGameID
+    for gameID in df2['VideoGameID']: 
+        pass
+   
+    # Separate the letter and the number 
+    letter = gameID[0]
+    number = int(gameID[1:])
+
+    number += 1
+    return 'V' + format(number, '04') 
+# generateMemberID
+ 

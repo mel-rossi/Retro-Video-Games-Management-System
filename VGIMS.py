@@ -23,7 +23,7 @@ from datetime import timedelta
 SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions') 
 
 app = Flask(__name__, template_folder='front-end/html')
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1) # automatically deletes session after 30 mins
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = SESSIONS
@@ -129,8 +129,30 @@ def change_password():
 @app.route('/logout', methods=['POST']) # route for manual logout button click
 def logout():
     session.pop('logged_in', None)  # clears current session
-    return jsonify({'redirect_url' : '/VGIMS/login'})  # Redirect to login page
+    return jsonify({'redirect_url' : '/VGIMS/login'})  # sends redirection route as a param
 # logout route
+
+@app.before_request # check session expiration before each request is sent
+def check_session():
+    excluded_routes = ['authenticator'] # routes not effected
+    if request.endpoint in excluded_routes:
+        return None
+    if request.path.startswith('/css') or request.path.startswith('/js'): 
+        return None
+    if 'logged_in' not in session and request.path != '/VGIMS/login':
+        return redirect('/VGIMS/login') # send to login page if expired
+
+ # check session expiration at specific intervals
+ # javascript frontend needs to call this route and handle logic    
+@app.route('/heartbeat', methods=['GET'])
+def heartbeat():
+    excluded_routes = ['authenticator'] # routes not effected
+    if request.endpoint in excluded_routes:
+        return None
+    if request.path.startswith('/css') or request.path.startswith('/js'): 
+        return None
+    if 'logged_in' not in session and request.path != '/VGIMS/login':
+        return redirect('/VGIMS/login') # send to login page if expired
 
 if __name__ == '__main__':
     init_scheduler() # updates videogames.csv ranking at midnight 00:00

@@ -17,6 +17,29 @@ p {
   color: #333333;
 }
 
+input,
+select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 200px;
+}
+
+.enter-button {
+  background-color: #ff5722;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.enter-button:hover {
+  background-color: #e64a19;
+}
+
 .header {  
   position:relative;
   text-align:center;

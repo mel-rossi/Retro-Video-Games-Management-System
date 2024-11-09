@@ -103,15 +103,6 @@
     padding-bottom: 20px;
 }
 
-.search-filter-container input,
-.search-filter-container select {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    width: 200px;
-}
-
 .search-filter-container .search-button {
     background-color: #ff5722;
     color: white;

@@ -130,7 +130,7 @@ def validateStringFormat(pattern, string):
 # Check Whether the Name is in a valid format 
 def validateNameFormat(Name): 
     
-    pattern = r'^[a-zA-Z\s]+$'
+    pattern = r'^(?! )[A-Z][a-z]*(?: [A-Z][a-z]*)*$'
 
     return validateStringFormat(pattern, Name) 
 
@@ -146,7 +146,7 @@ def validatePhoneFormat(Phone):
 # validatePhoneFormat
 
 # Check Whether the Email is in valid format 
-def validateEmail(Email):
+def validateEmailFormat(Email):
 
     pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
 

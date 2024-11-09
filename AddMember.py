@@ -2,6 +2,7 @@ import os
 import pandas as pd 
 from flask_cors import CORS
 from validateEntries import validateNameFormat
+from validateEntries import validateEmailFormat
 from validateEntries import validatePhoneFormat
 from flask import request, jsonify, Blueprint, session 
 
@@ -39,8 +40,8 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
     if Email is None: 
         return jsonify({"error": "Email Missing"}), 400
 
-    if not validateEmail(Email): 
-        return jsonify({"error": "Invalid Email Format:"}), 400
+    if not validateEmailFormat(Email): 
+        return jsonify({"error": "Invalid Email Format"}), 400
 
     session['FirstName'] = FirstName
     session['LastName'] = LastName 

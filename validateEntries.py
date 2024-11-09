@@ -1,5 +1,6 @@
 # This program contains Validation & Generation Methods 
 
+import re
 import pandas as pd
 
 # Data Frames 
@@ -114,3 +115,41 @@ def checkRentalStatus(RentalInput):
     #print("Rental " + RentalInput + " is inactive.")
     return False # Inactive
 # checkRentalStatus
+
+def validateStringFormat(pattern, string):
+
+    if not isinstance(string, str): 
+        return False
+
+    if re.match(pattern, string): 
+        return True
+    else: 
+        return False
+# validateStringFormat 
+
+# Check Whether the Name is in a valid format 
+def validateNameFormat(Name): 
+    
+    pattern = r'^[a-zA-Z\s]+$'
+
+    return validateStringFormat(pattern, Name) 
+
+# checkNameFormat
+
+# Check Whether the Phone Number is in valid format 
+def validatePhoneFormat(Phone):
+
+    pattern = r'^\d{3}-\d{3}-\d{4}$'
+    
+    return validateStringFormat(pattern, Phone) 
+
+# validatePhoneFormat
+
+# Check Whether the Email is in valid format 
+def validateEmail(Email):
+
+    pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
+
+    return validateStringFormat(pattern, Email) 
+
+# validateEmail 

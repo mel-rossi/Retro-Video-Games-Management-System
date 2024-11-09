@@ -104,8 +104,7 @@ def authenticator():
             if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
                 session['logged_in'] = True # creates session if password is correct
                 return jsonify({'redirect_url' : '/VGIMS'}) # sends redirection route as a param
-            else:
-                return jsonify('Login failed.')
+    return jsonify('Login failed.')
 # authenticator route
 
 # call route to change passwords (admin or employee)

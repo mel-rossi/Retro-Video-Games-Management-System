@@ -26,7 +26,8 @@ def dry_run_close_entry(RentalID):
         return jsonify({"error": "Invalid Rental ID"}), 400
 
     if not checkRentalStatus(RentalID): 
-        return jsonify({"error": "This Rental Transaction has already been closed"}), 400
+        return jsonify({"error": \
+                "This Rental Transaction has already been closed"}), 400
 
     session['RentalID'] = RentalID
 
@@ -34,19 +35,29 @@ def dry_run_close_entry(RentalID):
     MemberID = rentalMemberID(RentalID) # Extract MemberID 
 
     return jsonify({
-        "Rental Registration": confirmRentalID(RentalID).to_dict(orient='records'),
+        "Rental Registration": \
+                confirmRentalID(RentalID).to_dict(orient='records'),
         "Registered Video Game (Title)": gameTitle(VideoGameID),
         "Registered Member (Name)": memberName(MemberID),       
         "Message": "Please confirm the details"
     }), 200
 # dry_run_close_entry
 
+# Checks if all Validation Methods Work
+def fullValidation(RentalID): 
+
+    if validateRentalID(RentalID) and checkRentalStatus(RentalID): 
+        return True 
+
+    return False
+# fullValidation
+
 # Primary Validation : Process Input and perform modification if Validation Check passes
 def close_entry(RentalID):
 
     # Primary Validation 
-    if not validateRentalID(RentalID) or not checkRentalStatus(RentalID): 
-        return jsonify({"error": "Primary Validation Failed"})
+    if fullValidation(RentalID): 
+        return jsonify({"error": "Session Transaction Glitch Detected"})
 
     # Generate today's Date as ReturnDate
     ReturnDate = generateDate()

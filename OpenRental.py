@@ -46,12 +46,23 @@ def dry_run_open_entry(VideoGameID, MemberID):
 
 # dry_run_entry
 
+# Checks if all Validation Methods Work
+def fullValidation(VideoGameID, MemberID): 
+    if validateVideoGameID(VideoGameID) and \
+       checkAvailability(VideoGameID) and \
+       validateMemberID(MemberID) and \
+       checkRentalLimit(MemberID): 
+           return True
+
+    return False 
+# fullValidation
+
 # Primary Validation : Process Input and perform modification if appropriate 
 def open_entry(VideoGameID, MemberID):
 
     # Primary Validation 
-    if not validateVideoGameID(VideoGameID) or not checkAvailability(VideoGameID) or not validateMemberID(MemberID) or not checkRentalLimit(MemberID):
-           return jsonify({"error": "Primary Validation Failed!"})
+    if not fullValidation(VideoGameID, MemberID):
+           return jsonify({"error": "Session Transaction Glitch Detected"})
 
     # Generate the valid next RentalID for the Rental being added
     RentalID = generateRentalID() 

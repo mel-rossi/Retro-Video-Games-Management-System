@@ -59,12 +59,24 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
 
 # dry_run_add_member
 
+def fullValidation(FirstName, LastName, PhoneNumber, Email): 
+
+    if validateNameFormat(FirstName) and \
+       validateNameFormat(LastName) and \
+       validatePhoneFormat(PhoneNumber) and \
+       validateEmailFormat(Email): 
+           return True
+
+    return False
+
+# fullValidation 
+
 # Primary Validation : Process Input and perform modification if appropriate 
 def add_member(FirstName, LastName, PhoneNumber, Email): 
 
     # Primary Validation
-    if not validateNameFormat(FirstName) or not validateNameFormat(LastName) or not validatePhoneFormat(PhoneNumber) or not validateEmailFormat(Email): 
-        return jsonify({"error": "Primary Validation Failed!"})
+    if not fullValidation(FirstName, LastName, PhoneNumber, Email): 
+        return jsonify({"error": "Session Transaction Glitch Detected"})
 
     # Generate the valid next MemberID for the Member being added 
     MemberID = generateMemberID() 

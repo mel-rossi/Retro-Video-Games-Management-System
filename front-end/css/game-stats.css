@@ -26,11 +26,20 @@
     font-size: 40px;
     color: white;
 }
+.stats-container h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+
+}
+
+.stats-container h4 {
+    font-size: 14px;
+}
 
 .stats-container {
-    dsiplay: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: 'Lato', sans-serif;
     font-size: 16px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
@@ -41,54 +50,38 @@
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 700px;
-    width: 100%;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
-.charts-row {
+.charts-column { /* Grid container for charts */
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 20px;
+    width: 100%;
 }
-.chart {
-    width: 45%;
-    background-color: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    
-}
-.rental-box {
+
+.inner-charts-column {
     grid-column: 1;
 }
 
-.inventory-box {
-    grid-column: 2;
-}
-
-canvas { /*AvgRental & Inventory boxes */
+canvas {
     background-color: white;
     border-radius: 10px;
-    width:50%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+    width: 100%;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.text-box {
-    float: left;
+.summary-box {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    float: center;
     padding: 10px;
-    border-radius: 10px;
-    font-size: 16px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
-    color: rgba(0, 0, 0, 0.727);
     background-color: white;
     border-radius: 10px;
-    width: 89%;
-    height: 25%;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    width: 300px;
+    height: 95px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: 10px;
     margin-right: 10px;
 }

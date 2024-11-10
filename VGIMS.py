@@ -26,7 +26,7 @@ SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions')
 
 app = Flask(__name__, template_folder='front-end/html')
 app.config['SESSION_PERMANENT'] = True
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1) # automatically deletes session after 30 mins
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30) # automatically deletes session after 30 mins
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = SESSIONS
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'  

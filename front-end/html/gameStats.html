@@ -21,28 +21,26 @@
                  <div id="gameData" class="stats-container" data-videogame-id="{{ videogame_id }}">
                     <h2 id="gameTitle"></h2>
 
-                    <div class="charts-row">
-                    <!-- Rank Information
-                    <div class="rank-container">
-                        Rank: <span>104</span><sup>th</sup> / 1540
-                    </div> -->
-                    <div class="charts-row-inner">
+                    <div class="charts-column">
+                        <div class="inner-charts-column">
 
-                        <!-- Rental History (LineChart)-->
-                        <div class="rental-box">
-                            <h3>Monthly Rentals</h3>
-                            <canvas id="monthlyRentalChart"></canvas>
-                        </div>
-                        
-                        <!-- Rank Information -->
-                        
-                        <div class="text-box">
-                            <h3> Ranked: </h3>
-                            <div id="textBox"></div>
-                            <!-- <canvas id="rankBox"></canvas> -->
-                        </div>
+                            <!-- Rank and Average -->
+                            <div class = "summary-container">
+                                <h3>Performance Summary</h3>
+                                <div class="summary-box">
+                                    <h4 id="rankHeader">Ranked #</h4>
+                                    <h4 id = "averageHeader">Average Rental Time: </h4>
+                                </div>
+                            </div>
 
-                    </div>
+                            <!-- Rental History (LineChart)-->
+                            <div class = "summary-container">
+                                <h3>Monthly Rentals</h3>
+                                <div class="rental-box">
+                                    <canvas id="monthlyRentalChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     
                         <!-- Inventory (Pie Chart) -->
                         <div class="inventory-box">

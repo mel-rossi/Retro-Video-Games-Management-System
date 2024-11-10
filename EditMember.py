@@ -1,6 +1,7 @@
 import os 
 import pandas as pd 
 from flask_cors import CORS
+from validateEntries import confirmMemberID
 from validateEntries import validateMemberID 
 from flask import request, jsonify, Blueprint, session 
 
@@ -19,12 +20,13 @@ def dry_run_request_member(MemberID):
 
     # Validate MemberID 
     if not validateMemberID(MemberID): 
-        return jsonify({"error": "Invalid Rental ID"}), 400
+        return jsonify({"error": "Invalid Member ID"}), 400
 
     session['MemberID'] = MemberID
 
     return jsonify({
-        "Member Details Requested": confirmMemberID(MemberID),
+        "Member Details Requested": \
+                confirmMemberID(MemberID).to_dict(orient='records'),
         "Message": "Please confirm the request"
     }), 200
 # dry_run_edit_member

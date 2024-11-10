@@ -28,3 +28,16 @@ def dry_run_request_member(MemberID):
         "Message": "Please confirm the request"
     }), 200
 # dry_run_edit_member
+
+@editrental_bp.route('/edit_member', methods=['POST'])
+def edit_member_route(): 
+    
+    data = request.json # Get json data from POST body 
+
+    # Dry Run Request : Initial Validation for Member Request and confirmation
+    if 'Confirm' not in data: 
+        return dry_run_request_member(data.get('MemberID')) 
+
+    # Dry Run : Initial Validation and confirmation
+
+# edit_member_route

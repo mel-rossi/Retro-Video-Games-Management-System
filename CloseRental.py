@@ -56,7 +56,7 @@ def fullValidation(RentalID):
 def close_entry(RentalID):
 
     # Primary Validation 
-    if fullValidation(RentalID): 
+    if not fullValidation(RentalID): 
         return jsonify({"error": "Session Transaction Glitch Detected"})
 
     # Generate today's Date as ReturnDate

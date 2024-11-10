@@ -24,12 +24,12 @@ def dry_run_request_member(MemberID):
     session['MemberID'] = MemberID
 
     return jsonify({
-        "Member Details Requested": confirmMemberID(MemberID)
+        "Member Details Requested": confirmMemberID(MemberID),
         "Message": "Please confirm the request"
     }), 200
 # dry_run_edit_member
 
-@editrental_bp.route('/edit_member', methods=['POST'])
+@editmember_bp.route('/edit_member', methods=['POST'])
 def edit_member_route(): 
     
     data = request.json # Get json data from POST body 

@@ -90,7 +90,7 @@ def gamestats_route():
 
 @app.route('/VGIMS/login') # opens login page
 def login_page():
-    return render_template('mainPage.html')  # set to open main page temporarily
+    return render_template('loginPage.html')  # set to open main page temporarily
 
 @app.route('/VGIMS/manage') # opens manage page for editing/adding entries
 def manage_page():
@@ -103,9 +103,9 @@ def authenticator():
         for pw in f:
             if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
                 session['logged_in'] = True # creates session if password is correct
-                return jsonify({'redirect_url' : '/VGIMS'}) # sends redirection route as a param
+                return jsonify({'valid': True, 'redirect_url' : '/VGIMS'})
             else:
-                return jsonify('Login failed.')
+                return jsonify({'valid' : False})
 # authenticator route
 
 # call route to change passwords (admin or employee)

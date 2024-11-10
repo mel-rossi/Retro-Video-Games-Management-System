@@ -1,6 +1,6 @@
 import os 
 import pandas as pd 
-from flask_cors impport CORS
+from flask_cors import CORS
 from validateEntries import validateMemberID 
 from flask import request, jsonify, Blueprint, session 
 

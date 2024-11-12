@@ -79,8 +79,10 @@ def close_entry(RentalID):
     # Save updated DataFrame back to CSV file 
     df.to_csv(CSV_FILE, index=False)
 
-    # Return the updated DataFrame as JSON 
-    return jsonify(df.to_dict(orient='records')), 200
+    row = df[df['RentalID'] == RentalID]
+
+    # Return the updated row as JSON 
+    return jsonify(row.to_dict(orient='records')), 200
 # close_entry
 
 @closerental_bp.route('/close_rental', methods=['POST'])

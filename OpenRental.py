@@ -99,8 +99,8 @@ def open_entry(VideoGameID, MemberID):
     # Write the updated DataFrame back to the CSV file 
     df.to_csv(CSV_FILE, index=False) 
 
-    # Return the updated DataFrame as JSON 
-    return jsonify(df.to_dict(orient='records')), 200
+    # Return the added row as JSON 
+    return jsonify(row.to_dict(orient='records')), 200
 # add_entry
 
 @openrental_bp.route('/open_rental', methods=['POST']) 

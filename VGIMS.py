@@ -98,7 +98,8 @@ def login_page():
 
 @app.route('/VGIMS/manage') # opens manage page for editing/adding entries
 def manage_page():
-    return render_template('name of manage file')
+    id = request.args.get('ID')
+    return render_template('manageGames.html', videogame_id=id)
 
 @app.route('/authenticator', methods=['POST']) # call route to check password when logging in
 def authenticator():

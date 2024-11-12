@@ -166,5 +166,5 @@ def member_rental_route():
 
     # Invalid Input 
     else:
-        return jsonify ({"error": "No member found with the provided ID, phone number, or email."}), 404
+        return jsonify ({"Error": "No member found with the provided ID, phone number, or email."}), 404
 # member_rental_route

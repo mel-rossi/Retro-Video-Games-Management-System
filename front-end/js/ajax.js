@@ -13,7 +13,7 @@ function postRequestParams(link, params, runFunction, errorFunction) {
         else {
             //assume we do not know the error
             data = { 
-                'error': "Unknown error occured" 
+                'Error': "Unknown error occured" 
             };
 
             //change data to known error message

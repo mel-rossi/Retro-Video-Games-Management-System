@@ -7,9 +7,11 @@
     <body>
         <div class="header">
             <div class="inner-header flex">
-                <h1>Video Game Management System</h1>                
-                <div id="Add Info" data-videogame-id="{{ videogame_id }}">
-                
+                <h1>Add Rental to Customer</h1>                
+                <div id="addInfo" data-videogame-id="{{ videogame_id }}">
+                    <input type="text" id="memberInput" placeholder="Phone number or email">
+                    <button class="enter-button" onclick="enterClick()">Enter</button>
+                    <div id="resultInfo"></div>
                 </div>
             </div>            
 
@@ -32,5 +34,7 @@
         </div>   
         
         <script src="../js/ajax.js"></script>
+        <script src="../js/manageGames.js"></script>
+        <script src="../js/genericCustomerSearch.js"></script>
     </body>
 </html>

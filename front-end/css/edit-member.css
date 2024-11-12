@@ -1,0 +1,110 @@
+/* Back Button Styling */
+.back-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    top: 30px;
+    left: 20px;
+}
+
+.back-button:hover {
+    background-color: #45a049;
+}
+/* Title Styling */
+.title-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.title-container h1 {
+    font-size: 40px;
+    color: white;
+}
+
+/* Form Styles */
+#edit-member-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
+    color: rgba(0, 0, 0, 0.727);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 600px;
+    margin:  auto;
+  }
+  
+  #edit-member-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  #edit-member-form input[type="text"], #edit-member-form input[type="email"] {
+    width: 70%;
+    height: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  #edit-member-form button {
+
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #edit-member-form button:hover {
+    background-color: #e64a19;
+  }
+  
+  /* Confirmation Message Styles */
+  #confirmation-message {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #confirmation-message ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #confirmation-message li {
+    margin-bottom: 10px;
+  }
+  
+  #confirmation-message span {
+    font-weight: bold;
+  }
+
+  #error-messages ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #error-messages li {
+    margin-bottom: 10px;
+    color: #ff0000;
+  }

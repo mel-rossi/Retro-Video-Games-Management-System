@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Member</title>
+        <link rel="stylesheet" href="../css/shared-styles.css">
+        <link rel="stylesheet" href="../css/edit-member.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="inner-header flex">
+                <!-- Back Button -->
+                <button class="back-button" onclick="window.location.href='/VGIMS/status'">Back</button>
+
+                <!-- Title -->
+                <div class="title-container">
+                    <h1>Edit Member</h1>
+                </div>
+
+                <!-- Edit Member -->
+                <form id="edit-member-form">
+
+                    <h2>Edit Member Form</h2>
+                    <label for="member-id">Member ID:</label>
+                    <input type="text" id="member-id" name="member-id" readonly>
+
+                    <label for="first-name">First Name:</label>
+                    <input type="text" id="first-name" name="first-name">
+
+                    <label for="last-name">Last Name:</label>
+                    <input type="text" id="last-name" name="last-name"></label>
+
+                    <label for="phone-number">Phone Number:</label>
+                    <input type="text" id="phone-number" name="phone-number">
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email">
+
+                    <button id="request-button">Request Changes</button>
+                    <button id="confirm-button" style="display: none;">Confirm Changes</button>
+
+                      <!-- Error Messages -->
+                    <div id="error-messages" style="display: none;">
+                        <ul>
+                            <li id="first-name-error"></li>
+                            <li id="last-name-error"></li>
+                            <li id="phone-number-error"></li>
+                            <li id="email-error"></li>
+                        </ul>
+                    </div>
+                    
+
+                </form>
+            </div>
+
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                </g>
+            </svg>
+        </div>
+
+        <script src="../js/ajax.js"></script>
+
+    </body>
+</html>

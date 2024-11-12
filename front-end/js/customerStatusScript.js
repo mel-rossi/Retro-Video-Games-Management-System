@@ -85,6 +85,9 @@ function addRentalCard(rentedGame, gameElement, appendInfo) {
     newGameInfo.id = rentedGame.RentalID;
     newGameInfo.setAttribute("class", "rental-card");
 
+    let gameInfoFragment = document.createDocumentFragment();
+    gameInfoFragment.appendChild(newGameInfo);
+
     const appendElement = (tag, label, text) => {
         const element = document.createElement(tag);
 
@@ -100,7 +103,7 @@ function addRentalCard(rentedGame, gameElement, appendInfo) {
     //call the passed information 
     appendInfo(appendElement);
 
-    gameElement.appendChild(newGameInfo);
+    gameElement.appendChild(gameInfoFragment);
 }
 
 function deleteRentalContainerValues() {

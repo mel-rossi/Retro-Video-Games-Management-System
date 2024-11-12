@@ -35,7 +35,7 @@ window.onclick = function(event) {
  function game_stats_page() {
     let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
     
-    MODAL_IFRAME.setAttribute("src", "manage?ID=" + videoGameID)
+    MODAL_IFRAME.setAttribute("src", "manage?ID=" + videoGameID + "&M_State=open")
 
     let inventory_params = {
         'option': videoGameID,

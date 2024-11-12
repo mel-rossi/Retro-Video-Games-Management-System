@@ -1,13 +1,14 @@
-<<<<<<< HEAD
 // variables
 const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
 const TEXT_BOX_ELEMENT = document.getElementById('textBox'); 
 const RENTAL_HISTORY_CHART = document.getElementById('monthlyRentalChart').getContext('2d');
 const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
+const STATS_CONTAINER = document.getElementById('gameData');
+const MONTHLY_RENTAL_CONTAINER = document.getElementById('monthlyRentalChart').getContext('2d');
 const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
 const TOTAL_VIDEO_GAMES = 1589;
  
- // Get modal elements
+// Get modal elements
 const MODAL = document.getElementById("myModal");
 const RENTAL_BUTTON = document.getElementById("rentButton");
 const SPAN_MODAL = document.getElementsByClassName("close")[0];
@@ -28,12 +29,6 @@ window.onclick = function(event) {
         MODAL.style.display = "none";
     }
 }
-=======
- // variables
- const STATS_CONTAINER = document.getElementById('gameData');
- const MONTHLY_RENTAL_CONTAINER = document.getElementById('monthlyRentalChart').getContext('2d');
- const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
->>>>>>> 6c1eb76f7d33abd64ae0dda9166c400e63ef61e3
 
  window.onload = game_stats_page;
 

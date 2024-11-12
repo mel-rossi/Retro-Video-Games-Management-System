@@ -6,10 +6,10 @@ const PERCENTAGE_TEXT = document.getElementById('percentageText');
 const STATS_CONTAINER = document.getElementById('gameData');
 const MONTHLY_RENTAL_CONTAINER = document.getElementById('monthlyRentalChart').getContext('2d');
 const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
-const TOTAL_VIDEO_GAMES = 1589;
  
 // Get modal elements
 const MODAL = document.getElementById("myModal");
+const MODAL_IFRAME = document.getElementById('modalIframe');
 const RENTAL_BUTTON = document.getElementById("rentButton");
 const SPAN_MODAL = document.getElementsByClassName("close")[0];
 
@@ -35,6 +35,8 @@ window.onclick = function(event) {
  function game_stats_page() {
     let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
     
+    MODAL_IFRAME.setAttribute("src", "manage?ID=" + videoGameID)
+
     let inventory_params = {
         'option': videoGameID,
         'out': 'stat'

@@ -1,11 +1,32 @@
- // variables
- const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
- const TEXT_BOX_ELEMENT = document.getElementById('textBox'); 
- const RENTAL_HISTORY_CHART = document.getElementById('monthlyRentalChart').getContext('2d');
- const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
- const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
- const TOTAL_VIDEO_GAMES = 1589;
+// variables
+const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
+const TEXT_BOX_ELEMENT = document.getElementById('textBox'); 
+const RENTAL_HISTORY_CHART = document.getElementById('monthlyRentalChart').getContext('2d');
+const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
+const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
+const TOTAL_VIDEO_GAMES = 1589;
  
+ // Get modal elements
+const MODAL = document.getElementById("myModal");
+const RENTAL_BUTTON = document.getElementById("rentButton");
+const SPAN_MODAL = document.getElementsByClassName("close")[0];
+
+// Open the modal when the button is clicked
+RENTAL_BUTTON.onclick = function() {
+    MODAL.style.display = "block";
+}
+
+// Close the modal when the 'x' is clicked
+SPAN_MODAL.onclick = function() {
+    MODAL.style.display = "none";
+}
+
+// Close the modal when clicking outside of the modal content
+window.onclick = function(event) {
+    if (event.target == MODAL) {
+        MODAL.style.display = "none";
+    }
+}
 
  window.onload = game_stats_page;
 
@@ -113,4 +134,8 @@ function generateInventoryChart(data){
             }
         }
     });
+}
+
+function rentClick(){
+
 }

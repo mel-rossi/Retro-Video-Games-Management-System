@@ -4,6 +4,8 @@ import webbrowser
 import bcrypt
 from Rank import rank_bp
 from Rank import sortingMethod
+from AddMember import addmember_bp
+from EditMember import editmember_bp
 from OpenRental import openrental_bp
 from SearchGame import searchgame_bp
 from GameRental import gamerental_bp
@@ -24,7 +26,7 @@ SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions')
 
 app = Flask(__name__, template_folder='front-end/html')
 app.config['SESSION_PERMANENT'] = True
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1) # automatically deletes session after 30 mins
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30) # automatically deletes session after 30 mins
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = SESSIONS
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'  
@@ -39,7 +41,9 @@ app.register_blueprint(rentalstat_bp, url_prefix='')
 app.register_blueprint(rank_bp, url_prefix='')
 app.register_blueprint(searchmember_bp, url_prefix='')
 app.register_blueprint(openrental_bp, url_prefix='')
-app.register_blueprint(closerental_bp, url_prefix='') 
+app.register_blueprint(closerental_bp, url_prefix='')
+app.register_blueprint(addmember_bp, url_prefix='')
+app.register_blueprint(editmember_bp, url_prefix='')
 
 def rank_update(): # updates/resorts videogames.csv by rank in ascending order
     ranked = sortingMethod('game','','','') # sort the file by score

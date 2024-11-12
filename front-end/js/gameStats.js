@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // variables
 const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
 const TEXT_BOX_ELEMENT = document.getElementById('textBox'); 
@@ -27,11 +28,17 @@ window.onclick = function(event) {
         MODAL.style.display = "none";
     }
 }
+=======
+ // variables
+ const STATS_CONTAINER = document.getElementById('gameData');
+ const MONTHLY_RENTAL_CONTAINER = document.getElementById('monthlyRentalChart').getContext('2d');
+ const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
+>>>>>>> 6c1eb76f7d33abd64ae0dda9166c400e63ef61e3
 
  window.onload = game_stats_page;
 
  function game_stats_page() {
-    let videoGameID = GAME_CONTAINER_ELEMENT.getAttribute("data-videogame-id");
+    let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
     
     let inventory_params = {
         'option': videoGameID,
@@ -43,7 +50,6 @@ window.onclick = function(event) {
         'month_range': '',
         'year_range': ''
     }
-
     postRequestParams("game_rental", inventory_params, generateInventoryChart, () => { });
     postRequestParams("rental_stat", rental_params, generateRentalChart, () => {});
     
@@ -63,7 +69,7 @@ window.onclick = function(event) {
         RENTAL_COUNTS.push(COUNT);
     });
 
-    const RENTAL_CHART = new Chart(RENTAL_HISTORY_CHART, {
+    const RENTAL_CHART = new Chart(MONTHLY_RENTAL_CONTAINER, {
         type: 'bar',
         data: {
             labels: MONTH_LABELS,
@@ -88,39 +94,38 @@ window.onclick = function(event) {
         }
     });
 
-    // Stats Text Box
-    //like rank number, avg rental
-    //Average Rental Time
-    let averageRental = document.createElement("H3");
-    averageRental.innerText = data['Average Rental'];
-    TEXT_BOX_ELEMENT.appendChild(averageRental);
-
-    //Ranking
-    let rank_params = {
-        'rank': 'game',
-        'base': 'VideoGameID',
-        'top': 'Default',
-    }
-    postRequestParams("rank", rank_params, getRank, () => { });
-
-    function getRank(data){
-        let rank = document.createElement("H3");
-        rank.innerText = data['Ranked'][0]['Rank'];
-        TEXT_BOX_ELEMENT.appendChild(rank);
-    }
   }
-// Inventory (Pie Chart)
+/* Inventory (Pie Chart) */
 function generateInventoryChart(data){
+    //load game title
     const GAME_TITLE = data['Video Game'][0]['Title'];
     document.getElementById('gameTitle').innerText = GAME_TITLE;
-    const CURR_RENTALS = data['Rental Stats'][0]['Number of Copies Rented Out'];
+    
+    //set current rentals to inventory
+    let current_rentals;
+    if (data['Rental Stats'] && data['Rental Stats'].length > 0){
+        current_rentals = data['Rental Stats'][0]['Number of Copies Rented Out'];
+    }
+    else{
+        current_rentals = 0; 
+        //if rental stats is empty, default to 0
+    }
+   
+    if (current_rentals === null || 
+        current_rentals === undefined || 
+        current_rentals === ""){
+        current_rentals = 0; 
+        //if current rentals is empty, default to 0
+    }
+   
+    //load chart
     const INVENTORY = data['Video Game'][0]['Inventory'];
     const INVENTORY_CHART = new Chart(INVENTORY_ELEMENT, {
         type: 'pie',
         data: {
-            labels: ['In Stock: ' + INVENTORY, 'Rented: ' + CURR_RENTALS],
+            labels: ['In Stock: ' + INVENTORY, 'Rented: ' + current_rentals],
             datasets: [{
-                data: [INVENTORY, CURR_RENTALS], 
+                data: [INVENTORY-current_rentals, current_rentals], 
                 backgroundColor: ['rgba(54, 162, 235, 20)','rgba(255, 99, 132, 20)'],
                 hoverOffset: 4
             }]
@@ -133,7 +138,53 @@ function generateInventoryChart(data){
                 },
             }
         }
+    
     });
+
+    /* Performance Summary */
+
+    //Average Rental Time
+    let averageHeader = document.getElementById("averageHeader");
+
+    if (data && data ['Rental Stats'] 
+        && Array.isArray(data['Rental Stats'])
+        && data['Rental Stats'].length > 0){
+        const RENTAL_STATS = data['Rental Stats'][0];
+
+        if (RENTAL_STATS && RENTAL_STATS['Rental Time Average'] !== null 
+            && RENTAL_STATS['Rental Time Average'] !== undefined 
+            && RENTAL_STATS['Rental Time Average'] !== ""){
+                averageHeader.innerText = `Average Rental Time: ${Math.round(RENTAL_STATS['Rental Time Average'])}`;    
+            }
+        else{
+            averageHeader.innerText = "Average Rental Time: N/A";
+        }
+    }
+    else {
+        averageHeader.innerText = "Average Rental Time: N/A";
+    }
+    //averageHeader.innerText = `Average Rental Time: ${Math.round(data['Rental Stats'][0]['Rental Time Average'])}`;
+
+    //Ranking
+    let rank_params = {
+        'rank': 'game',
+        'base': 'VideoGameID',
+        'top': ''
+    }
+
+    postRequestParams("rank", rank_params, getRank, () => { });
+    function getRank(data){
+        let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
+        let rankHeader = document.getElementById("rankHeader");
+        let videogameRank = data['Ranked'].find((item) =>item['VideoGameID'] == videoGameID);
+        if (videogameRank){
+            rankHeader.innerText = `Ranked #${videogameRank['Rank']}`;
+        }
+        else{
+            rankHeader.innerText = "Rank not available";
+        }
+    }
+
 }
 
 function rentClick(){

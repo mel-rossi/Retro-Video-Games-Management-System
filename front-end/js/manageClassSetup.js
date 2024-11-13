@@ -7,6 +7,7 @@ class AddRental {
 
         this.confirmRentalStatus = false;
 
+        this.memberID = NaN;
         this.videoGameID = videoGameID;
         this.manageContainer = manageContainer;
     }
@@ -33,7 +34,7 @@ class AddRental {
                 this.enterClick();
             }
 
-            if (!confirmRentalStatus) {
+            if (!this.confirmRentalStatus) {
                 this.resultTextChange("");
             }
         };
@@ -44,7 +45,7 @@ class AddRental {
         //Button element to start rental
         let enterButton = document.createElement("button");
         enterButton.setAttribute("class", "enter-button");
-        enterButton.onclick = this.enterClick;
+        enterButton.onclick = () => this.enterClick();
         enterButton.innerText = "Enter";
 
         addInfoDiv.appendChild(enterButton);
@@ -69,14 +70,14 @@ class AddRental {
 
     //BUG: When doing this. in button event it thinks this. is the button element FUN
     enterClick() {
-        //if we are confirming to create the rental
-        if (this.confirmRentalStatus) {
-            confirmRental();
+         //if we are confirming to create the rental
+         if (this.confirmRentalStatus) {
+            this.confirmRental();
         }
         //if we are not confirming rental grab member info
         else {
             //handles valid customer input with given textbox
-            searchCustomer(this.memberTextBox, this.validCustomer, this.errorHandling);
+            searchCustomer(this.memberTextBox, this.validCustomer.bind(this), this.errorHandling.bind(this));
         }
     }
 
@@ -113,7 +114,7 @@ class AddRental {
 
     //change the text for the result element
     resultTextChange(text) {
-        this.resultText = text;
+        this.resultText.innerText = text;
     }
 
     //display error message
@@ -146,7 +147,7 @@ class RemoveRental {
         //Button element to end rental
         let endButton = document.createElement("button");
         endButton.setAttribute("class", "enter-button");
-        endButton.onclick = this.endClick;
+        endButton.onclick = () => this.endClick;
         endButton.innerText = "End Rental";
         
         closeInfoDiv.appendChild(endButton);
@@ -170,7 +171,6 @@ class RemoveRental {
     }
 
     endClick() {
-
         if(this.confirmRentalStatus){
 
         }

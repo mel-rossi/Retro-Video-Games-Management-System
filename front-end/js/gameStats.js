@@ -1,12 +1,12 @@
 // variables
 const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
-const TEXT_BOX_ELEMENT = document.getElementById('textBox'); 
+const TEXT_BOX_ELEMENT = document.getElementById('textBox');
 const RENTAL_HISTORY_CHART = document.getElementById('monthlyRentalChart').getContext('2d');
-const PERCENTAGE_TEXT = document.getElementById('percentageText'); 
+const PERCENTAGE_TEXT = document.getElementById('percentageText');
 const STATS_CONTAINER = document.getElementById('gameData');
 const MONTHLY_RENTAL_CONTAINER = document.getElementById('monthlyRentalChart').getContext('2d');
 const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
- 
+
 // Get modal elements
 const MODAL = document.getElementById("myModal");
 const MODAL_IFRAME = document.getElementById('modalIframe');
@@ -14,28 +14,28 @@ const RENTAL_BUTTON = document.getElementById("rentButton");
 const SPAN_MODAL = document.getElementsByClassName("close")[0];
 
 // Open the modal when the button is clicked
-RENTAL_BUTTON.onclick = function() {
+RENTAL_BUTTON.onclick = () => {
     MODAL.style.display = "block";
 }
 
 // Close the modal when the 'x' is clicked
-SPAN_MODAL.onclick = function() {
+SPAN_MODAL.onclick = () => {
     MODAL.style.display = "none";
 }
 
 // Close the modal when clicking outside of the modal content
-window.onclick = function(event) {
+window.onclick = (event) => {
     if (event.target == MODAL) {
         MODAL.style.display = "none";
     }
 }
 
- window.onload = game_stats_page;
+window.onload = game_stats_page;
 
- function game_stats_page() {
+function game_stats_page() {
     let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
-    
-    MODAL_IFRAME.setAttribute("src", "manage?ID=" + videoGameID + "&M_State=open")
+
+    MODAL_IFRAME.setAttribute("src", "manage?ID=" + videoGameID + "&M_State=open");
 
     let inventory_params = {
         'option': videoGameID,
@@ -48,14 +48,14 @@ window.onclick = function(event) {
         'year_range': ''
     }
     postRequestParams("game_rental", inventory_params, generateInventoryChart, () => { });
-    postRequestParams("rental_stat", rental_params, generateRentalChart, () => {});
-    
- }
- 
-  // Rentals by Month (Bar Chart)
-  function generateRentalChart(data){
+    postRequestParams("rental_stat", rental_params, generateRentalChart, () => { });
+
+}
+
+// Rentals by Month (Bar Chart)
+function generateRentalChart(data) {
     const RENTALS_BY_MONTH = data['Rentals by Month'];
-    
+
     const MONTH_LABELS = [];
     const RENTAL_COUNTS = [];
 
@@ -91,30 +91,30 @@ window.onclick = function(event) {
         }
     });
 
-  }
+}
 /* Inventory (Pie Chart) */
-function generateInventoryChart(data){
+function generateInventoryChart(data) {
     //load game title
     const GAME_TITLE = data['Video Game'][0]['Title'];
     document.getElementById('gameTitle').innerText = GAME_TITLE;
-    
+
     //set current rentals to inventory
     let current_rentals;
-    if (data['Rental Stats'] && data['Rental Stats'].length > 0){
+    if (data['Rental Stats'] && data['Rental Stats'].length > 0) {
         current_rentals = data['Rental Stats'][0]['Number of Copies Rented Out'];
     }
-    else{
-        current_rentals = 0; 
+    else {
+        current_rentals = 0;
         //if rental stats is empty, default to 0
     }
-   
-    if (current_rentals === null || 
-        current_rentals === undefined || 
-        current_rentals === ""){
-        current_rentals = 0; 
+
+    if (current_rentals === null ||
+        current_rentals === undefined ||
+        current_rentals === "") {
+        current_rentals = 0;
         //if current rentals is empty, default to 0
     }
-   
+
     //load chart
     const INVENTORY = data['Video Game'][0]['Inventory'];
     const INVENTORY_CHART = new Chart(INVENTORY_ELEMENT, {
@@ -122,8 +122,8 @@ function generateInventoryChart(data){
         data: {
             labels: ['In Stock: ' + INVENTORY, 'Rented: ' + current_rentals],
             datasets: [{
-                data: [INVENTORY-current_rentals, current_rentals], 
-                backgroundColor: ['rgba(54, 162, 235, 20)','rgba(255, 99, 132, 20)'],
+                data: [INVENTORY - current_rentals, current_rentals],
+                backgroundColor: ['rgba(54, 162, 235, 20)', 'rgba(255, 99, 132, 20)'],
                 hoverOffset: 4
             }]
         },
@@ -135,7 +135,7 @@ function generateInventoryChart(data){
                 },
             }
         }
-    
+
     });
 
     /* Performance Summary */
@@ -143,17 +143,17 @@ function generateInventoryChart(data){
     //Average Rental Time
     let averageHeader = document.getElementById("averageHeader");
 
-    if (data && data ['Rental Stats'] 
+    if (data && data['Rental Stats']
         && Array.isArray(data['Rental Stats'])
-        && data['Rental Stats'].length > 0){
+        && data['Rental Stats'].length > 0) {
         const RENTAL_STATS = data['Rental Stats'][0];
 
-        if (RENTAL_STATS && RENTAL_STATS['Rental Time Average'] !== null 
-            && RENTAL_STATS['Rental Time Average'] !== undefined 
-            && RENTAL_STATS['Rental Time Average'] !== ""){
-                averageHeader.innerText = `Average Rental Time: ${Math.round(RENTAL_STATS['Rental Time Average'])}`;    
-            }
-        else{
+        if (RENTAL_STATS && RENTAL_STATS['Rental Time Average'] !== null
+            && RENTAL_STATS['Rental Time Average'] !== undefined
+            && RENTAL_STATS['Rental Time Average'] !== "") {
+            averageHeader.innerText = `Average Rental Time: ${Math.round(RENTAL_STATS['Rental Time Average'])}`;
+        }
+        else {
             averageHeader.innerText = "Average Rental Time: N/A";
         }
     }
@@ -170,20 +170,20 @@ function generateInventoryChart(data){
     }
 
     postRequestParams("rank", rank_params, getRank, () => { });
-    function getRank(data){
+    function getRank(data) {
         let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
         let rankHeader = document.getElementById("rankHeader");
-        let videogameRank = data['Ranked'].find((item) =>item['VideoGameID'] == videoGameID);
-        if (videogameRank){
+        let videogameRank = data['Ranked'].find((item) => item['VideoGameID'] == videoGameID);
+        if (videogameRank) {
             rankHeader.innerText = `Ranked #${videogameRank['Rank']}`;
         }
-        else{
+        else {
             rankHeader.innerText = "Rank not available";
         }
     }
 
 }
 
-function rentClick(){
+function rentClick() {
 
 }

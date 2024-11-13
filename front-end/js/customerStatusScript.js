@@ -4,6 +4,11 @@ const CURRENT_RENTALS_ELEMENT = document.getElementById("currentRentals");
 const PAST_RENTALS_ELEMENT = document.getElementById("pastRentals");
 const RENTALS_CONTAINER_ELEMENT = document.getElementById("rentalResults");
 
+// Get modal elements
+const MODAL = document.getElementById("myModal");
+const MODAL_IFRAME = document.getElementById('modalIframe');
+const SPAN_MODAL = document.getElementsByClassName("close")[0];
+
 const RENTAL_TYPES = {
     ACTIVE: 'Active Rentals',
     INACTIVE: 'Inactive Rentals',
@@ -11,6 +16,18 @@ const RENTAL_TYPES = {
 };
 
 const RENTAL_INFO = { [RENTAL_TYPES.ACTIVE]: CURRENT_RENTALS_ELEMENT, [RENTAL_TYPES.INACTIVE]: PAST_RENTALS_ELEMENT, [RENTAL_TYPES.ERROR]: CURRENT_RENTALS_ELEMENT };
+
+// Close the modal when the 'x' is clicked
+SPAN_MODAL.onclick = () => {
+    MODAL.style.display = "none";
+}
+
+// Close the modal when clicking outside of the modal content
+window.onclick = (event) => {
+    if (event.target == MODAL) {
+        MODAL.style.display = "none";
+    }
+}
 
 window.onload = () => {
     //search container keydown check when enter to call search
@@ -63,10 +80,15 @@ function generateRentalCards(customerData) {
     //go through all the active games from the member
     //only show title and rented date
     customerData[RENTAL_TYPES.ACTIVE].forEach(rentedGame => {
-        addRentalCard(rentedGame, RENTAL_INFO[RENTAL_TYPES.ACTIVE], (appendElement) => {
+        let cardDiv = addRentalCard(rentedGame, RENTAL_INFO[RENTAL_TYPES.ACTIVE], (appendElement) => {
             appendElement("p", "Game: ", rentedGame.Title);
-            appendElement("p", "Rented on: ", new Date(rentedGame.StartDate).toDateString());
+            appendElement("p", "Rented on: ", new Date(rentedGame.StartDate).toDateString());            
         });
+
+        cardDiv.onclick = () => {
+            MODAL_IFRAME.setAttribute("src", "manage?ID=" + rentedGame.RentalID + "&M_State=close");
+            MODAL.style.display = "block";
+        };
     });
 
     //go through all the inactive games from the member
@@ -104,6 +126,9 @@ function addRentalCard(rentedGame, gameElement, appendInfo) {
     appendInfo(appendElement);
 
     gameElement.appendChild(gameInfoFragment);
+
+    //return the game card div made
+    return newGameInfo; 
 }
 
 function deleteRentalContainerValues() {

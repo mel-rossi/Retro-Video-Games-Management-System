@@ -99,8 +99,8 @@ def checkAvailability(VideoGameInput):
 
 # Check Rental Limit based on MemberID input 
 def checkRentalLimit(MemberInput): 
-    row = df3.loc[df3.iloc[:, 0] == MemberInput] # Find correct Row 
-    if row.iloc[:, -1].item() < 5: # Find if value of last column is less than 5 : -1 = last column 
+    row = df3[df3['MemberID'] == MemberInput] # Find correct Row 
+    if not row[row['CurRentals'] < 5].empty: # Find if value of last column is less than 5 : -1 = last column 
                                    # check if said value < 5
         return True # Limit Not Reached
     #print("Member " + MemberInput + " has reached their Rental Limit(5).")
@@ -109,8 +109,8 @@ def checkRentalLimit(MemberInput):
 
 # Check Rental Status based on RentalID input 
 def checkRentalStatus(RentalInput): 
-    row = df1.loc[df1.iloc[:, 0] == RentalInput] # Find correct Row
-    if row.iloc[:, -1].eq('Active').any(): # Find the value of the last column : -1 = last column
+    row = df1[df1['RentalID'] == RentalInput] # Find correct Row
+    if not row[row['Status'] == 'Active'].empty: # Find the value of the last column : -1 = last column
         return True # Active 
     #print("Rental " + RentalInput + " is inactive.")
     return False # Inactive

@@ -63,31 +63,23 @@ def dry_run_edit_member(MemberID, FirstName, LastName, PhoneNumber, Email):
         if not validateNameFormat(FirstName):
             return jsonify({"error": "Invalid Format for First Name Given"}), \
                    400
-    else: 
-        FirstName = no 
 
     # Validate LastName 
     if LastName is not None:
         if not validateNameFormat(LastName): 
             return jsonify({"error": "Invalid Format for Last Name Given"}), \
                    400
-    else: 
-        LastName = no
 
     # Validate PhoneNumber
     if PhoneNumber is not None:
         if not validatePhoneFormat(PhoneNumber): 
             return jsonify({"error": "Invalid Format for Phone Number Given"}),\
                    400
-    else: 
-        PhoneNumber = no
 
     # Validate Email 
     if Email is not None: 
         if not validateEmailFormat(Email): 
             return jsonify({"error": "Invalid Format for Email Given"}), 400
-    else: 
-        Email = no
 
     session['MemberID'] = MemberID
     session['FirstName'] = FirstName
@@ -98,14 +90,66 @@ def dry_run_edit_member(MemberID, FirstName, LastName, PhoneNumber, Email):
     return jsonify({
         "Member Registration Being Edited": \
                 confirmMemberID(MemberID).to_dict(orient='records'), 
-        "First Name Requested Changes": FirstName,
-        "Last Name Requested Changes": LastName, 
-        "Phone Number Requested Changes": PhoneNumber, 
-        "Email Requested Changes": Email,
+        "First Name Requested Changes": FirstName \
+                if FirstName is not None else no,
+        "Last Name Requested Changes": LastName \
+                if LastName is not None else no, 
+        "Phone Number Requested Changes": PhoneNumber \
+                if PhoneNumber is not None else no, 
+        "Email Requested Changes": Email \
+                if Email is not None else no,
         "Message": "Please confirm the details"
     }), 200
 
 # dry_run_edit_member
+
+def fullValidation(MemberID, FirstName, LastName, PhoneNumber, Email): 
+
+    if validateMemberID(MemberID) and \
+       changeRequest(FirstName, LastName, PhoneNumber, Email) and \
+       (FirstName is None or validateNameFormat(FirstName)) and \
+       (LastName is None or validateNameFormat(LastName)) and \
+       (PhoneNumber is None or validatePhoneFormat(PhoneNumber)) and \
+       (Email is None or validateEmailFormat(Email)): 
+           return True
+
+    return False
+# fullValidation 
+
+# Primary Validation : Process Input and perform modification if Validation Check passes
+def edit_member(MemberID, FirstName, LastName, PhoneNumber, Email): 
+
+    # Primary Validation 
+    if not fullValidation(MemberID, FirstName, LastName, PhoneNumber, Email): 
+        return jsonify({"error": "Session Transaction Glitch Detected"})
+
+    # Read CSV file into DataFrame 
+    df = pd.read_csv(CSV_FILE) 
+
+    # Modify First Name 
+    if FirstName is not None:
+        df.loc[df['MemberID'] == MemberID, 'FirstName'] = FirstName
+
+    # Modify Last Name 
+    if LastName is not None: 
+        df.loc[df['MemberID'] == MemberID, 'LastName'] = LastName
+
+    # Modify Phone Number 
+    if PhoneNumber is not None: 
+        df.loc[df['MemberID'] == MemberID, 'PhoneNumber'] = PhoneNumber 
+
+    # Modify Email 
+    if Email is not None: 
+        df.loc[df['MemberID'] == MemberID, 'Email'] = Email
+
+    # Save updated DataFrame back to CSV file 
+    df.to_csv(CSV_FILE, index=False) 
+
+    row = df[df['MemberID'] == MemberID]
+
+    # Return the updated row as JSON 
+    return jsonify(row.to_dict(orient='records')), 200
+# edit_member 
 
 @editmember_bp.route('/edit_member', methods=['POST'])
 def edit_member_route(): 
@@ -135,7 +179,7 @@ def edit_member_route():
         LastName = session.get('LastName') 
         PhoneNumber = session.get('PhoneNumber') 
         Email = session.get('Email') 
-        return jsonify({"message": "1"}) # Placeholder
+        return edit_member(MemberID, FirstName, LastName, PhoneNumber, Email)
 
     else: 
         return jsonify({"message": "Operation cancelled"}), 200

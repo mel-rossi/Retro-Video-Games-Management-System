@@ -68,7 +68,6 @@ class AddRental {
         this.manageContainer.appendChild(fragment);
     }
 
-    //BUG: When doing this. in button event it thinks this. is the button element FUN
     enterClick() {
          //if we are confirming to create the rental
          if (this.confirmRentalStatus) {

@@ -22,12 +22,19 @@ MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
 RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 
-# Read .csv files into DataFrames 
-df1 = pd.read_csv(MEMBER_PATH)
-df2 = pd.read_csv(RENTAL_PATH)
-df3 = pd.read_csv(VIDEOGAME_PATH)
+# Define the .csv file variables
+df1 = ''
+df2 = ''
+df3 = ''
 
 # Functions
+
+# Read .csv files into DataFrames 
+def read_files():
+    global df1, df2, df3
+    df1 = pd.read_csv(MEMBER_PATH)
+    df2 = pd.read_csv(RENTAL_PATH)
+    df3 = pd.read_csv(VIDEOGAME_PATH)    
 
 # Filter Rentals by Member 
 def member_filter(MemberInput): 
@@ -150,6 +157,8 @@ def member_rental_route():
 
     data = request.json # Get json data from POST body
     user_input = data.get('option') # Extract 'option' field
+
+    read_files() #read the CSV file to grab the new data to account for changes
 
     member, activeRentals, inactiveRentals, rentalStats = find_member(user_input)
 

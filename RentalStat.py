@@ -18,7 +18,12 @@ INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
 RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv') 
 
 # Read .csv file into DataFrame 
-df = pd.read_csv(RENTAL_PATH)
+df = ''
+
+# Read .csv file into DataFrame
+def read_file():
+    global df
+    df = pd.read_csv(RENTAL_PATH)
 
 # Filter Rentals by Rental ID 
 def rental_filter(RentalInput): 
@@ -180,6 +185,8 @@ def rental_stat_route():
     data = request.json # Get json data from POST body 
 
     option = data.get('option')
+
+    read_file() # read the CSV file to grab the new data to account for changes
 
     # Option given 
     if option is not None: 

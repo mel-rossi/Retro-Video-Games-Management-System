@@ -158,7 +158,7 @@ def member_rental_route():
     data = request.json # Get json data from POST body
     user_input = data.get('option') # Extract 'option' field
 
-    read_files() #read the CSV file to grab the new data to account for changes
+    read_files() #read the CSV files to grab the new data to account for changes
 
     member, activeRentals, inactiveRentals, rentalStats = find_member(user_input)
 

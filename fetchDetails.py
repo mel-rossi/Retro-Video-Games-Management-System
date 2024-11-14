@@ -1,17 +1,25 @@
 # This program contains methods that Fetch Specific Details when given ID 
 
+import os
 import pandas as pd
 
 # Data Frames 
 
+# Load the .csv files
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
+MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
+RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
+
 # Read Rentals 
-df1 = pd.read_csv('Inventory/Rentals.csv')
+df1 = read_rentals() 
 
 # Read VideoGames
-df2 = pd.read_csv('Inventory/VideoGames.csv')
+df2 = read_games() 
 
 # Read Members
-df3 = pd.read_csv('Inventory/Members.csv')
+df3 = read_members() 
 
 # Fetch Title of corresponding VideoGame based on VideoGameID 
 def gameTitle(VideoGameID):
@@ -48,3 +56,17 @@ def rentalMemberID(RentalID):
     return MemberID
 # rentalMemberID
 
+# Read Rentals 
+def read_rentals(): 
+    return pd.read_csv(RENTAL_PATH)
+# read_rentals
+
+# Read Members
+def read_members(): 
+    return pd.read_csv(MEMBER_PATH)
+# read_members
+
+# Read Video Games
+def read_games(): 
+    return pd.read_csv(VIDEOGAME_PATH)
+# read_games

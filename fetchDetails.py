@@ -29,19 +29,19 @@ def read_games():
 
 # Fetch Title of corresponding VideoGame based on VideoGameID 
 def gameTitle(VideoGameID):
-    df2 = read_games() 
+    df = read_games() 
 
-    title = df2.loc[df2['VideoGameID'] == VideoGameID, 'Title'].values[0]
+    title = df.loc[df['VideoGameID'] == VideoGameID, 'Title'].values[0]
 
     return title 
 # gameTitle 
 
 # Fetch Name (LastName, FirstName) of corresponding Member based on MemberID
 def memberName(MemberID):
-    df3 = read_members()
+    df = read_members()
 
-    first = df3.loc[df3['MemberID'] == MemberID, 'FirstName'].values[0]
-    last = df3.loc[df3['MemberID'] == MemberID, 'LastName'].values[0]
+    first = df.loc[df['MemberID'] == MemberID, 'FirstName'].values[0]
+    last = df.loc[df['MemberID'] == MemberID, 'LastName'].values[0]
 
     name = f"{last}, {first}" 
 
@@ -50,18 +50,18 @@ def memberName(MemberID):
 
 # Fetch VideoGameID of corresponding RentalID
 def rentalGameID(RentalID):
-    df1 = read_rentals() 
+    df = read_rentals() 
 
-    VideoGameID = df1.loc[df1['RentalID'] == RentalID, 'VideoGameID'].values[0]
+    VideoGameID = df.loc[df['RentalID'] == RentalID, 'VideoGameID'].values[0]
 
     return VideoGameID 
 # rentalGameID 
 
 # Fetch MemberID of corresponding RentalID 
 def rentalMemberID(RentalID):
-    df1 = read_rentals() 
+    df = read_rentals() 
 
-    MemberID = df1.loc[df1['RentalID'] == RentalID, 'MemberID'].values[0] 
+    MemberID = df.loc[df['RentalID'] == RentalID, 'MemberID'].values[0] 
 
     return MemberID
 # rentalMemberID

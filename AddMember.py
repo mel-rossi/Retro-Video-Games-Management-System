@@ -5,6 +5,7 @@ from fetchDetails import get_m, write_members
 from validateEntries import validateNameFormat
 from validateEntries import validateEmailFormat
 from validateEntries import validatePhoneFormat
+from validateEntries import checkPhoneEx, checkEmailEx
 from flask import request, jsonify, Blueprint, session 
 
 # This file allows the use to add new entries to the Members Table 
@@ -27,15 +28,20 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
     if LastName is None: 
         return jsonify({"error": "Last Name Missing"}), 400
 
-    if not validateNameFormat(FirstName) or not validateNameFormat(LastName): 
-        return jsonify({"error": "Invalid Name Format"}), 400
+    if not validateNameFormat(FirstName) or \
+       not validateNameFormat(LastName): 
+           return jsonify({"error": "Invalid Name Format"}), 400
 
     # Validate PhoneNumber
     if PhoneNumber is None: 
         return jsonify({"error": "Phone Number Missing"}), 400
 
     if not validatePhoneFormat(PhoneNumber): 
-        return jsonify({"error": "Invalid Phone Number Format"}) 
+        return jsonify({"error": "Invalid Phone Number Format"}), 400
+
+    if checkPhoneEx(PhoneNumber): 
+        return jsonify({"error": "Phone Number Already Registered \
+                        in System"}), 400
 
     # Validate Email
     if Email is None: 
@@ -44,6 +50,8 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
     if not validateEmailFormat(Email): 
         return jsonify({"error": "Invalid Email Format"}), 400
 
+    if checkEmailEx(Email): 
+        return jsonify({"error": "Email Already Registered in System"}), 400 
     session['FirstName'] = FirstName
     session['LastName'] = LastName 
     session['PhoneNumber'] = PhoneNumber 

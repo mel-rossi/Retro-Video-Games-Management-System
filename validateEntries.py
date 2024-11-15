@@ -192,3 +192,21 @@ def validateEmailFormat(Email):
     return validateStringFormat(pattern, Email) 
 # validateEmail
 
+# Check Whether Phone Number Exists 
+def checkPhoneEx(Phone): 
+
+    if not df_m[df_m['PhoneNumber'] == Phone].empty: 
+        return True # Exists 
+
+    return False # Does Not Exist 
+# checkPhoneEx
+
+# Check Whether Email Exists 
+def checkEmailEx(Email): 
+
+    if not df_m[df_m['Email'] == Email].empty: 
+        return True # Exist
+
+    return False # Does Not Exist
+# checkEmailEx
+

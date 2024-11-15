@@ -1,8 +1,8 @@
-import os 
 import pandas as pd 
 from flask_cors import CORS
 from validateEntries import confirmMemberID
-from validateEntries import validateMemberID 
+from validateEntries import validateMemberID
+from fetchDetails import get_m, write_members
 from validateEntries import validateNameFormat
 from validateEntries import validateEmailFormat
 from validateEntries import validatePhoneFormat 
@@ -10,13 +10,13 @@ from flask import request, jsonify, Blueprint, session
 
 # This file allows the use to edit Member Registrations 
 
+# Blue Print 
 editmember_bp = Blueprint('EditMember', __name__)
 CORS(editmember_bp) 
 editmember_bp.secret_key = 'supersecretkey' # Session Management 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
-CSV_FILE = os.path.join(INVENTORY_DIR, 'Members.csv') 
+# Global Variables 
+df = get_m() # Members DataFrame
 
 # Dry Run Request : Initial Input Validation for Requested Registration
 def dry_run_request_member(MemberID): 
@@ -35,7 +35,8 @@ def dry_run_request_member(MemberID):
 # dry_run_edit_member
 
 # Check if at least one change request is being made
-def changeRequest(FirstName, LastName, PhoneNumber, Email): 
+def changeRequest(FirstName, LastName, PhoneNumber, Email):
+
     if FirstName is None and \
        LastName is None and \
        PhoneNumber is None and \
@@ -123,9 +124,6 @@ def edit_member(MemberID, FirstName, LastName, PhoneNumber, Email):
     if not fullValidation(MemberID, FirstName, LastName, PhoneNumber, Email): 
         return jsonify({"error": "Session Transaction Glitch Detected"})
 
-    # Read CSV file into DataFrame 
-    df = pd.read_csv(CSV_FILE) 
-
     # Modify First Name 
     if FirstName is not None:
         df.loc[df['MemberID'] == MemberID, 'FirstName'] = FirstName
@@ -143,7 +141,7 @@ def edit_member(MemberID, FirstName, LastName, PhoneNumber, Email):
         df.loc[df['MemberID'] == MemberID, 'Email'] = Email
 
     # Save updated DataFrame back to CSV file 
-    df.to_csv(CSV_FILE, index=False) 
+    write_members(df)
 
     row = df[df['MemberID'] == MemberID]
 

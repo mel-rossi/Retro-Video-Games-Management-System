@@ -66,13 +66,13 @@ def get_g():
 # Write to Rentals 
 def write_rentals(df): 
 
-    return df.to_csv(RENTAL_PATH, index=False)
+    df.to_csv(RENTAL_PATH, index=False)
 # write_rentals
 
 # Write to Members 
 def write_members(df): 
 
-    return df.to_csv(MEMBER_PATH, index=False) 
+    df.to_csv(MEMBER_PATH, index=False) 
 # write_members 
 
 # Write to Video Games 

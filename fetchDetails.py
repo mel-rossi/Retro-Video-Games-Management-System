@@ -1,9 +1,7 @@
-# This program contains methods that Fetch Specific Details when given ID 
-
 import os
 import pandas as pd
 
-# Data Frames 
+# This program contains methods that Fetch Specific Details 
 
 # Load the .csv files
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,36 +10,89 @@ MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
 RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
 VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 
+# Global DataFrames 
+df_r = pd.DataFrame() # Rentals DataFrame 
+df_m = pd.DataFrame() # Members DataFrame
+df_g = pd.DataFrame() # (Video) Games DataFrame
+
 # Read Rentals 
-def read_rentals(): 
-    return pd.read_csv(RENTAL_PATH)
+def read_rentals():
+
+    global df_r
+    df_r = pd.read_csv(RENTAL_PATH)
 # read_rentals
 
 # Read Members
 def read_members(): 
-    return pd.read_csv(MEMBER_PATH)
+
+    global df_m
+    df_m = pd.read_csv(MEMBER_PATH)
 # read_members
 
 # Read Video Games
-def read_games(): 
-    return pd.read_csv(VIDEOGAME_PATH)
+def read_games():
+
+    global df_g
+    df_g = pd.read_csv(VIDEOGAME_PATH)
 # read_games
+
+# Fetch Rentals 
+def get_r():
+
+    global df_r
+    return df_r
+# get_r
+
+# Fetch Members 
+def get_m(): 
+
+    global df_m
+    return df_m
+# get_m
+
+# Fetch Video Games 
+def get_g(): 
+
+    global df_g 
+    return df_g
+# get_g
+
+# Initial load of CSV files 
+read_rentals() 
+read_members() 
+read_games() 
+
+# Write to Rentals 
+def write_rentals(df): 
+
+    return df.to_csv(RENTAL_PATH, index=False)
+# write_rentals
+
+# Write to Members 
+def write_members(df): 
+
+    return df.to_csv(MEMBER_PATH, index=False) 
+# write_members 
+
+# Write to Video Games 
+def write_games(df): 
+
+    return df.to_csv(VIDEOGAME_PATH, index=False)
+# write_games
 
 # Fetch Title of corresponding VideoGame based on VideoGameID 
 def gameTitle(VideoGameID):
-    df = read_games() 
 
-    title = df.loc[df['VideoGameID'] == VideoGameID, 'Title'].values[0]
+    title = df_g.loc[df_g['VideoGameID'] == VideoGameID, 'Title'].values[0]
 
     return title 
 # gameTitle 
 
 # Fetch Name (LastName, FirstName) of corresponding Member based on MemberID
 def memberName(MemberID):
-    df = read_members()
 
-    first = df.loc[df['MemberID'] == MemberID, 'FirstName'].values[0]
-    last = df.loc[df['MemberID'] == MemberID, 'LastName'].values[0]
+    first = df_m.loc[df_m['MemberID'] == MemberID, 'FirstName'].values[0]
+    last = df_m.loc[df_m['MemberID'] == MemberID, 'LastName'].values[0]
 
     name = f"{last}, {first}" 
 
@@ -50,18 +101,16 @@ def memberName(MemberID):
 
 # Fetch VideoGameID of corresponding RentalID
 def rentalGameID(RentalID):
-    df = read_rentals() 
 
-    VideoGameID = df.loc[df['RentalID'] == RentalID, 'VideoGameID'].values[0]
+    VideoGameID = df_r.loc[df_r['RentalID'] == RentalID, 'VideoGameID'].values[0]
 
     return VideoGameID 
 # rentalGameID 
 
 # Fetch MemberID of corresponding RentalID 
 def rentalMemberID(RentalID):
-    df = read_rentals() 
 
-    MemberID = df.loc[df['RentalID'] == RentalID, 'MemberID'].values[0] 
+    MemberID = df_r.loc[df_r['RentalID'] == RentalID, 'MemberID'].values[0] 
 
     return MemberID
 # rentalMemberID

@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from flask_cors import CORS
 from linkIDs import rentOut, incRentals
+from fetchDetails import get_r, write_rentals
 from flask import request, jsonify, Blueprint, session
 from validateEntries import generateDate, generateRentalID
 from validateEntries import confirmMemberID, validateMemberID
@@ -10,13 +11,13 @@ from validateEntries import confirmVideoGameID, validateVideoGameID
 
 # This file allows the user to add new entries to the Rentals Table
 
+# Blueprint
 openrental_bp = Blueprint('OpenRental', __name__)
 CORS(openrental_bp)
 openrental_bp.secret_key = 'supersecretkey' # Session Management 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
-CSV_FILE = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+# Global Variables 
+df = get_r() # Rentals DataFrame
 
 # Dry Run : Initial Input Validation 
 def dry_run_open_entry(VideoGameID, MemberID): 
@@ -39,8 +40,10 @@ def dry_run_open_entry(VideoGameID, MemberID):
     session['MemberID'] = MemberID
 
     return jsonify({
-        "Video Game Registration": confirmVideoGameID(VideoGameID).to_dict(orient='records'), 
-        "Member Registration": confirmMemberID(MemberID).to_dict(orient='records'),
+        "Video Game Registration": \
+                confirmVideoGameID(VideoGameID).to_dict(orient='records'), 
+        "Member Registration": \
+                confirmMemberID(MemberID).to_dict(orient='records'),
         "Message": "Please confirm the details"
     }), 200
 
@@ -80,9 +83,6 @@ def open_entry(VideoGameID, MemberID):
     rentOut(VideoGameID) 
     incRentals(MemberID) 
 
-    # Read CSV file into a DataFrame 
-    df = pd.read_csv(CSV_FILE) 
-
     # Make a new row (registration) 
     row = { 'RentalID': RentalID, 
             'VideoGameID': VideoGameID,
@@ -97,7 +97,7 @@ def open_entry(VideoGameID, MemberID):
     df = pd.concat([df, row], ignore_index=True) 
 
     # Write the updated DataFrame back to the CSV file 
-    df.to_csv(CSV_FILE, index=False) 
+    write_rentals(df)
 
     # Return the added row as JSON 
     return jsonify(row.to_dict(orient='records')), 200

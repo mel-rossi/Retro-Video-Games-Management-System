@@ -2,6 +2,7 @@
 
 # Imports 
 import pandas as pd
+from fetchDetails import write_members
 from fetchDetails import get_r, get_m, get_g
 
 # Global Variables 

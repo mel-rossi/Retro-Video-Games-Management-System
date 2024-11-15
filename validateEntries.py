@@ -1,18 +1,19 @@
-# This program contains Validation & Generation Methods 
-
 import re
 import pandas as pd
-from fetchDetails import read_rentals
-from fetchDetails import read_games
-from fetchDetails import read_members
+from fetchDetails import get_r, get_m, get_g
+
+# This program contains Validation & Generation Methods
+
+# Global Variables 
+df_r = get_r() # Rentals DataFrame 
+df_m = get_m() # Members DataFrame
+df_g = get_g() # (Video) Games DataFrame
 
 # Generate the next valid RentalID 
 def generateRentalID():
     
-    df = read_rentals() # Read Rentals into DataFrame
-
     # Iterate through the column RentalID
-    for rentalID in df['RentalID']: 
+    for rentalID in df_r['RentalID']: 
         pass
    
     # Separate the letter and the number 
@@ -27,10 +28,8 @@ def generateRentalID():
 # Generate the next valid MemberID 
 def generateMemberID():
 
-    df = read_members() # Read Members to DataFrame
-    
     # Iterate through the column MemberID
-    for memberID in df['MemberID']: 
+    for memberID in df_m['MemberID']: 
         pass
    
     # Separate the letter and the number 
@@ -45,10 +44,8 @@ def generateMemberID():
 # Generate the next valid VideoGameID 
 def generateVideoGameID():
 
-    df = read_games() # Read Video Games to DataFrame
-
     # Iterate through the column VideoGameID
-    for gameID in df['VideoGameID']: 
+    for gameID in df_g['VideoGameID']: 
         pass
    
     # Separate the letter and the number 
@@ -63,10 +60,8 @@ def generateVideoGameID():
 # Check Validation of VideoGameID input 
 def validateVideoGameID(VideoGameInput):
     
-    df = read_games() # Read VideoGames into DataFrame 
-
     # Iterate through the column VideoGameID
-    for VideoGameID in df['VideoGameID']: 
+    for VideoGameID in df_g['VideoGameID']: 
         if VideoGameID == VideoGameInput: 
             return True 
     
@@ -76,10 +71,8 @@ def validateVideoGameID(VideoGameInput):
 # Confirm if the VideoGameID entered is the correct one 
 def confirmVideoGameID(VideoGameInput):
 
-    df = read_games() # Read Video Games into DataFrame
-
     # Display Video Game information based on ID
-    result = df[df['VideoGameID'] == VideoGameInput]
+    result = df_g[df_g['VideoGameID'] == VideoGameInput]
 
     return result
 # confirmVideoGameID
@@ -87,10 +80,8 @@ def confirmVideoGameID(VideoGameInput):
 # Check Validation of MemberID input 
 def validateMemberID(MemberInput):
 
-    df = read_members() # Read Members to DataFrame
-
     # Iterate through the column MemberID
-    for MemberID in df['MemberID']: 
+    for MemberID in df_m['MemberID']: 
         if MemberInput == MemberID: 
             return True
 
@@ -100,10 +91,8 @@ def validateMemberID(MemberInput):
 # Confirm if the MemberID entered is the correct one 
 def confirmMemberID(MemberInput):
 
-    df = read_members() # Read Members to DataFrame
-
     # Display Member information based on ID
-    result = df[df['MemberID'] == MemberInput]
+    result = df_m[df_m['MemberID'] == MemberInput]
 
     return result
 # confirmMemberID
@@ -111,10 +100,8 @@ def confirmMemberID(MemberInput):
 # Check Validation of RentalID input 
 def validateRentalID(RentalInput): 
 
-    df = read_rentals() # Read Rentals to DataFrame
-
     # Iterate through the column RentalID
-    for RentalID in df['RentalID']: 
+    for RentalID in df_r['RentalID']: 
         if RentalInput == RentalID: 
             return True
 
@@ -124,10 +111,8 @@ def validateRentalID(RentalInput):
 # Confirm if the RentalID entered is the correct one 
 def confirmRentalID(RentalInput):
 
-    df = read_rentals() # Read Rentals to DataFrame 
-
     # Display Rental information based on ID
-    result = df[df['RentalID'] == RentalInput]
+    result = df_r[df_r['RentalID'] == RentalInput]
 
     return result
 # confirmRentalID
@@ -141,9 +126,7 @@ def generateDate():
 # Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
 
-    df = read_games() # Read Video Games to DataFrame
-
-    row = df[df['VideoGameID'] == VideoGameInput] # Find correct Row 
+    row = df_g[df_g['VideoGameID'] == VideoGameInput] # Find correct Row 
 
     if not row[row['Availability'] == 'Available'].empty: 
         return True # Available
@@ -154,9 +137,7 @@ def checkAvailability(VideoGameInput):
 # Check Rental Limit based on MemberID input 
 def checkRentalLimit(MemberInput):
 
-    df = read_members() # Read Members to DataFrame
-
-    row = df[df['MemberID'] == MemberInput] # Find correct Row
+    row = df_m[df_m['MemberID'] == MemberInput] # Find correct Row
 
     if not row[row['CurRentals'] < 5].empty:
         return True # Limit Not Reached
@@ -167,9 +148,8 @@ def checkRentalLimit(MemberInput):
 # Check Rental Status based on RentalID input 
 def checkRentalStatus(RentalInput):
 
-    df = read_rentals() # Read Rentals to DataFrame 
+    row = df_r[df_r['RentalID'] == RentalInput] # Find correct Row
 
-    row = df[df['RentalID'] == RentalInput] # Find correct Row
     if not row[row['Status'] == 'Active'].empty:         
         return True # Active
 
@@ -183,6 +163,7 @@ def validateStringFormat(pattern, string):
 
     if re.match(pattern, string): 
         return True
+
     else: 
         return False
 # validateStringFormat 
@@ -201,7 +182,6 @@ def validatePhoneFormat(Phone):
     pattern = r'^\d{3}-\d{3}-\d{4}$'
     
     return validateStringFormat(pattern, Phone) 
-
 # validatePhoneFormat
 
 # Check Whether the Email is in valid format 
@@ -210,6 +190,5 @@ def validateEmailFormat(Email):
     pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
 
     return validateStringFormat(pattern, Email) 
-
 # validateEmail
 

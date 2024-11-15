@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
@@ -6,28 +5,24 @@ from RentalStat import rent_num
 from RentalStat import active_filter 
 from RentalStat import inactive_filter
 from RentalStat import avg_rental_time
+from fetchDetails import get_r, get_g
 from flask import request, jsonify, Blueprint 
 from validateEntries import validateVideoGameID
 
 # This program Outputs Rental History based off of Video Game (ID or Title) 
 
+# Blueprint
 gamerental_bp = Blueprint('GameRental', __name__)
 CORS(gamerental_bp)
 
-# Load the .csv files 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
-RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
-VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
-
-# Read .csv files into DataFrames 
-df1 = pd.read_csv(RENTAL_PATH)
-df2 = pd.read_csv(VIDEOGAME_PATH)
+# Global Variables 
+df_r = get_r() # Rentals DataFrame
+df_g = get_g() # (Video) Games DataFrame
 
 # Filter Rentals by Video Game 
 def game_filter(VideoGameInput): 
 
-    return df1[df1['VideoGameID'] == VideoGameInput].copy()
+    return df_r[df_r['VideoGameID'] == VideoGameInput].copy()
 # game_filter
 
 # Check whether Rentals of said Video Game exist
@@ -60,6 +55,9 @@ def find_game(userInput=None, output=None):
 
     empty = pd.DataFrame()
 
+    if userInput is None: 
+        return empty, empty, empty, empty
+
     # Video Game ID input if only 4 digits
     if userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
@@ -71,7 +69,8 @@ def find_game(userInput=None, output=None):
     # Video Game Title input 
     else:
         # Retrieve VideoGameID associated with Title
-        userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
+        userInput = df_g.loc[df_g['Title'].str.lower() == userInput.lower(), \
+                             'VideoGameID'].values
         
         # Invalid Title input
         if len(userInput) <= 0: 
@@ -82,7 +81,7 @@ def find_game(userInput=None, output=None):
     # Video Game ID input validation
     if validateVideoGameID(userInput):
         # Retrieve Video Game details based on VideoGameID
-        game = df2[df2['VideoGameID'] == userInput] 
+        game = df_g[df_g['VideoGameID'] == userInput] 
 
         # Check whether rentals of this VideoGameID exist 
         exist = rental_exist(userInput)
@@ -106,12 +105,13 @@ def find_game(userInput=None, output=None):
             average = pd.DataFrame([average], columns=['Rental Time Average'])
 
             # Calculate how many times said Video Game has been Rented Out 
-            numRentals = rent_num(rentals) 
-            numRentals = pd.DataFrame([numRentals], columns=['Numbers of Rentals'])
+            numRent = rent_num(rentals) 
+            numRent = pd.DataFrame([numRent], columns=['Numbers of Rentals'])
 
             # Calculate how many copies of said Video Game has been Rented out 
             rentedNum = game_num(rentals)
-            rentedNum = pd.DataFrame([rentedNum], columns=['Number of Copies Rented Out']) 
+            rentedNum = pd.DataFrame([rentedNum], \
+                        columns=['Number of Copies Rented Out']) 
 
             # Merge average & numRentals into one row
             rentalStats = pd.concat([average, numRentals, rentedNum], axis=1)
@@ -131,7 +131,8 @@ def find_game(userInput=None, output=None):
 def game_rental_route():
     
     data = request.json # Get json data from POST body 
-    game, activeRentals, inactiveRentals, rentalStats = find_game(data.get('option'), data.get('out'))
+    game, activeRentals, inactiveRentals, rentalStats = \
+            find_game(data.get('option'), data.get('out'))
    
     if activeRentals.empty and inactiveRentals.empty: 
         data = { 

@@ -62,6 +62,8 @@ def fullValidation(VideoGameID, MemberID):
 
 # Primary Validation : Process Input and perform modification if appropriate 
 def open_entry(VideoGameID, MemberID):
+    
+    global df
 
     # Primary Validation 
     if not fullValidation(VideoGameID, MemberID):

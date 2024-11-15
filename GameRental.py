@@ -131,6 +131,10 @@ def find_game(userInput=None, output=None):
 @gamerental_bp.route('/game_rental', methods=['POST']) 
 def game_rental_route():
     
+    global df_r, df_g
+    df_r = get_r() # Rentals DataFrame
+    df_g = get_g() # (Video) Games DataFrame
+
     data = request.json # Get json data from POST body 
     game, activeRentals, inactiveRentals, rentalStats = \
             find_game(data.get('option'), data.get('out'))

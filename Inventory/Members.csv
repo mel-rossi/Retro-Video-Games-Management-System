@@ -1,7 +1,7 @@
 MemberID,FirstName,LastName,PhoneNumber,Email,CurRentals
-M0001,Michael,Jones,641-931-9686,MichaelJones@gmail.com,0
+M0001,Michael,Jones,641-931-9686,MichaelJones@gmail.com,2
 M0002,John,Rodriguez,510-515-5059,JohnRodriguez@gmail.com,0
-M0003,Emily,Garcia,103-913-5977,EmilyGarcia@gmail.com,0
+M0003,Emily,Garcia,103-913-5977,EmilyGarcia@gmail.com,1
 M0004,Katie,Brown,739-419-6448,KatieBrown@gmail.com,0
 M0005,John,Brown,559-871-8808,JohnBrown@gmail.com,2
 M0006,Katie,Garcia,403-163-2212,KatieGarcia@gmail.com,3

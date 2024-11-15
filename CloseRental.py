@@ -1,22 +1,23 @@
-import os
 import pandas as pd
 from flask_cors import CORS
 from linkIDs import returnGame, decRentals
+from fetchDetails import get_r, write_rentals
 from fetchDetails import gameTitle, memberName
 from fetchDetails import rentalGameID, rentalMemberID
 from flask import request, jsonify, Blueprint, session
 from validateEntries import generateDate, confirmRentalID
 from validateEntries import validateRentalID, checkRentalStatus
 
-# This file allows the user to close Rental Transactions (Registration --> Status => "Inactive") 
+# This file allows the user to close Rental Transactions 
+#   (Registration --> Status => "Inactive") 
 
+# Blueprint 
 closerental_bp = Blueprint('CloseRental', __name__)
 CORS(closerental_bp)
 closerental_bp.secret_key = 'supersecretkey' # Session Management
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
-CSV_FILE = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+# Global Variables 
+df = get_r() # Rentals DataFrame 
 
 # Dry Run : Initial Input Validation
 def dry_run_close_entry(RentalID): 
@@ -63,9 +64,6 @@ def close_entry(RentalID):
     ReturnDate = generateDate()
     ReturnDate = ReturnDate.strftime('%Y-%m-%d') # Format it 
 
-    # Read CSV file into DataFrame 
-    df = pd.read_csv(CSV_FILE)
-
     VideoGameID = rentalGameID(RentalID) # Extract VideoGameID  
     MemberID = rentalMemberID(RentalID) # Extract MemberID   
 
@@ -74,12 +72,13 @@ def close_entry(RentalID):
     decRentals(MemberID)
 
     # Modify Return Date and Status 
-    df.loc[df['RentalID'] == RentalID, ['ReturnDate', 'Status']] = [ReturnDate, 'Inactive']
+    df.loc[df['RentalID'] == RentalID, ['ReturnDate', 'Status']] \
+                                     = [ReturnDate, 'Inactive']
 
     # Save updated DataFrame back to CSV file 
-    df.to_csv(CSV_FILE, index=False)
+    write_rentals(df)
 
-    row = df[df['RentalID'] == RentalID]
+    row = df[df['RentalID'] == RentalID] # Fetch Updated Row
 
     # Return the updated row as JSON 
     return jsonify(row.to_dict(orient='records')), 200
@@ -94,7 +93,7 @@ def close_rental_route():
     if 'Confirm' not in data: 
         return dry_run_close_entry(data.get('RentalID'))
 
-    # Confirm : Primary validation and proceed with closing entry if check passes 
+    # Confirm : Primary validation and (if valid) close rental
     if data.get('Confirm').lower() == 'confirmed': 
         RentalID = session.get('RentalID')
         return close_entry(RentalID)

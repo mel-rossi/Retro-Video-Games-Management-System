@@ -56,6 +56,8 @@ def fullValidation(RentalID):
 # Primary Validation : Process Input and perform modification if Validation Check passes
 def close_entry(RentalID):
 
+    global df
+
     # Primary Validation 
     if not fullValidation(RentalID): 
         return jsonify({"error": "Session Transaction Glitch Detected"})

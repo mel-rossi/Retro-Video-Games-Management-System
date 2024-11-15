@@ -126,8 +126,6 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
 
     # Determine the table / .csv to be ranked  
     
-    global df_r, df_m, df_g 
-
     if validRank(rankType): 
         # Rank Video Games 
         if rankType.lower() == 'game': 

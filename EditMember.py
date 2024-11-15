@@ -120,6 +120,8 @@ def fullValidation(MemberID, FirstName, LastName, PhoneNumber, Email):
 # Primary Validation : Process Input and perform modification if Validation Check passes
 def edit_member(MemberID, FirstName, LastName, PhoneNumber, Email): 
 
+    global df
+
     # Primary Validation 
     if not fullValidation(MemberID, FirstName, LastName, PhoneNumber, Email): 
         return jsonify({"error": "Session Transaction Glitch Detected"})

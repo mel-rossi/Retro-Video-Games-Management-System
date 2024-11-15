@@ -71,7 +71,9 @@ def fullValidation(FirstName, LastName, PhoneNumber, Email):
 # fullValidation 
 
 # Primary Validation : Process Input and perform modification if appropriate 
-def add_member(FirstName, LastName, PhoneNumber, Email): 
+def add_member(FirstName, LastName, PhoneNumber, Email):
+
+    global df
 
     # Primary Validation
     if not fullValidation(FirstName, LastName, PhoneNumber, Email): 

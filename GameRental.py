@@ -45,7 +45,8 @@ def rental_info(rentals):
 # rental_info
 
 # Number of unique Video Game IDs rented out 
-def game_num(df): 
+def game_num(df):
+
     rentals = active_filter(df)
     return len(rentals)
 # game_num

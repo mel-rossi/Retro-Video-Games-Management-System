@@ -26,6 +26,8 @@ def instanceNum(VideoGameInput):
 # Change VideoGame Availability to 'Unavailable'
 def rentOut(VideoGameInput):
 
+    global df_g
+
     # Check how many copies of VideoGameID are rented out
     rentalInstance = instanceNum(VideoGameInput)
 
@@ -43,7 +45,9 @@ def rentOut(VideoGameInput):
 
 # Change VideoGame Availability to 'Available'
 def returnGame(VideoGameInput):
-    
+   
+    global df_g
+
     # Check how many copies of VideoGameID are rented out 
     rentalInstance = instanceNum(VideoGameInput) 
 
@@ -62,6 +66,8 @@ def returnGame(VideoGameInput):
 # Increase Number of Active Rentals a Member has 
 def incRentals(MemberInput):
     
+    global df_m
+
     # Increments number of active rentals a Member has 
     df_m.loc[df_m['MemberID'] == MemberInput, 'CurRentals'] += 1
 
@@ -71,6 +77,8 @@ def incRentals(MemberInput):
 
 # Decrease Number of Active Rentals a Member has 
 def decRentals(MemberInput):
+
+    global df_m 
 
     # Decrements number of active rentals a Member has 
     df_m.loc[df_m['MemberID'] == MemberInput, 'CurRentals'] -= 1

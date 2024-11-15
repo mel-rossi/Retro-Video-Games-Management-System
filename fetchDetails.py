@@ -36,7 +36,12 @@ def read_games():
     df_g = pd.read_csv(VIDEOGAME_PATH)
 # read_games
 
-# Fetch Rentals 
+# Initial load of CSV files 
+read_rentals() 
+read_members() 
+read_games()
+
+# Fetch Rentals
 def get_r():
 
     global df_r
@@ -57,10 +62,6 @@ def get_g():
     return df_g
 # get_g
 
-# Initial load of CSV files 
-read_rentals() 
-read_members() 
-read_games() 
 
 # Write to Rentals 
 def write_rentals(df): 

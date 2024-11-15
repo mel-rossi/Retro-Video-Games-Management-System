@@ -67,7 +67,7 @@ def open_entry(VideoGameID, MemberID):
 
     # Primary Validation 
     if not fullValidation(VideoGameID, MemberID):
-           return jsonify({"error": "Session Transaction Glitch Detected"})
+        return jsonify({"error": "Session Transaction Glitch Detected"})
 
     # Generate the valid next RentalID for the Rental being added
     RentalID = generateRentalID() 

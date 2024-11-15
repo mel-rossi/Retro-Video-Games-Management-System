@@ -1,6 +1,6 @@
-import os 
 import pandas as pd 
 from flask_cors import CORS
+from fetchDetails import get_r
 from validateEntries import generateDate
 from validateEntries import validateVideoGameID
 from flask import request, jsonify, Blueprint
@@ -10,19 +10,14 @@ from flask import request, jsonify, Blueprint
 # Calculates Rental Stats : Number of Rentals & Average Rental Time 
 
 rentalstat_bp = Blueprint('RentalStat', __name__) 
-CORS(rentalstat_bp) 
+CORS(rentalstat_bp)
 
-# Load the .csv file 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
-RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv') 
-
-# Read .csv file into DataFrame 
-df = pd.read_csv(RENTAL_PATH)
+# Global Variable 
+df = get_r() # Rentals DataFrame 
 
 # Filter Rentals by Rental ID 
-def rental_filter(RentalInput): 
-    
+def rental_filter(RentalInput):
+
     return df[df['RentalID'] == RentalInput].copy() 
 # rental_filter
 
@@ -54,12 +49,14 @@ def avg_rental_time(rentals):
     today = pd.to_datetime(generateDate())
 
     # Convert date columns to datetime 
-    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'], errors='coerce')
+    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'], \
+                                          errors='coerce')
     startDate = rentals['StartDate']
 
     # Replace empty ReturnDate with today's date
-    if 'ReturnDate' not in rentals.columns or (rentals['ReturnDate'] == '-1').any(): 
-        returnDate = today
+    if 'ReturnDate' not in rentals.columns or \
+       (rentals['ReturnDate'] == '-1').any(): 
+           returnDate = today
         
     else:
         rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate']) 
@@ -92,27 +89,35 @@ def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
         count = pd.Series(0, index=range(1, 13))
     else: 
         # Convert StartDate to date time 
-        rentals['StartDate'] = pd.to_datetime(df['StartDate'], errors='coerce')
+        rentals['StartDate'] = pd.to_datetime(df['StartDate'], \
+                                              errors='coerce')
 
         # Extract Year and Month from StartDate 
         rentals['Year'] = rentals['StartDate'].dt.year
         rentals['Month'] = rentals['StartDate'].dt.month
 
         # If range is provided 
-        if rangeM or rangeY:
-            # Parse range 
-            if rangeM: 
-                start_month, end_month = map(int, rangeM.split('-')) # parse month range 
-                filters = ((rentals['Month'] >= start_month) & (rentals['Month'] <= end_month))
+        if rangeM or rangeY: # Parse Range
 
-            if rangeY: 
-                start_year, end_year = map(int, rangeY.split('-')) # Parse year range 
-                filters = ((rentals['Year'] >= start_year) & (rentals['Month'] <= end_year)) 
+            if rangeM: # Parse Month Range  
+                start_month, end_month = map(int, rangeM.split('-')) 
 
-            if rangeY and rangeM:
-                filters = ((rentals['Year'] == start_year) & (rentals['Month'] >= start_month)) 
-                filters |= ((rentals['Year'] == end_year) & (rentals['Month'] <= end_month))
-                filters |= ((rentals['Year'] > start_year) & (rentals['Year'] < end_year)) 
+                filters = ((rentals['Month'] >= start_month) \
+                         & (rentals['Month'] <= end_month))
+
+            if rangeY: # Parse Year Range 
+                start_year, end_year = map(int, rangeY.split('-')) 
+
+                filters = ((rentals['Year'] >= start_year) 
+                         & (rentals['Month'] <= end_year)) 
+
+            if rangeY and rangeM: # Parse Year AND Month Range
+                filters = ((rentals['Year'] == start_year) 
+                         & (rentals['Month'] >= start_month)) 
+                filters |= ((rentals['Year'] == end_year) 
+                          & (rentals['Month'] <= end_month))
+                filters |= ((rentals['Year'] > start_year) 
+                          & (rentals['Year'] < end_year)) 
 
             # Filter rentals by the range 
             rentals = rentals[filters]
@@ -132,18 +137,18 @@ def game_rent_by_month(VideoGameID, rangeM=None, rangeY=None):
 
     # Convert to DataFrame then to dictionary
     countDict = { 
-        "Rentals by Month": [{month: int(count[month])} for month in months.values()]
+        "Rentals by Month": [{month: int(count[month])} \
+                             for month in months.values()]
     }
 
     return countDict
-    #return countDict # for Testing purposes
 # game_rent_by_month 
 
 # Organize Rental Information
 def rental_info(status):
 
     # Default : Unbiased Rental Stats
-    rentals = df
+    rentals = read_rentals() 
 
     if status is not None: 
         # 'Inactive' Rental Stats
@@ -156,11 +161,11 @@ def rental_info(status):
 
     # Calculate average Rental Time
     average = avg_rental_time(rentals)
-    average = pd.DataFrame([average], columns=['Rental Time Average']) # Convert to DataFrame 
+    average = pd.DataFrame([average], columns=['Rental Time Average'])
 
     # Calculate how many rentals there have been 
     num = rent_num(rentals)
-    num = pd.DataFrame([num], columns=['Numbers of Rentals']) # Convert to DataFrame
+    num = pd.DataFrame([num], columns=['Numbers of Rentals'])
 
     # Drop 'RentalDuration' column 
     rentals = rentals.drop(columns=['RentalDuration'])

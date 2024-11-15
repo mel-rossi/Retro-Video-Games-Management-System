@@ -1,19 +1,17 @@
-import os 
 import pandas as pd 
 from flask_cors import CORS 
+from fetchDetails import get_m
 from MemberRental import extract_numbers
 from flask import request, jsonify, Blueprint
 
 # This programs searches though Members based on filters indicated through user input 
 
+# Blueprint
 searchmember_bp = Blueprint('SearchMember', __name__) 
 CORS(searchmember_bp) 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
-CSV_FILE = os.path.join(INVENTORY_DIR, 'Members.csv') 
-
-df = pd.read_csv(CSV_FILE) 
+# Global Variables 
+df = get_m() # Members DataFrame
 
 # Filter Members based on input 
 def filter_members(firstName=None, lastName=None, phone=None, email=None, limit=None):

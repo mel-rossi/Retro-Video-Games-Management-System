@@ -13,6 +13,7 @@ from RentalStat import rentalstat_bp
 from CloseRental import closerental_bp
 from SearchMember import searchmember_bp
 from MemberRental import memberrental_bp
+from fetchDetails import read_rentals, read_members, read_games
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, session
 from flask_session import Session
@@ -98,7 +99,9 @@ def login_page():
 
 @app.route('/VGIMS/manage') # opens manage page for editing/adding entries
 def manage_page():
-    return render_template('manageGames.html')
+    id = request.args.get('ID')
+    action = request.args.get('M_State')
+    return render_template('manageGames.html', game_id=id, manage_state=action)
 
 @app.route('/authenticator', methods=['POST']) # call route to check password when logging in
 def authenticator():
@@ -145,6 +148,13 @@ def check_session():
         return None
     if 'logged_in' not in session and request.path != '/VGIMS/login':
         return redirect('/VGIMS/login') # send to login page if expired
+
+@app.after_request # (re) read the CSVs
+def refresh_csv(response): 
+    read_rentals() 
+    read_members() 
+    read_games() 
+    return response
 
  # check session expiration at specific intervals
  # javascript frontend needs to call this route and handle logic    

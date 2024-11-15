@@ -1,5 +1,3 @@
-# This program sorts .CSVs
-import os 
 import pandas as pd 
 from flask_cors import CORS 
 from RentalStat import rent_num 
@@ -7,24 +5,22 @@ from GameRental import game_filter
 from RentalStat import rental_filter
 from MemberRental import member_filter
 from RentalStat import avg_rental_time
+from fetchDetails import get_r, get_m, get_g
 from flask import request, jsonify, Blueprint 
 
+# This program sorts through .csv files
+
+# Blueprint
 rank_bp = Blueprint('Rank', __name__) 
 CORS(rank_bp)
 
-# Load the .csv files 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
-RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv') 
-VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv') 
-MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv') 
+# Global Variables 
+df_r = get_r() # Rentals DataFrame 
+df_m = get_m() # Members DataFrame
+df_g = get_g() # (Video) Games DataFrame
 
-# Read .csv files into DataFrames 
-df1 = pd.read_csv(MEMBER_PATH) 
-df2 = pd.read_csv(RENTAL_PATH) 
-df3 = pd.read_csv(VIDEOGAME_PATH)
-
-# Sort .csv information based on Rental Time (Average Rental Time * Number of Rentals) 
+# Sort .csv information based on Rental Time : 
+#   (Average Rental Time * Number of Rentals) 
 def ranking(idName, filters, df, bias):
     
     # Iterate through DataFrame 
@@ -61,53 +57,52 @@ def limitOut(df, top):
 
 # Sorts dataframe by valueID
 def sort(df, valueID, bias):
+
     return df.sort_values(by=valueID, ascending=bias)
 # sort
 
 # Check whether the input for 'rank' is valid 
 def validRank(rank): 
-    valid = False
 
-    if rank is not None and (rank.lower() == 'game' or rank.lower() == 'member'): 
-        valid = True
+    if rank is not None and \
+       (rank.lower() == 'game' or rank.lower() == 'member'): 
+           return True
 
-    return valid
+    return False
 # validRank
 
 # Check whether the input for 'base' is valid 
 def validBase(base, rank): 
-    valid = False 
 
     if base is not None: 
         if base.lower() == 'id': 
-            valid = True 
+            return True 
         elif base.lower() == 'name':
             if validRank(rank):  
-                valid = True
+                return True
         elif rank.lower() == 'game': 
             if base.lower() == 'year' or base.lower() == 'genre':
-                valid = True
+                return True
  
-    return valid
+    return False
 # validBase
 
 # Check whether the input for 'sort' is valid
 def validSort(rank, base, sort): 
-    valid = False 
 
     if validBase(base, rank) and sort is not None: 
         if base.lower() == 'name': 
             if rank.lower() == 'game' and sort.lower() == 'publisher': 
-                valid = True
+                return True
 
             elif rank.lower() == 'member' and sort.lower() == 'surname':
-                valid = True
+                return True
 
         elif base.lower() == 'id': 
             if sort.lower() == 'game' or sort.lower() == 'member': 
-                valid = True
+                return True
 
-    return valid
+    return False
 # validSort
 
 # Check whether the input for 'top' is valid 
@@ -131,26 +126,28 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
 
     # Determine the table / .csv to be ranked  
     
+    global df_r, df_m, df_g 
+
     if validRank(rankType): 
         # Rank Video Games 
         if rankType.lower() == 'game': 
             idName = 'VideoGameID' 
             filters = game_filter
-            df = df3
+            df = df_g
             valueID = 'Title'
 
         # Rank Members 
         elif rankType.lower() == 'member': 
             idName = 'MemberID'
             filters = member_filter 
-            df = df1
+            df = df_m
             valueID = 'FirstName'
 
     # Default = Rank Rentals
     else: 
         idName = 'RentalID'
         filters = rental_filter 
-        df = df2
+        df = df_r
 
     # Determine additional sorting factors 
 
@@ -208,8 +205,8 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
 @rank_bp.route('/rank', methods=['POST']) 
 def rank_route(): 
     data = request.json # Get json data from POST body 
-    ranked = sortingMethod(data.get('rank'), data.get('base'), data.get('sort'), 
-                           data.get('top'), data.get('trend'))
+    ranked = sortingMethod(data.get('rank'), data.get('base'), \
+                      data.get('sort'), data.get('top'), data.get('trend'))
 
     data = { 
         "Ranked": ranked.to_dict(orient='records') 

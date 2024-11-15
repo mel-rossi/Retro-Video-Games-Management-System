@@ -1,21 +1,21 @@
-import os 
 import pandas as pd 
 from flask_cors import CORS
 from validateEntries import generateMemberID
+from fetchDetails import get_m, write_members
 from validateEntries import validateNameFormat
 from validateEntries import validateEmailFormat
 from validateEntries import validatePhoneFormat
 from flask import request, jsonify, Blueprint, session 
 
-# This file allows the use to add new entries to the Members Tablle 
+# This file allows the use to add new entries to the Members Table 
 
+# Blueprint 
 addmember_bp = Blueprint('AddMember', __name__)
 CORS(addmember_bp) 
-addmember_bp.secret_key = 'supersecretkey' # Session Management 
+addmember_bp.secret_key = 'supersecretkey' # Session Management
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory') 
-CSV_FILE = os.path.join(INVENTORY_DIR, 'Members.csv') 
+# Global Variables
+df = get_m() # Members DataFrame 
 
 # Dry Run : Initial Input Validation 
 def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
@@ -54,9 +54,8 @@ def dry_run_add_member(FirstName, LastName, PhoneNumber, Email):
         "Last Name Entered": LastName,
         "Phone Number Entered": PhoneNumber, 
         "Email Entered": Email,  
-        "Message": "Please confirm the details"
+        "message": "Please confirm the details"
     }), 200
-
 # dry_run_add_member
 
 def fullValidation(FirstName, LastName, PhoneNumber, Email): 
@@ -84,9 +83,6 @@ def add_member(FirstName, LastName, PhoneNumber, Email):
     # Set Number of Current Rentals to 0 
     CurRentals = 0 
 
-    # Read CSV file into a DataFrame 
-    df = pd.read_csv(CSV_FILE)
-
     # Make a new row (registration) 
     row = { 'MemberID': MemberID, 
             'FirstName': FirstName, 
@@ -96,16 +92,15 @@ def add_member(FirstName, LastName, PhoneNumber, Email):
             'CurRentals': CurRentals
     }
 
-    row = pd.DataFrame(row, index=[0]) # convert to DataFrame 
+    row = pd.DataFrame(row, index=[0]) # Convert to DataFrame 
 
-    df = pd.concat([df, row], ignore_index=True) 
+    df = pd.concat([df, row], ignore_index=True) # Update DataFrame 
 
-    # Write the updated DataFram back to the CSV file 
-    df.to_csv(CSV_FILE, index=False)
+    # Save updated DataFrame back to CSV file 
+    write_members(df)
 
     # Return the updated row as JSON 
     return jsonify({"Registration Added": row.to_dict(orient='records')}), 200
-
 # add_member 
 
 @addmember_bp.route('/add_member', methods=['POST']) 
@@ -120,7 +115,7 @@ def add_member_route():
                                   data.get('PhoneNumber'), 
                                   data.get('Email')) 
 
-    # Confirm: Primary validation and prooceed with adding entry if appropriate
+    # Confirm: Primary validation and (if valid) add member
     if data.get('Confirm').lower() == 'confirmed': 
         FirstName = session.get('FirstName')
         LastName = session.get('LastName') 

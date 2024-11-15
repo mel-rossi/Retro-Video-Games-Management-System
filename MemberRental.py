@@ -1,38 +1,30 @@
-import os
 import re
 import pandas as pd
 from flask_cors import CORS
 from RentalStat import rent_num
 from RentalStat import active_filter 
 from RentalStat import inactive_filter
-from RentalStat import avg_rental_time 
+from RentalStat import avg_rental_time
 from validateEntries import generateDate
-from validateEntries import validateMemberID 
+from validateEntries import validateMemberID
+from fetchDetails import get_r, get_m, get_g
 from flask import request, jsonify, Blueprint
 
 # This program Outputs Rental History based off of Member (ID, Phone Number, or Email) 
 
+# Blueprint
 memberrental_bp = Blueprint('MemberRental', __name__)
 CORS(memberrental_bp)
 
-# Load the .csv files
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
-MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
-RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
-VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
-
-# Read .csv files into DataFrames 
-df1 = pd.read_csv(MEMBER_PATH)
-df2 = pd.read_csv(RENTAL_PATH)
-df3 = pd.read_csv(VIDEOGAME_PATH)
-
-# Functions
+# Global Variables
+df_r = get_r() # Rentals DataFrame
+df_m = get_m() # Members DataFrame
+df_g = get_g() # (Video) Games DataFrame 
 
 # Filter Rentals by Member 
 def member_filter(MemberInput): 
 
-    return df2[df2['MemberID'] == MemberInput].copy()
+    return df_r[df_r['MemberID'] == MemberInput].copy()
 # member_filter
 
 # Check whether Rentals of said Member exist
@@ -44,7 +36,7 @@ def rental_exist(MemberInput):
 # Grab only 'VideoGameID' and 'Title' from Video Game details
 def game_title():
 
-    return df3[['VideoGameID', 'Title']]
+    return df_g[['VideoGameID', 'Title']]
 # game_title
 
 # Extract digits from the phone number 
@@ -75,29 +67,35 @@ def rental_info(rentals):
 # Process input
 def find_member(user_input):
     # Empty DataFrame to return in place of rentals
-    empty = pd.DataFrame() 
+    empty = pd.DataFrame()
+
+    if user_input is None: 
+        return empty, empty, empty, empty
 
     # Member ID input if only 4 digits
     if user_input.isdigit() and len(user_input) == 4:
         user_input = "M" + user_input
 
     # Member ID input with M + 4 digits 
-    elif user_input.upper().startswith("M") and len(user_input) == 5 and user_input[1:].isdigit():
-        user_input = user_input.upper(); # Case insensitivity: takes care if input starts with "m" instead of "M" 
+    elif user_input.upper().startswith("M") and len(user_input) == 5 \
+                                            and user_input[1:].isdigit():
+        user_input = user_input.upper(); # m = M 
 
     # Non MemberID input 
     else:
         # Email input : If input contains '@' 
         if '@' in user_input:
             # Retrieve MemberID associated with Email
-            user_input = df1.loc[df1['Email'].str.lower() == user_input.lower(), 'MemberID'].values
+            user_input = df_m.loc[df_m['Email'].str.lower() == \
+                         user_input.lower(), 'MemberID'].values
 
         # Phone Number input : If input contains 10 digits
         if sum(char.isdigit() for char in user_input) == 10: 
             digits = extract_numbers(user_input) # Extract digits 
 
             # Retrieve MemberID associated with Phone Number 
-            user_input = df1.loc[df1['PhoneNumber'].apply(extract_numbers) == digits, 'MemberID'].values
+            user_input = df_m.loc[df_m['PhoneNumber'].apply(extract_numbers) \
+                                       == digits, 'MemberID'].values
 
         # Invalid Phone Number or Email
         if len(user_input) <= 0:
@@ -110,7 +108,7 @@ def find_member(user_input):
     # Member ID input validation 
     if validateMemberID(user_input):
         # Retrieve Member details based on MemberID
-        member = df1[df1['MemberID'] == user_input] 
+        member = df_m[df_m['MemberID'] == user_input] 
 
         # Check whether rentals with this MemberID exist 
         exist = rental_exist(user_input)
@@ -125,11 +123,11 @@ def find_member(user_input):
 
             # Calculate average Rental Time of said Member 
             average = avg_rental_time(rentals)
-            average = pd.DataFrame([average], columns=['Rental Time Average']) # Convert to DataFrame 
+            average = pd.DataFrame([average], columns=['Rental Time Average'])
 
             # Calculate how many times said Video Game has been Rented Out 
-            numRentals = rent_num(rentals)
-            numRentals = pd.DataFrame([numRentals], columns=['Numbers of Rentals']) # Convert to DataFrame 
+            numRent = rent_num(rentals)
+            numRent = pd.DataFrame([numRent], columns=['Number of Rentals']) 
 
             # Merge average & numRentals into Rental Stats 
             rentalStats = pd.concat([average, numRentals], axis=1)
@@ -151,7 +149,8 @@ def member_rental_route():
     data = request.json # Get json data from POST body
     user_input = data.get('option') # Extract 'option' field
 
-    member, activeRentals, inactiveRentals, rentalStats = find_member(user_input)
+    member, activeRentals, inactiveRentals, rentalStats = \
+                                                find_member(user_input)
 
     data = {
         "Member": member.to_dict(orient='records'),
@@ -166,5 +165,7 @@ def member_rental_route():
 
     # Invalid Input 
     else:
-        return jsonify ({"error": "No member found with the provided ID, phone number, or email."}), 404
+        return jsonify ({"Error": \
+                "No member found with the provided ID, phone number, or email."\
+        }), 404
 # member_rental_route

@@ -96,6 +96,11 @@
     margin-bottom: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Lato', sans-serif;
+    transition: transform 0.3s ease;
+}
+
+.rental-card:hover {
+    transform: translateY(-5px);
 }
 
 .rental-card p {

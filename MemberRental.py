@@ -130,7 +130,7 @@ def find_member(user_input):
             numRent = pd.DataFrame([numRent], columns=['Number of Rentals']) 
 
             # Merge average & numRentals into Rental Stats 
-            rentalStats = pd.concat([average, numRentals], axis=1)
+            rentalStats = pd.concat([average, numRent], axis=1)
 
             return member, activeRentals, inactiveRentals, rentalStats
 

@@ -114,7 +114,7 @@ def find_game(userInput=None, output=None):
                         columns=['Number of Copies Rented Out']) 
 
             # Merge average & numRentals into one row
-            rentalStats = pd.concat([average, numRentals, rentedNum], axis=1)
+            rentalStats = pd.concat([average, numRent, rentedNum], axis=1)
 
             return game, activeRentals, inactiveRentals, rentalStats
 

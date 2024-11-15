@@ -69,6 +69,10 @@ def sort_by_rank(results):
 @searchgame_bp.route('/search_game', methods=['POST'])
 def search_game_route():
 
+    # Update global DataFrame
+    global df
+    df = get_g()
+
     data = request.json # Get json data from POST body
     results = filter_games(data.get('title'), data.get('publisher'), \
                         data.get('start_year'), data.get('end_year'), \

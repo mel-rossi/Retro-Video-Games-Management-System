@@ -106,7 +106,11 @@ def open_entry(VideoGameID, MemberID):
 # add_entry
 
 @openrental_bp.route('/open_rental', methods=['POST']) 
-def open_rental_route(): 
+def open_rental_route():
+
+    # Update global DataFrame
+    global df
+    df = get_r() 
 
     data = request.json # Get json data from POST body 
 

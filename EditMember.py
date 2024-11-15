@@ -152,7 +152,11 @@ def edit_member(MemberID, FirstName, LastName, PhoneNumber, Email):
 # edit_member 
 
 @editmember_bp.route('/edit_member', methods=['POST'])
-def edit_member_route(): 
+def edit_member_route():
+
+    # Update global DataFrame
+    global df
+    df = get_m()
     
     data = request.json # Get json data from POST body 
 

@@ -87,7 +87,11 @@ def close_entry(RentalID):
 # close_entry
 
 @closerental_bp.route('/close_rental', methods=['POST'])
-def close_rental_route(): 
+def close_rental_route():
+
+    # Update global DataFrame
+    global df 
+    df = get_r() 
 
     data = request.json # Get json data from POST body 
 

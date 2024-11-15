@@ -182,6 +182,10 @@ def rental_info(status):
 @rentalstat_bp.route('/rental_stat', methods=['POST']) 
 def rental_stat_route():
 
+    # Update global DataFrame
+    global df
+    df = get_r() 
+
     data = request.json # Get json data from POST body 
 
     option = data.get('option')

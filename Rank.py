@@ -201,7 +201,14 @@ def sortingMethod(rankType=None, sortBy=None, sortAdd=None, top=None, bias=None)
 # sortingMethod 
 
 @rank_bp.route('/rank', methods=['POST']) 
-def rank_route(): 
+def rank_route():
+
+    # Update global DataFrame 
+    global df_r, df_m, df_g
+    df_r = get_r() 
+    df_m = get_m() 
+    df_g = get_g() 
+
     data = request.json # Get json data from POST body 
     ranked = sortingMethod(data.get('rank'), data.get('base'), \
                       data.get('sort'), data.get('top'), data.get('trend'))

@@ -146,6 +146,11 @@ def find_member(user_input):
 @memberrental_bp.route('/member_rental', methods=['POST'])
 def member_rental_route():
 
+    global df_r, df_m, df_g 
+    df_r = get_r() 
+    df_m = get_m() 
+    df_g = get_g() 
+
     data = request.json # Get json data from POST body
     user_input = data.get('option') # Extract 'option' field
 

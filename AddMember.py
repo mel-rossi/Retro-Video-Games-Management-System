@@ -106,7 +106,11 @@ def add_member(FirstName, LastName, PhoneNumber, Email):
 # add_member 
 
 @addmember_bp.route('/add_member', methods=['POST']) 
-def add_member_route(): 
+def add_member_route():
+
+    # Update global DataFrame
+    global df
+    df = get_m()
 
     data = request.json # Get json data from POST body 
 

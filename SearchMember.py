@@ -48,7 +48,11 @@ def filter_members(firstName=None, lastName=None, phone=None, email=None, limit=
 # filter_members
 
 @searchmember_bp.route('/search_member', methods=['POST']) 
-def search_member_route(): 
+def search_member_route():
+
+    # Update global DataFrame
+    global df 
+    df = get_m()
 
     data = request.json # Get json data from POST body 
     results = filter_members(data.get('forename'), data.get('surname'), data.get('phone'), data.get('email'), data.get('limit')) 

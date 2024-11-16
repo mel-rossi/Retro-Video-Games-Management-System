@@ -14,7 +14,30 @@ p {
   font-family: 'Lato', sans-serif;
   letter-spacing: 1px;
   font-size:14px;
-  color: #333333;
+  color: white;
+}
+
+input,
+select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 200px;
+}
+
+.enter-button {
+  background-color: #ff5722;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.enter-button:hover {
+  background-color: #e64a19;
 }
 
 .header {  
@@ -45,7 +68,7 @@ p {
 }
 
 .inner-header {
-  height:65vh;
+  height:85vh;
   width:100%;
   margin: 0;
   padding: 0;
@@ -96,6 +119,7 @@ p {
   animation-delay: -5s;
   animation-duration: 20s;
 }
+
 @keyframes move-forever {
   0% {
    transform: translate3d(-90px,0,0);
@@ -117,4 +141,44 @@ p {
   h1 {
     font-size:24px;
   }
+}
+
+/* Modal container - hidden by default */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4); /* Black background with opacity */
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 10px;
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }

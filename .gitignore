@@ -1,0 +1,4 @@
+
+*.pyc
+/sessions
+/__pycache__

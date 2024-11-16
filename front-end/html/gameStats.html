@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game Statistics</title>
+        <link rel="stylesheet" href="../css/shared-styles.css">
+        <link rel="stylesheet" href="../css/game-stats.css">
+        
+    </head>
+    <body>        
+        <div class="header">
+            <div class="inner-header flex">
+                <!-- Back Button -->
+                 <button class="back-button" onclick="window.location.href='/VGIMS/games'">Back</button>
+
+                <!-- Title -->
+                <div class="title-container">
+                    <h1>Game Stats</h1>
+                </div>
+
+                <!-- Game Stats Section -->
+                 <div id="gameData" class="stats-container" data-videogame-id="{{ videogame_id }}">
+                    <h2 id="gameTitle"></h2>
+
+                    <div class="charts-column">
+                        <div class="inner-charts-column">
+
+                            <!-- Rank and Average -->
+                            <div class = "summary-container">
+                                <h3>Performance Summary</h3>
+                                <div class="summary-box">
+                                    <h4 id="rankHeader">Ranked #</h4>
+                                    <h4 id = "averageHeader">Average Rental Time: </h4>
+                                </div>
+                            </div>
+
+                            <!-- Rental History (LineChart)-->
+                            <div class = "summary-container">
+                                <h3>Monthly Rentals</h3>
+                                <div class="rental-box">
+                                    <canvas id="monthlyRentalChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Inventory (Pie Chart) -->
+                        <div class="inventory-box">
+                            <h3>Inventory</h3>
+                            <canvas id="inventoryChart"></canvas>
+                        </div> 
+                    </div>
+
+                    <!-- Add Rent Button -->
+                    <div>
+                        <button id="rentButton" class="enter-button" onclick="rentClick()">Rent</button>
+                    </div>
+                 </div>
+
+                 <!--Frame for adding a rental-->
+                 <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <iframe id="modalIframe" src="" width="100%" height="400px"></iframe>
+                    </div>
+                </div>
+            </div>
+                 
+                 <!-- The animated waves -->
+                 <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                 <defs>
+                     <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                 </defs>
+                 <g class="parallax">
+                     <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
+                     <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                     <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                     <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                 </g>
+                </svg>                  
+            
+        </div>
+        <script src="../js/ajax.js"></script>
+        <script src="../js/gameStats.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+        
+
+    </body>
+</html>

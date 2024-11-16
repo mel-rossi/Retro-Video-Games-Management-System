@@ -1,177 +1,66 @@
-# This program Shows History based off of the Video Game
-
-# Imports 
-from flask import Flask, jsonify, request
-import pandas as pd 
-from validateEntries import generateDate
-from validateEntries import validateVideoGameID
-from flask_cors import CORS
 import numpy as np
+import pandas as pd
+from flask_cors import CORS
+from RentalStat import rent_num
+from RentalStat import active_filter 
+from RentalStat import inactive_filter
+from RentalStat import avg_rental_time
+from fetchDetails import get_r, get_g
+from flask import request, jsonify, Blueprint 
+from validateEntries import validateVideoGameID
 
+# This program Outputs Rental History based off of Video Game (ID or Title) 
 
-app = Flask(__name__)
-CORS(app)
+# Blueprint
+gamerental_bp = Blueprint('GameRental', __name__)
+CORS(gamerental_bp)
 
-# Data Frames 
+# Global Variables 
+df_r = get_r() # Rentals DataFrame
+df_g = get_g() # (Video) Games DataFrame
 
-# Load Rentals & Video Games
-df1 = pd.read_csv('Inventory/Rentals.csv')
-df2 = pd.read_csv('Inventory/VideoGames.csv')
+# Filter Rentals by Video Game 
+def game_filter(VideoGameInput): 
 
-# Functions
+    return df_r[df_r['VideoGameID'] == VideoGameInput].copy()
+# game_filter
 
-# Filter Rental rows where VideoGameID matches VideoGameInput 
-def filter_rentals(VideoGameInput): 
-    return df1[df1['VideoGameID'] == VideoGameInput].copy()
-# filter_rentals
+# Check whether Rentals of said Video Game exist
+def rental_exist(VideoGameInput):
 
-# Check whether Rentals of said videoGame exist
-def rental_exist(VideoGameInput): 
-    return not filter_rentals(VideoGameInput).empty
+    return not game_filter(VideoGameInput).empty
 # rental_exist 
 
-# Organize Rental Information of VideoGameID
-def rental_info(VideoGameInput): 
-    # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput) 
+# Organize Rental Information of Video Game
+def rental_info(rentals):
 
-    # Display Rental Registrations based on VideoGameID
-    info = "" 
-    for index, row in rentals.iterrows(): 
-        dic = row.to_dict() # Convert to dictionary 
-        for key, value in dic.items(): 
-            info += f"{key}: {value}\n"
-        info += '\n' # Add a newline between entries
+    # Drop the 'VideoGameID' column 
+    rentals = rentals.drop(columns=['VideoGameID'])
 
-    return info 
-# rental_info 
+    # Separate rentals into active and inactive rentals 
+    activeRentals = active_filter(rentals) 
+    inactiveRentals = inactive_filter(rentals) 
 
-# Calculate : Average Rental Time (Return - Start Date)
-def avg_rental_time(VideoGameInput):
-    # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput) 
+    return activeRentals, inactiveRentals 
+# rental_info
 
-    # Convert date columns to datetime
-    rentals['StartDate'] = pd.to_datetime(rentals['StartDate'])
-    rentals['ReturnDate'] = pd.to_datetime(rentals['ReturnDate'])
+# Number of unique Video Game IDs rented out 
+def game_num(df):
 
-    # Replace empty ReturnDate with today's data
-    today = pd.to_datetime(generateDate())
-    rentals['ReturnDate'] = rentals['ReturnDate'].fillna(today)
+    rentals = active_filter(df)
+    return len(rentals)
+# game_num
 
-    # Calculate rental duration in days
-    rentals['RentalDuration'] = (rentals['ReturnDate'] - rentals['StartDate']).dt.days
+# Process Input
+def find_game(userInput=None, output=None):
 
-    # Calculate the average rental duration 
-    average = rentals['RentalDuration'].mean()
+    empty = pd.DataFrame()
 
-    return average
-# avg_rental_time 
-
-# Calculate : How many times VideoGameID has been rented out 
-def rent_num(VideoGameInput):
-    # Filter relevant rentals 
-    rentals = filter_rentals(VideoGameInput) 
-
-    # Initialize number of rentals
-    num = 0
-
-    # Iterate through teh column VideoGameID in Rentals 
-    for VideoGameID in df1['VideoGameID']: 
-        if VideoGameID == VideoGameInput: 
-            num += 1
-
-    return num
-# rent_num
-
-# Calculate : How many active rentals are there right now? 
-def active_rentals(): 
-    active = 0
-
-    # Iterate through Status column in Rentals 
-    for Status in df1['Status']: 
-        if Status == 'Active': 
-            active += 1
-
-    return active
-# active_rentals
-
-# Calculate : How many inactive rentals are there right now? 
-def inactive_rentals(): 
-    inactive = 0
-
-    # Iterate through Status column in Rentals 
-    for Status in df1['Status']:
-        if Status == 'Inactive': 
-            inactive += 1
-
-    return inactive
-# inactive_rentals
-
-# Calculate : How many rentals have there been ever? 
-def all_rentals(): 
-    rentals = 0
-
-    for _, _ in df1.iterrows(): 
-        rentals += 1
-  
-    return rentals
-# all_rentals
-
-# Rank Video Games based on number of times they have been rented out
-def rank():
-    rentals = [] 
-
-    # Iterate through VideoGameID column in Video Games 
-    for VideoGameID in df2['VideoGameID']: 
-        exist = rental_exist(VideoGameID)  
-        numRentals = rent_num(VideoGameID) 
-        rentals.append((VideoGameID, numRentals)) 
-    
-    # Convert to DataFrame for easy sorting 
-    sortByRentals = pd.DataFrame(rentals, columns=['VideoGameID', 'rentNum'])
-
-    # Merge rentals with VideoGames DataFrame 
-    merge = pd.merge(df2, sortByRentals, on='VideoGameID', how='left')
-    merge['rentNum'] = merge['rentNum'].fillna(0) # Fill in no rentals with 0 
-
-    # Sort merged DataFrame by rentNum in descending order
-    sortedGames = merge.sort_values(by='rentNum', ascending=False)
-
-    # Drop the 'rentNum' column 
-    sortedGames = sortedGames.drop(columns=['rentNum'])
-
-    # Convert sorted Games DataFrame to dictionary 
-    sortedGames = sortedGames.to_dict(orient='records')
-
-    # Return sorted Games
-    return sortedGames
-# rank
-
-def route_input(userInput):
-    # Rank Rentals based on numRentals 
-    if userInput.lower() == 'rank':
-        sortedRentals = rank() 
-        # print(sortedRentals)
-        return sortedRentals
-
-    # Number of active Rentals
-    elif userInput.lower() == 'active': 
-        active = active_rentals()
-        return active
-
-    # Number of inactive Rentals 
-    elif userInput.lower() == 'inactive': 
-        inactive = inactive_rentals()
-        return inactive
-    
-    # Number of all Rentals ever made
-    elif userInput.lower() == 'all': 
-        rentalsEver = all_rentals()
-        return rentalsEver
+    if userInput is None: 
+        return empty, empty, empty, empty
 
     # Video Game ID input if only 4 digits
-    elif userInput.isdigit() and len(userInput) == 4: 
+    if userInput.isdigit() and len(userInput) == 4: 
         userInput = "V" + userInput
 
     # Video Game ID input with V + 4 digits
@@ -179,56 +68,94 @@ def route_input(userInput):
         pass
 
     # Video Game Title input 
-    else: 
-        userInput = df2.loc[df2['Title'].str.lower() == userInput.lower(), 'VideoGameID'].values
+    else:
+        # Retrieve VideoGameID associated with Title
+        userInput = df_g.loc[df_g['Title'].str.lower() == userInput.lower(), \
+                             'VideoGameID'].values
         
         # Invalid Title input
         if len(userInput) <= 0: 
-            return None
+            return empty, empty, empty, empty
         elif len(userInput) == 1: 
             userInput = userInput[0]
              
     # Video Game ID input validation
-    if validateVideoGameID(userInput): 
+    if validateVideoGameID(userInput):
+        # Retrieve Video Game details based on VideoGameID
+        game = df_g[df_g['VideoGameID'] == userInput] 
+
         # Check whether rentals of this VideoGameID exist 
         exist = rental_exist(userInput)
 
+        # Filter Rentals by Video Game 
+        rentals = game_filter(userInput) 
+
         # There is at least one Rental with VideoGameID
-        if exist: 
-            # Rentals related to inputed VideoGameID 
-            rentalData = rental_info(userInput)
+        if exist:
+            
+            # Only Video Game Stat is desired 
+            if not output == None and output.lower() == 'stat': 
+                activeRentals = empty 
+                inactiveRentals = empty
+            else: 
+                # Rentals (active & inactive) rentals with this VideoGameID 
+                activeRentals, inactiveRentals = rental_info(rentals) 
 
             # Calculate average Rental Time of said Video Game 
-            average = avg_rental_time(userInput)
+            average = avg_rental_time(rentals)
+            average = pd.DataFrame([average], columns=['Rental Time Average'])
 
-            # Calcultae how many times said Video Game has been Rented Out 
-            numRentals = rent_num(userInput) 
+            # Calculate how many times said Video Game has been Rented Out 
+            numRent = rent_num(rentals) 
+            numRent = pd.DataFrame([numRent], columns=['Numbers of Rentals'])
 
-            return f"Rentals: {rentalData} Rental Time Average: {average} Number of Rentals: {numRentals}"
+            # Calculate how many copies of said Video Game has been Rented out 
+            rentedNum = game_num(rentals)
+            rentedNum = pd.DataFrame([rentedNum], \
+                        columns=['Number of Copies Rented Out']) 
+
+            # Merge average & numRentals into one row
+            rentalStats = pd.concat([average, numRent, rentedNum], axis=1)
+
+            return game, activeRentals, inactiveRentals, rentalStats
 
         # No Rentals with VideoGameID 
         else:
-            return "Rentals: 0"
+            return game, empty, empty, empty
 
     # Invalid VideoGameID 
     else: 
-        return None
+        return empty, empty, empty, empty
+# find_game
 
-# get_input
-
-@app.route('/game_rental', methods=['GET', 'POST']) # Both GET and POST are possible 
+@gamerental_bp.route('/game_rental', methods=['POST']) 
 def game_rental_route():
-    if request.method == 'POST': 
-        VideoGameID = request.json.get('input')
+    
+    global df_r, df_g
+    df_r = get_r() # Rentals DataFrame
+    df_g = get_g() # (Video) Games DataFrame
+
+    data = request.json # Get json data from POST body 
+    game, activeRentals, inactiveRentals, rentalStats = \
+            find_game(data.get('option'), data.get('out'))
+   
+    if activeRentals.empty and inactiveRentals.empty: 
+        data = { 
+            "Video Game": game.to_dict(orient='records'), 
+            "Rental Stats": rentalStats.to_dict(orient='records')
+        } 
     else: 
-        VideoGameID = request.args.get('input')
+        data = {
+            "Video Game": game.to_dict(orient='records'), 
+            "Active Rentals": activeRentals.to_dict(orient='records'), 
+            "Inactive Rentals": inactiveRentals.to_dict(orient='records'), 
+            "Rental Stats": rentalStats.to_dict(orient='records'), 
+        } 
 
-    videoGame = route_input(VideoGameID)
+    # Valid Input 
+    if not game.empty: 
+        return jsonify(data)
 
-    if videoGame: 
-        return jsonify(videoGame)
+    # Invalid Input
     else: 
-        return jsonify({"error": "No special call nor video game with provided ID or name"}), 404
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        return jsonify({"error": "No video game found with the provided ID or title."}), 404

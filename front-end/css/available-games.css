@@ -16,6 +16,72 @@
     background-color: #45a049;
 }
 
+/* Style the dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style the button to look like a select element */
+.dropdown button {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px; /* Match the padding of the select element */
+    cursor: pointer;
+    width: 200px; /* Set the width to match the select element */
+    height: 40px; /* Adjust height to match the select element */
+    text-align: left;
+    font-size: 16px;
+    border-radius: 5px; /* Match border-radius with select */
+    box-sizing: border-box; /* Ensures padding does not affect the element size */
+}
+
+/* Add a small arrow to the dropdown button */
+.dropdown button::after {
+    content: "▼";
+    float: right;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Style the dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 1;
+    width: 150px;
+    border-radius: 4px;
+    text-align: left;
+}
+
+/* Show the dropdown content on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Style each checkbox item */
+.dropdown-content label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+/* Style the checkboxes */
+.dropdown-content input[type="checkbox"] {
+    margin-left: auto;
+    transform: scale(1.1);
+}
+
 /* Title Styling */
 .title-container {
     text-align: center;
@@ -35,15 +101,6 @@
     gap: 15px;
     margin-top: 20px;
     padding-bottom: 20px;
-}
-
-.search-filter-container input, 
-.search-filter-container select {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    width: 200px;
 }
 
 .search-filter-container .search-button {
@@ -69,27 +126,15 @@
     padding: 10px;
     border-radius: 15px;
     overflow-y: auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-    background-color: rgba(255, 255, 255, 0.741); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.741);
     border: 1px solid #ddd;
     padding-top: 10px;
-    scrollbar-width: none;
-    scrollbar-color: #888 #f1f1f1;
-}
 
-.game-list-container::-webkit-scrollbar {
-    width: 12px;
-}
-
-.game-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 15px;
-}
-
-.game-list-container::-webkit-scrollbar-thumb {
-    background-color: #888; 
-    border-radius: 10px;
-    border: 3px solid #f1f1f1;
+    /* Hide scrollbar initially */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.5s;
 }
 
 .game-list {
@@ -106,6 +151,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
+    text-decoration: none;
 }
 
 .game-card:hover {

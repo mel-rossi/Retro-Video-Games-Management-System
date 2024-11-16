@@ -10,7 +10,7 @@
                 <h1>Video Game Management System</h1>                
                 <div id="buttonArea">
                     <button type="button" value="AvailableGames" onclick="clicked(this)">Check Available Games</button>
-                    <button type="button" value="CheckStatus" onclick="clicked(this)">Check Customer Status</button>
+                    <button type="button" value="CheckStatus" onclick="clicked(this)">Check Customer Status</button>                    
                 </div>
             </div>            
 
@@ -37,10 +37,10 @@
 <script>
     function clicked(button) {
         if (button.value == "AvailableGames") {
-            window.location.href = "availableGames.html";
+            window.location.href = "/VGIMS/games";
         }
         else if (button.value == "CheckStatus") {
-            window.location.href = "customerStatus.html";
+            window.location.href = "/VGIMS/status";
         }
     }
 </script>

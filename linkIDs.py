@@ -2,19 +2,20 @@
 
 # Imports 
 import pandas as pd
+from fetchDetails import write_members
+from fetchDetails import get_r, get_m, get_g
 
-# Read VideoGames 
-df1 = pd.read_csv('Inventory/VideoGames.csv')
+# Global Variables 
+df_r = get_r() # Rentals DataFrame
+df_m = get_m() # Members DataFrame
+df_g = get_g() # (Video) Games DataFrame
 
-# Read Members
-df2 = pd.read_csv('Inventory/Members.csv')
+# How many copies of a Video Game are currently rented out
+def instanceNum(VideoGameInput):
 
-# Read Rentals
-df3 = pd.read_csv('Inventory/Rentals.csv')
-
-def instanceNum(VideoGameInput): 
     # Instances of VideoGameInput when Status is Active 
-    rentals = df3.loc[(df3['VideoGameID'] == VideoGameInput) & (df3['Status'] == 'Active')]
+    rentals = df_r.loc[(df_r['VideoGameID'] == VideoGameInput) \
+                     & (df_r['Status'] == 'Active')]
 
     # Number of instances
     rentals = len(rentals)
@@ -25,47 +26,63 @@ def instanceNum(VideoGameInput):
 # Change VideoGame Availability to 'Unavailable'
 def rentOut(VideoGameInput):
 
+    global df_g
+
     # Check how many copies of VideoGameID are rented out
     rentalInstance = instanceNum(VideoGameInput)
 
     # Check if Active Rental Instances are the same as the Inventory Number 
-    if not df1.loc[(df1['VideoGameID'] == VideoGameInput) & (df1['Inventory'] == rentalInstance + 1)].empty: 
-        # Find the value of VideoGameID and change Availability to Unavailable 
-        df1.loc[df1['VideoGameID'] == VideoGameInput, 'Availability'] = 'Unavailable'
+    if not df_g.loc[(df_g['VideoGameID'] == VideoGameInput) \
+                & (df_g['Inventory'] == rentalInstance + 1)].empty:
 
-        # Save update DataFrame back to CSV file 
-        df1.to_csv('Inventory/VideoGames.csv', index=False)
+        # Find the value of VideoGameID and change Availability to Unavailable 
+        df_g.loc[df_g['VideoGameID'] == VideoGameInput, 'Availability'] \
+                                                  = 'Unavailable'
+
+        # Save updated DataFrame back to CSV file 
+        write_games(df_g)
 # rentOut
 
 # Change VideoGame Availability to 'Available'
-def returnGame(VideoGameInput): 
+def returnGame(VideoGameInput):
+   
+    global df_g
 
     # Check how many copies of VideoGameID are rented out 
     rentalInstance = instanceNum(VideoGameInput) 
 
     # Check if Active Rental Instances are less than the Inventory Number
-    if not df1.loc[(df1['VideoGameID'] == VideoGameInput) & (df1['Inventory'] <= rentalInstance)].empty: 
+    if not df_g.loc[(df_g['VideoGameID'] == VideoGameInput) \
+                  & (df_g['Inventory'] <= rentalInstance)].empty:
+
         # Find the value of VideoGameID and change Availability to Available    
-        df1.loc[df1['VideoGameID'] == VideoGameInput, 'Availability'] = 'Available'
+        df_g.loc[df_g['VideoGameID'] == VideoGameInput, 'Availability'] \
+                                                      = 'Available'
 
         # Save updated DataFrame back to CSV file
-        df1.to_csv('Inventory/VideoGames.csv', index=False)
+        write_games(df_g)
 # returnGame
 
 # Increase Number of Active Rentals a Member has 
-def incRentals(MemberInput): 
+def incRentals(MemberInput):
+    
+    global df_m
+
     # Increments number of active rentals a Member has 
-    df2.loc[df2['MemberID'] == MemberInput, 'CurRentals'] += 1
+    df_m.loc[df_m['MemberID'] == MemberInput, 'CurRentals'] += 1
 
     # Save updated DataFrame back to CSV file
-    df2.to_csv('Inventory/Members.csv', index=False)
+    write_members(df_m)
 # incRentals 
 
 # Decrease Number of Active Rentals a Member has 
-def decRentals(MemberInput): 
+def decRentals(MemberInput):
+
+    global df_m 
+
     # Decrements number of active rentals a Member has 
-    df2.loc[df2['MemberID'] == MemberInput, 'CurRentals'] -= 1
+    df_m.loc[df_m['MemberID'] == MemberInput, 'CurRentals'] -= 1
 
     # Save updated DataFrame back to CSV file
-    df2.to_csv('Inventory/Members.csv', index=False)
+    write_members(df_m)
 # decRentals

@@ -1,6 +1,34 @@
+class BaseRental {
+    constructor(manageContainer) {
+        this.resultText = document.createElement("p");;
+
+        this.manageContainer = manageContainer;
+    }
+
+    getResultText() {
+        return this.resultText;
+    }
+
+    getManageContainer() {
+        return this.manageContainer;
+    }
+
+    //change the text for the result element
+    resultTextChange(text) {
+        this.resultText.innerText = text;
+    }
+
+    //display error message
+    errorHandling(errorData) {
+        this.resultTextChange(errorData['Error']);
+    }
+}
+
 //TODO Design class better I think?
-class AddRental {
+class AddRental extends BaseRental {
     constructor(manageContainer, videoGameID) {
+        super(manageContainer);
+
         this.memberTextBox = null;
         this.resultContainer = null;
         this.resultText = null;
@@ -9,7 +37,6 @@ class AddRental {
 
         this.memberID = NaN;
         this.videoGameID = videoGameID;
-        this.manageContainer = manageContainer;
     }
 
     //create add rental html
@@ -34,6 +61,7 @@ class AddRental {
                 this.enterClick();
             }
 
+            //reset the textbox when we are not confirming a rental
             if (!this.confirmRentalStatus) {
                 this.resultTextChange("");
             }
@@ -54,34 +82,31 @@ class AddRental {
         let resultDiv = document.createElement("div");
         resultDiv.setAttribute("id", "resultInfo");
 
-        //Result text
-        let resultText = document.createElement("p");
-
-        this.resultText = resultText;
         this.resultContainer = resultDiv;
-        resultDiv.appendChild(resultText);
+
+        resultDiv.appendChild(super.getResultText());
         addInfoDiv.appendChild(resultDiv);
 
         fragment.appendChild(title);
         fragment.appendChild(addInfoDiv);
 
-        this.manageContainer.appendChild(fragment);
+        super.getManageContainer().appendChild(fragment);
     }
 
     enterClick() {
-         //if we are confirming to create the rental
-         if (this.confirmRentalStatus) {
-            this.confirmRental();
+        //if we are confirming to create the rental
+        if (this.confirmRentalStatus) {
+            confirmRental();
         }
         //if we are not confirming rental grab member info
         else {
             //handles valid customer input with given textbox
-            searchCustomer(this.memberTextBox, this.validCustomer.bind(this), this.errorHandling.bind(this));
+            searchCustomer(this.memberTextBox, this.validCustomer, this.errorHandling);
         }
     }
 
     //when customer data is valid make a request to add rental
-    validCustomer(data) {        
+    validCustomer(data) {
 
         this.memberID = data['Member'][0]['MemberID'];
 
@@ -93,9 +118,9 @@ class AddRental {
         postRequestParams('open_rental', params,
             () => {
                 this.confirmRentalStatus = true;
-                this.resultTextChange("Confirm rental for " + data['Member'][0]['FirstName'] + " " + data['Member'][0]['LastName']);
+                super.resultTextChange("Confirm rental for " + data['Member'][0]['FirstName'] + " " + data['Member'][0]['LastName']);
             },
-            this.errorHandling);
+            super.errorHandling);
     }
 
     //when a request was made that we can add rental, confirm the rental
@@ -108,28 +133,19 @@ class AddRental {
             'MemberID': this.memberID
         };
 
-        postRequestParams('open_rental', params, () => this.resultTextChange("Rental Complete!"), this.errorHandling);
-    }
-
-    //change the text for the result element
-    resultTextChange(text) {
-        this.resultText.innerText = text;
-    }
-
-    //display error message
-    errorHandling(errorData) {
-        this.resultTextChange(errorData['Error']);
+        postRequestParams('open_rental', params, () => super.resultTextChange("Rental Complete!"), super.errorHandling);
     }
 }
 
-class RemoveRental {
+class RemoveRental extends BaseRental {
     constructor(manageContainer, rentalID) {
+        super(manageContainer);
+
         this.resultContainer = null;
         this.resultText = null;
         this.confirmRentalStatus = false;
 
         this.rentalID = rentalID;
-        this.manageContainer = manageContainer;
     }
 
     createRemoveRental() {
@@ -146,9 +162,9 @@ class RemoveRental {
         //Button element to end rental
         let endButton = document.createElement("button");
         endButton.setAttribute("class", "enter-button");
-        endButton.onclick = () => this.endClick;
+        endButton.onclick = () => this.endClick();
         endButton.innerText = "End Rental";
-        
+
         closeInfoDiv.appendChild(endButton);
 
         //Result div to contain elements for result
@@ -170,31 +186,35 @@ class RemoveRental {
     }
 
     endClick() {
-        if(this.confirmRentalStatus){
-
+        if (this.confirmRentalStatus) {
+            this.confirmRental();
         }
-        else{
+        else {
             this.validRental();
-        }        
+        }
     }
 
-    validRental(){
+    validRental() {
         this.confirmRentalStatus = true;
 
         let params = {
             'RentalID': this.rentalID
         };
 
-        postRequestParams("close_rental", params, () => { }, () => { });
+        postRequestParams("close_rental", params,
+            (data) => {
+                super.resultTextChange(data['Message'] + "\n" + data['Registered Member (Name)'] + " close " + data['Registered Video Game (Title)']);
+            }, super.errorHandling);
     }
 
-    //change the text for the result element
-    resultTextChange(text) {
-        this.resultText = text;
-    }
+    confirmRental() {
+        this.confirmRentalStatus = false;
 
-    //display error message
-    errorHandling(errorData) {
-        this.resultTextChange(errorData['Error']);
+        let params = {
+            'Confirm': 'confirmed',
+            'RentalID': this.rentalID
+        };
+
+        postRequestParams("close_rental", params, () => super.resultTextChange("Rental has been closed"), super.errorHandling);
     }
 }

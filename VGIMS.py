@@ -15,15 +15,22 @@ from SearchMember import searchmember_bp
 from MemberRental import memberrental_bp
 from fetchDetails import read_rentals, read_members, read_games
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, session
+from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, session, g
 from flask_session import Session
 from datetime import timedelta
+from filelock import FileLock, Timeout
 
 # This program serves as the main entry point for the Web Application
 # When ran, opens main page and runs all the flask apps on startup
 # Also makes the url pretty instead of '.html'
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
+MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
+RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions') 
+FILE_PATHS = {VIDEOGAME_PATH, RENTAL_PATH, MEMBER_PATH}
 
 app = Flask(__name__, template_folder='front-end/html')
 app.config['SESSION_PERMANENT'] = True
@@ -111,8 +118,7 @@ def authenticator():
             if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
                 session['logged_in'] = True # creates session if password is correct
                 return jsonify({'valid': True, 'redirect_url' : '/VGIMS'})
-            else:
-                return jsonify({'valid' : False})
+    return jsonify({'valid' : False})
 # authenticator route
 
 # call route to change passwords (admin or employee)
@@ -141,7 +147,18 @@ def logout():
 
 @app.before_request # check session expiration before each request is sent
 def check_session():
+    writing_routes = ['/open_rental', '/close_rental', 
+                      '/edit_member', '/add_member']
     excluded_routes = ['authenticator'] # routes not effected
+    g.locks = {}
+    if request.path in writing_routes:
+        for path in FILE_PATHS:
+            try:
+                lock_path = f'{path}.lock'
+                g.locks[path] = FileLock(lock_path, timeout=5)
+                g.locks[path].acquire()
+            except Timeout:
+                return jsonify('Error, another write is occurring.'), 409
     if request.endpoint in excluded_routes:
         return None
     if request.path.startswith('/css') or request.path.startswith('/js'): 
@@ -153,7 +170,9 @@ def check_session():
 def refresh_csv(response): 
     read_rentals() 
     read_members() 
-    read_games() 
+    read_games()
+    for lock in g.locks.values():
+        lock.release() 
     return response
 
  # check session expiration at specific intervals

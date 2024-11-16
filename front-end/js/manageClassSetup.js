@@ -99,7 +99,7 @@ class AddRental extends BaseRental {
         //if we are not confirming rental grab member info
         else {
             //handles valid customer input with given textbox
-            this.getManageContainersearchCustomer(this.memberTextBox, this.validCustomer, this.errorHandling);
+            searchCustomer(this.memberTextBox, this.validCustomer.bind(this), super.errorHandling.bind(this));
         }
     }
 
@@ -118,7 +118,7 @@ class AddRental extends BaseRental {
                 this.confirmRentalStatus = true;
                 super.resultTextChange("Confirm rental for " + data['Member'][0]['FirstName'] + " " + data['Member'][0]['LastName']);
             },
-            super.errorHandling);
+            super.errorHandling.bind(this));
     }
 
     //when a request was made that we can add rental, confirm the rental
@@ -131,7 +131,7 @@ class AddRental extends BaseRental {
             'MemberID': this.memberID
         };
 
-        postRequestParams('open_rental', params, () => super.resultTextChange("Rental Complete!"), super.errorHandling);
+        postRequestParams('open_rental', params, () => super.resultTextChange("Rental Complete!"), super.errorHandling.bind(this));
     }
 }
 
@@ -200,7 +200,7 @@ class RemoveRental extends BaseRental {
         postRequestParams("close_rental", params,
             (data) => {
                 super.resultTextChange(data['Message'] + "\n" + data['Registered Member (Name)'] + " close " + data['Registered Video Game (Title)']);
-            }, super.errorHandling);
+            }, super.errorHandling.bind(this));
     }
 
     confirmRental() {
@@ -211,6 +211,6 @@ class RemoveRental extends BaseRental {
             'RentalID': this.rentalID
         };
 
-        postRequestParams("close_rental", params, () => super.resultTextChange("Rental has been closed"), super.errorHandling);
+        postRequestParams("close_rental", params, () => super.resultTextChange("Rental has been closed"), super.errorHandling.bind(this));
     }
 }

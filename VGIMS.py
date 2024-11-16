@@ -171,4 +171,4 @@ def heartbeat():
 if __name__ == '__main__':
     init_scheduler() # updates videogames.csv ranking at midnight 00:00
     webbrowser.open('http://127.0.0.1:5500/VGIMS/login') # opens browser
-    app.run(port=5500, debug=True) # runs on port 5500
+    app.run(port=5500) # runs on port 5500

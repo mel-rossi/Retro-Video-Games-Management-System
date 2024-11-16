@@ -172,7 +172,6 @@ class RemoveRental extends BaseRental {
 
         resultDiv.appendChild(super.getResultText());
 
-        resultDiv.appendChild(resultText);
         closeInfoDiv.appendChild(resultDiv);
 
         fragment.appendChild(title);

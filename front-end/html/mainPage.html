@@ -10,8 +10,7 @@
                 <h1>Video Game Management System</h1>                
                 <div id="buttonArea">
                     <button type="button" value="AvailableGames" onclick="clicked(this)">Check Available Games</button>
-                    <button type="button" value="CheckStatus" onclick="clicked(this)">Check Customer Status</button>
-                    <button type="button" value="ManageGames" onclick="clicked(this)">Manage Rentals</button>
+                    <button type="button" value="CheckStatus" onclick="clicked(this)">Check Customer Status</button>                    
                 </div>
             </div>            
 
@@ -42,9 +41,6 @@
         }
         else if (button.value == "CheckStatus") {
             window.location.href = "/VGIMS/status";
-        }
-        else if (button.value == "ManageGames"){
-            window.location.href = "/VGIMS/manage";
         }
     }
 </script>

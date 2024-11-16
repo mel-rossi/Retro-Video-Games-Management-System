@@ -31,8 +31,6 @@ class AddRental extends BaseRental {
 
         this.memberTextBox = null;
         this.resultContainer = null;
-        this.resultText = null;
-
         this.confirmRentalStatus = false;
 
         this.memberID = NaN;
@@ -96,12 +94,12 @@ class AddRental extends BaseRental {
     enterClick() {
         //if we are confirming to create the rental
         if (this.confirmRentalStatus) {
-            confirmRental();
+            this.confirmRental();
         }
         //if we are not confirming rental grab member info
         else {
             //handles valid customer input with given textbox
-            searchCustomer(this.memberTextBox, this.validCustomer, this.errorHandling);
+            this.getManageContainersearchCustomer(this.memberTextBox, this.validCustomer, this.errorHandling);
         }
     }
 
@@ -141,8 +139,7 @@ class RemoveRental extends BaseRental {
     constructor(manageContainer, rentalID) {
         super(manageContainer);
 
-        this.resultContainer = null;
-        this.resultText = null;
+        this.resultContainer = null;        
         this.confirmRentalStatus = false;
 
         this.rentalID = rentalID;
@@ -171,11 +168,10 @@ class RemoveRental extends BaseRental {
         let resultDiv = document.createElement("div");
         resultDiv.setAttribute("id", "resultInfo");
 
-        //Result text
-        let resultText = document.createElement("p");
-
-        this.resultText = resultText;
         this.resultContainer = resultDiv;
+
+        resultDiv.appendChild(super.getResultText());
+
         resultDiv.appendChild(resultText);
         closeInfoDiv.appendChild(resultDiv);
 

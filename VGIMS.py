@@ -99,6 +99,11 @@ def gamestats_route():
     return render_template('gameStats.html', videogame_id=id)
 # sends videogame_id as a parameter to gamestats_html
 # gamestats_route
+@app.route('/VGIMS/editMember')
+def edit_member_route():
+    id = request.args.get('ID')
+    return render_template('editMember.html', member_id=id)
+# edit_member_route
 
 @app.route('/VGIMS/login') # opens login page
 def login_page():

@@ -1,11 +1,11 @@
 // variables
-const GAME_CONTAINER_ELEMENT = document.getElementById('gameData');
 const TEXT_BOX_ELEMENT = document.getElementById('textBox');
-const RENTAL_HISTORY_CHART = document.getElementById('monthlyRentalChart').getContext('2d');
-const PERCENTAGE_TEXT = document.getElementById('percentageText');
 const STATS_CONTAINER = document.getElementById('gameData');
 const MONTHLY_RENTAL_CONTAINER = document.getElementById('monthlyRentalChart').getContext('2d');
 const INVENTORY_ELEMENT = document.getElementById('inventoryChart').getContext('2d');
+let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
+let rankHeader = document.getElementById("rankHeader");
+let averageHeader = document.getElementById("averageHeader");
 
 // Get modal elements
 const MODAL = document.getElementById("myModal");
@@ -33,8 +33,6 @@ window.onclick = (event) => {
 window.onload = game_stats_page;
 
 function game_stats_page() {
-    let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
-
     MODAL_IFRAME.setAttribute("src", "manage?ID=" + videoGameID + "&M_State=open");
 
     let inventory_params = {
@@ -141,7 +139,6 @@ function generateInventoryChart(data) {
     /* Performance Summary */
 
     //Average Rental Time
-    let averageHeader = document.getElementById("averageHeader");
 
     if (data && data['Rental Stats']
         && Array.isArray(data['Rental Stats'])
@@ -160,20 +157,19 @@ function generateInventoryChart(data) {
     else {
         averageHeader.innerText = "Average Rental Time: N/A";
     }
-    //averageHeader.innerText = `Average Rental Time: ${Math.round(data['Rental Stats'][0]['Rental Time Average'])}`;
 
     //Ranking
     let rank_params = {
         'rank': 'game',
         'base': 'VideoGameID',
-        'top': ''
+        'top': '',
+        'filter': `VideoGameID=${videoGameID}`
     }
 
     postRequestParams("rank", rank_params, getRank, () => { });
     function getRank(data) {
-        let videoGameID = STATS_CONTAINER.getAttribute("data-videogame-id");
-        let rankHeader = document.getElementById("rankHeader");
         let videogameRank = data['Ranked'].find((item) => item['VideoGameID'] == videoGameID);
+        
         if (videogameRank) {
             rankHeader.innerText = `Ranked #${videogameRank['Rank']}`;
         }

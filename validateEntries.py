@@ -10,6 +10,12 @@ df_r = get_r() # Rentals DataFrame
 df_m = get_m() # Members DataFrame
 df_g = get_g() # (Video) Games DataFrame
 
+# Generate today's date
+def generateDate():
+
+    return pd.Timestamp.today().date()
+# generateDate
+
 # Generate the next valid RentalID 
 def generateRentalID():
     
@@ -57,6 +63,18 @@ def generateVideoGameID():
 
     return 'V' + format(number, '04') 
 # generateMemberID
+
+# Generate the new last place of Rank 
+def generateLastRank():
+
+    lastRank = df_g['Rank'].max()
+
+    lastRank += 1 # Next Number 
+
+    return lastRank
+# generateLastRank
+
+# generateLastRank
                  
 # Check Validation of VideoGameID input 
 def validateVideoGameID(VideoGameInput):
@@ -117,12 +135,6 @@ def confirmRentalID(RentalInput):
 
     return result
 # confirmRentalID
-
-# Generate today's date
-def generateDate():
-
-    return pd.Timestamp.today().date()
-# generateDate
 
 # Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
@@ -269,3 +281,5 @@ def validateGenreFormat(Genre):
 
     return validateStringFormat(pattern, Genre)
 # validateGenreFormat
+
+

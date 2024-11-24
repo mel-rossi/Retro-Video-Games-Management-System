@@ -1,5 +1,5 @@
 import pandas as pd
-import flask_cors import CORS
+from flask_cors import CORS
 from validateEntries import checkTitleEx
 from fetchDetails import get_g, write_games
 from validateEntries import validateYearFormat
@@ -58,6 +58,20 @@ def dry_run_add_game(Title, Publisher, Year, Inventory, Genre):
     if not validateGenreFormat(Genre): 
         return jsonify({"error": "Invalid Genre(s) Format"}), 400
 
+    session['Title'] = Title
+    session['Publisher'] = Publisher
+    session['Year'] = Year
+    session['Inventory'] = Inventory 
+    session['Genre'] = Genre
+
+    return jsonify({
+        "Title Entered": Title, 
+        "Publisher Entered": Publisher, 
+        "Year Entered": Year, 
+        "Inventory Entered": Inventory, 
+        "Genre(s) Entered": Genre,
+        "message": "Please confirm the details"
+    }), 200
 # dry_run_add_game
 
 @addgame_bp.route('/add_game', methods=['POST'])
@@ -70,6 +84,14 @@ def add_game_route():
     data = request.json # Get json data from POST body
 
     # Dry Run: Initial validation and confirmation
+    if 'Confirm' not in data: 
+        return dry_run_add_game(data.get('Title'), 
+                                data.get('Publisher'), 
+                                data.get('Year'), 
+                                data.get('Inventory'), 
+                                data.get('Genre'))
+
+    # Confirm: Primary validation and (if valid) add game
 
 # add_game_route
 

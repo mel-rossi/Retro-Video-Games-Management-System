@@ -262,7 +262,15 @@ def validateYearFormat(Year):
     )
     
     return validateStringFormat(pattern, Year)
-# validateYearFormat 
+# validateYearFormat
+
+# Check Whether the Number Input is valid 
+def validateNumInsert(Num): 
+
+    pattern = r'^\d{1,3}$'
+
+    return validateStringFormat(pattern, Num)
+# validateNumInsert
 
 # Check Whether Inventory is in valid Format 
 def validateInventoryFormat(Inventory):
@@ -281,5 +289,14 @@ def validateGenreFormat(Genre):
 
     return validateStringFormat(pattern, Genre)
 # validateGenreFormat
+
+# Check Insert Mode  
+def validateInsertion(Insertion): 
+
+    # Checks for either a + or - followed by digits 
+    pattern = r'^[+-]'
+
+    return validateStringFormat(pattern, Insertion)
+# validateInsertion
 
 

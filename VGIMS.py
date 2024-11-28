@@ -5,6 +5,7 @@ import bcrypt
 from Rank import rank_bp
 from Rank import sortingMethod
 from AddGame import addgame_bp
+from EditGame import editgame_bp
 from AddMember import addmember_bp
 from EditMember import editmember_bp
 from OpenRental import openrental_bp
@@ -54,6 +55,7 @@ app.register_blueprint(closerental_bp, url_prefix='')
 app.register_blueprint(addmember_bp, url_prefix='')
 app.register_blueprint(editmember_bp, url_prefix='')
 app.register_blueprint(addgame_bp, url_prefix='')
+app.register_blueprint(editgame_bp, url_prefix='')
 
 def rank_update(): # updates/resorts videogames.csv by rank in ascending order
     ranked = sortingMethod('game','','','') # sort the file by score

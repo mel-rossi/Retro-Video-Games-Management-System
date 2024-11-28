@@ -65,7 +65,6 @@ def dry_run_edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre, mod
     if not changeRequest(Title, Publisher, Year, Inventory, Genre): 
         return jsonify({"error": "No Changes are Being Requested"}), 400
 
-
     # Insert Editing Mode
     if mode is not None and mode.lower() == 'insert':
 
@@ -88,8 +87,6 @@ def dry_run_edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre, mod
                    Year = int(gameYear(VideoGameID)) - \
                           int(Year[1:])
 
-               Year = str(Year)
-
         # Insert to Inventory
         if Inventory is not None and validateInsertion(Inventory) and \
            validateInventoryFormat(Inventory[1:]):
@@ -98,14 +95,12 @@ def dry_run_edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre, mod
                                int(Inventory[1:])
 
                else: # Decrement(-) Inventory #
-                   if Inventory[1:] >= gameInventory(VideoGameID): 
+                   if int(Inventory[1:]) >= gameInventory(VideoGameID): 
                        Inventory = 0
 
                    else: 
                        Inventory = int(gameInventory(VideoGameID)) - \
                                    int(Inventory[1:])
-
-               Inventory = str(Inventory)
 
         # Insert to Genre
         if Genre is not None and validateInsertion(Genre) and \
@@ -143,13 +138,13 @@ def dry_run_edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre, mod
 
     # Validate Year
     if Year is not None: 
-        if not validateYearFormat(Year): 
+        if not validateYearFormat(str(Year)): 
             return jsonify({"error": "Invalid Requested Changes for \
                     Year"}), 400
 
     # Validate Inventory
     if Inventory is not None:
-        if not validateInventoryFormat(Inventory):
+        if not validateInventoryFormat(str(Inventory)):
             return jsonify({"error": "Invalid Requested Changes for \
                     Inventory"}), 400
 
@@ -185,6 +180,57 @@ def dry_run_edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre, mod
     }), 200
 # dry_run_edit_game
 
+def fullValidation(VideoGameID, Title, Publisher, Year, Inventory, Genre): 
+
+    if validateVideoGameID(VideoGameID) and \
+       changeRequest(Title, Publisher, Year, Inventory, Genre) and \
+       (Title is None or not checkTitleEx(Title)) and \
+       (Publisher is None or validatePublisherFormat(Publisher)) and \
+       (Year is None or validateYearFormat(str(Year))) and \
+       (Inventory is None or validateInventoryFormat(str(Inventory))) and \
+       (Genre is None or validateGenreFormat(Genre)): 
+           return True 
+
+    return False
+# fullValidation
+
+def edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre): 
+
+    global df 
+
+    # Primary Validation 
+    if not fullValidation(VideoGameID, Title, Publisher, Year, Inventory, Genre): 
+        return jsonify({"error": "Session Transaction Glitch Detected"})
+
+    # Modify Title 
+    if Title is not None: 
+        df.loc[df['VideoGameID'] == VideoGameID, 'Title'] = Title 
+
+    # Modify Publisher 
+    if Publisher is not None: 
+        df.loc[df['VideoGameID'] == VideoGameID, 'Publisher'] = Publisher
+
+    # Modify Year 
+    if Year is not None: 
+        df.loc[df['VideoGameID'] == VideoGameID, 'Year'] = Year
+
+    # Modify Inventory 
+    if Inventory is not None: 
+        df.loc[df['VideoGameID'] == VideoGameID, 'Inventory'] = Inventory
+
+    # Modify Genre(s) 
+    if Genre is not None: 
+        df.loc[df['VideoGameID'] == VideoGameID, 'Genre'] = Genre
+
+    # Save updated DataFrame back to CSV file 
+    write_games(df) 
+
+    row = df[df['VideoGameID'] == VideoGameID] # Updated row
+
+    # Return the updated row 
+    return jsonify(row.to_dict(orient='records')), 200
+# edit_game
+
 @editgame_bp.route('/edit_game', methods=['POST'])
 def edit_game_route(): 
 
@@ -211,5 +257,16 @@ def edit_game_route():
                                      data.get('mode'))
         else: 
             return jsonify({"message": "Request cancelled"}), 200
-    
+
+    # Confirm : Primary Validation and proceed with editing entry if appropriate 
+    if data.get('Confirm').lower() == 'confirmed': 
+        VideoGameID = session.get('VideoGameID')
+        Title = session.get('Title') 
+        Publisher = session.get('Publisher') 
+        Year = session.get('Year')
+        Inventory = session.get('Inventory') 
+        Genre = session.get('Genre') 
+        return edit_game(VideoGameID, Title, Publisher, Year, Inventory, Genre) 
+    else: 
+        return jsonify({"message": "Operation cancelled"}), 200
 # edit_game_route

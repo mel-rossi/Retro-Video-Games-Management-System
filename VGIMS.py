@@ -157,7 +157,8 @@ def logout():
 @app.before_request # check session expiration before each request is sent
 def check_session():
     writing_routes = ['/open_rental', '/close_rental', 
-                      '/edit_member', '/add_member']
+                      '/edit_member', '/add_member', 
+                      '/edit_game', '/add_game']
     excluded_routes = ['authenticator'] # routes not effected
     g.locks = {}
     if request.path in writing_routes:

@@ -11,7 +11,7 @@
         <div class="header">
             <div class="inner-header flex">
                 <!-- Back Button -->
-                <button class="back-button" onclick="window.location.href='/VGIMS/status'">Back</button>
+                <button class="back-button" onclick="window.location.href='/VGIMS'">Back</button>
 
                 <!-- Title -->
                 <div class="title-container">
@@ -39,7 +39,7 @@
                             <label for="email">Email:</label>
                             <input type="email" id="email" name="email" required>
                         </div>
-                        <button type="submit">Add Member</button>
+                        <button id="add-member-button" type="submit">Add Member</button>
                     </form>
 
                     <div id="response-message"></div>
@@ -61,6 +61,28 @@
             </svg>
         </div>
 
+         <!-- Request Modal Structure -->
+        <div id="custom-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">                        
+                    <h5>Confirm Member</h5>
+                </div>
+            <div class="modal-body">
+            <!-- Confirmation message will appear here -->
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-button">Cancel</button>
+                <button class="confirm-button">Confirm</button>
+            </div>
+                </div>
+        </div>
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-success-modal">&times;</span>
+                    <p id="success-message">Member details updated successfully.</p>
+            </div>
+        </div>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="../js/ajax.js"></script>

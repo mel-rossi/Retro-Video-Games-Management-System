@@ -64,7 +64,7 @@ function openModal(event) {
     // compare the current form values with the original values
     const CHANGES = [];
     if(FIRST_NAME_INPUT.value.trim() !== originalData.FirstName){
-        CHANGES.push(`First Name: ${FIRST_NAME_INPUT.value.trim() || "[No Change]"}`);
+        CHANGES.push(`First Name: ${FIRST_NAME_INPUT.value.trim()}`);
     } 
     if(LAST_NAME_INPUT.value.trim() !== originalData.LastName) {
         CHANGES.push(`Last Name: ${LAST_NAME_INPUT.value.trim()}`);
@@ -148,6 +148,7 @@ function noChangeMessage() {
     MODAL_BODY.innerHTML = `
         <p>No changes were made to the member's details.</p>
     `;
+    MODAL.querySelector(".modal-header").textContent = "Change Error";
 }
 function showSuccessModal() {
     SUCCESS_MODAL.style.display = "block";

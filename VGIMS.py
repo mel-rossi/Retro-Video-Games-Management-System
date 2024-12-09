@@ -109,6 +109,10 @@ def edit_member_route():
     return render_template('editMember.html', member_id=id)
 # edit_member_route
 
+@app.route('/VGIMS/editGame')
+def edit_game_route():
+    return render_template('editGame.html')
+
 @app.route('/VGIMS/addMember')
 def add_member_route():
     return render_template('addMember.html')

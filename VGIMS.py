@@ -109,6 +109,14 @@ def edit_member_route():
     return render_template('editMember.html', member_id=id)
 # edit_member_route
 
+@app.route('/VGIMS/addMember')
+def add_member_route():
+    return render_template('addMember.html')
+
+@app.route('/VGIMS/addGame')
+def add_game_route():
+    return render_template('addGame.html')
+
 @app.route('/VGIMS/login') # opens login page
 def login_page():
     return render_template('loginPage.html')  # set to open main page temporarily
@@ -157,7 +165,8 @@ def logout():
 @app.before_request # check session expiration before each request is sent
 def check_session():
     writing_routes = ['/open_rental', '/close_rental', 
-                      '/edit_member', '/add_member']
+                      '/edit_member', '/add_member', 
+                      '/edit_game', '/add_game']
     excluded_routes = ['authenticator'] # routes not effected
     g.locks = {}
     if request.path in writing_routes:

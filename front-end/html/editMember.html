@@ -2,6 +2,7 @@
 <html>
 
 <head>
+
     <title>Edit Member</title>
     <link rel="stylesheet" href="../css/shared-styles.css">
     <link rel="stylesheet" href="../css/edit-member.css">
@@ -39,13 +40,12 @@
                     <input type="email" id="email" name="email">
 
                    <button id="request-button">Request Changes</button>
-                    <button id="confirm-button" style="display: none;">Confirm Changes</button>
-
+                   
                 </form>
             </div>
-
         </div>
 
+        <!-- Waves Animation -->
         <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
             <defs>
@@ -59,6 +59,30 @@
             </g>
         </svg>
     </div>
+
+            <!-- Request Modal Structure -->
+            <div id="custom-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Confirm Changes</h5>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Confirmation message will appear here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-button">Cancel</button>
+                        <button class="confirm-button">Confirm</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Success Modal -->
+             <div id="success-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" id="close-success-modal">&times;</span>
+                    <p id="success-message">Member details updated successfully.</p>
+                </div>
+             </div>
+
     <div id="response"></div>"
     <script src="../js/ajax.js"></script>
     <script src="../js/editMember.js"></script>

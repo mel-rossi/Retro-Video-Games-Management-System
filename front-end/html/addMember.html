@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewpoint" content=""width=device-width, initial-scale="1.0">
+        <title>Add Member</title>
+        <link rel="stylesheet" href="../css/shared-styles.css">
+        <link rel="stylesheet" href="../css/add-member.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="inner-header flex">
+                <!-- Back Button -->
+                <button class="back-button" onclick="window.location.href='/VGIMS'">Back</button>
+
+                <!-- Title -->
+                <div class="title-container">
+                        <h1>Add Member</h1>
+                </div>
+
+                <!-- Add Member Form -->
+                <div id="add-member-container">
+                    <form id="add-member-form">
+
+                        <h2>Add Member Form</h2>
+                        <div class="form-group">
+                            <label for="first-name">First Name:</label>
+                            <input type="text" id="first-name" name="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name:</label>
+                            <input type="text" id="last-name" name="last-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number">Phone Number:</label>
+                            <input type="text" id="phone-number" name="phone-number" required>  
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <button id="add-member-button" type="submit">Add Member</button>
+                    </form>
+
+                    <div id="response-message"></div>
+                </div>
+
+            </div>
+            <!-- Waves Animation -->
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                </g>
+            </svg>
+        </div>
+
+         <!-- Request Modal Structure -->
+        <div id="custom-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">                        
+                    <h5>Confirm Member</h5>
+                </div>
+            <div class="modal-body">
+            <!-- Confirmation message will appear here -->
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-button">Cancel</button>
+                <button class="confirm-button">Confirm</button>
+            </div>
+                </div>
+        </div>
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-success-modal">&times;</span>
+                    <p id="success-message">Member details updated successfully.</p>
+            </div>
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="../js/ajax.js"></script>
+        <script src="../js/addMember.js"></script>
+    </body>
+</html>

@@ -57,8 +57,8 @@ function populateForm(data){
 }
 
 //request button confirm
-REQUEST_BUTTON.addEventListener("click", openModal);
-function openModal(event) {
+REQUEST_BUTTON.addEventListener("click", validateAndOpenModal);
+function validateAndOpenModal(event) {
     event.preventDefault(); // prevent form submission
 
     // compare the current form values with the original values
@@ -82,7 +82,7 @@ function openModal(event) {
 
     //change button labels to Go back and Cancel
     MODAL_CONFIRM_BUTTON.textContent = "Go Back";
-    MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit);
+    MODAL_CONFIRM_BUTTON.removeEventListener("click", submitForm);
     MODAL_CONFIRM_BUTTON.addEventListener("click", closeModal); // remove any old event listener
     }
     else {
@@ -98,7 +98,7 @@ function openModal(event) {
         //change back button labels to Confirm and Cancel
         MODAL_CONFIRM_BUTTON.textContent = "Confirm";
         MODAL_CONFIRM_BUTTON.removeEventListener("click", closeModal);
-        MODAL_CONFIRM_BUTTON.addEventListener("click", handleSubmit);
+        MODAL_CONFIRM_BUTTON.addEventListener("click", submitForm);
     }
     MODAL.style.display = "block";  
 
@@ -108,8 +108,8 @@ function closeModal(){
 }
 
 MODAL_CANCEL_BUTTON.addEventListener("click", closeModal);
-MODAL_CONFIRM_BUTTON.addEventListener("click", handleSubmit);       
-function handleSubmit() {
+MODAL_CONFIRM_BUTTON.addEventListener("click", submitForm);       
+function submitForm() {
     let currentData ={
         MemberID: MEMBER_ID.value,
         FirstName: FIRST_NAME_INPUT.value.trim(),
@@ -136,7 +136,7 @@ function handleSubmit() {
         Email: currentData.Email|| null
     };
 
-    postRequestParams("edit_member", params, handleResponse,(error) => {
+    postRequestParams("edit_member", params, editMemberResponse,(error) => {
         RESPONSE.textContent = `Error updating member details: ${error.Error || "Unknown error"}`;
         RESPONSE.className = "error";
     });
@@ -164,7 +164,7 @@ window,addEventListener("click", (event) => {
         SUCCESS_MODAL.style.display = "none";
     }
 });
-function handleResponse(data){
+function editMemberResponse(data){
     if (data && !data.error) {
         showSuccessModal();
 

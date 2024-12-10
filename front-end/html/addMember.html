@@ -61,21 +61,22 @@
             </svg>
         </div>
 
-         <!-- Request Modal Structure -->
+        <!--  Modal Structure -->
         <div id="custom-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">                        
                     <h5>Confirm Member</h5>
                 </div>
-            <div class="modal-body">
-            <!-- Confirmation message will appear here -->
-            </div>
-            <div class="modal-footer">
-                <button class="cancel-button">Cancel</button>
-                <button class="confirm-button">Confirm</button>
-            </div>
+                <div class="modal-body"></div>
+                <!-- Confirm and Cancel Buttons -->
+            
+                <div class="modal-footer">
+                    <button class="cancel-button">Cancel</button>
+                    <button class="confirm-button">Confirm</button>
                 </div>
+            </div>
         </div>
+
         <!-- Success Modal -->
         <div id="success-modal" class="modal">
             <div class="modal-content">
@@ -83,9 +84,11 @@
                     <p id="success-message">Member details updated successfully.</p>
             </div>
         </div>
-        
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <div id="response"></div>"
         <script src="../js/ajax.js"></script>
         <script src="../js/addMember.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </body>
 </html>

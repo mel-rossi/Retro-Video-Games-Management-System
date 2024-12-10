@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="../css/add-game.css">
  </head>
 
-<body>
-    <div class="header">
+    <body>
         <div class="header">
+
             <div class="inner-header flex">
                 <!-- Back Button -->
                 <button class="back-button" onclick="window.location.href='/VGIMS'">Back</button>
@@ -40,7 +40,7 @@
                         <label for="genre">Genre:</label>
                         <input type="text" id="genre" name="genre" required>
                 
-                        <button type="button" onclick="submitForm()">Submit</button>
+                        <button  id="add-game-button" type="submit">Add Game</button>
                     </form>
         
                 <div id="confirmationMessage" style="margin-top: 20px;"></div>
@@ -60,11 +60,35 @@
                 </g>
             </svg>                        
         </div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!--  Modal Structure -->
+        <div id="custom-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Confirm New Game</h5>
+                </div>
+                <div class="modal-body"></div>
+                <!-- Confirm and Cancel Buttons -->
+
+                <div class="modal-footer">
+                    <button class="cancel-button">Cancel</button>
+                    <button class="confirm-button">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->        
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-success-modal">&times;</span>
+                    <p id="success-message">Video Game successfully added!</p>
+                </div>
+        </div>
+
+    <!-- Response Message -->
+    <div id="response"></div>" 
     <script src="../js/ajax.js"></script>
     <script src="../js/addGame.js"></script> 
-
- 
-</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </body>
 </html>

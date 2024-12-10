@@ -52,22 +52,6 @@
     background-color: #e64a19;
     }
 
-/*Response Message Styles*/
 
-#response-message {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    display: none;
-}
 
-.success {
-    background-color: #4CAF50;
-    color: white;
-}
 
-.error {
-    background-color: #f44336;
-    color: white;
-}

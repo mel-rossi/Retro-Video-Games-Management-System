@@ -25,13 +25,12 @@ window.onload = function() {
 
     function openModal(event) {
         event.preventDefault(); // prevent form submission
-
+        MODAL.querySelector(".modal-header").textContent = "Confirm Member"; // reset header
         // check if any of the required fields are empty
         if (!FIRST_NAME_INPUT.value.trim() || 
             !LAST_NAME_INPUT.value.trim() || 
             !PHONE_NUMBER_INPUT.value.trim()|| 
             !EMAIL_INPUT.value.trim()) {
-
             emptyFieldsMessage();
             MODAL.style.display = "block";
             return;
@@ -49,17 +48,19 @@ window.onload = function() {
        // MODAL.querySelector(".modal-header").textContent = "Confirm Details";
         MODAL_BODY.innerHTML = ENTERED_DETAILS;
         MODAL.style.display = "block";
-        MODAL_CONFIRM_BUTTON.textContent = "Confirm";
-        MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit); // remove any old event listener
+
         MODAL_CONFIRM_BUTTON.addEventListener("click", handleSubmit);
+        MODAL_CANCEL_BUTTON.addEventListener("click", closeModal);
     }
 
     function closeModal() {
         MODAL.style.display = "none";
-        MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit);
-        MODAL_CONFIRM_BUTTON.addEventListener("click", openModal);
+        MODAL_BODY.innerHTML = ""; //clear modal content
+        MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit);//remove any old event listener
+        MODAL_CONFIRM_BUTTON.removeEventListener("click", closeModal);//remove any old event listener
+        MODAL_CONFIRM_BUTTON.textContent = "Confirm"; // reset button label
+        MODAL_CANCEL_BUTTON.style.display = "block"; //reset cancel button
     }
-        MODAL_CANCEL_BUTTON.addEventListener("click", closeModal);
 
     function handleSubmit() {
         const NEW_MEMBER_DATA = {
@@ -77,9 +78,7 @@ window.onload = function() {
             Email: NEW_MEMBER_DATA.Email
 
         };
-
-        console.log("Submitting new member data:", NEW_MEMBER_DATA);
-
+        
         postRequestParams("add_member", params, handleResponse, () =>{});
 
         closeModal();//close modal after successful submission
@@ -89,8 +88,12 @@ window.onload = function() {
         MODAL_BODY.innerHTML = `
         <p>Please fill in all required fields.</p>
     `;
-        MODAL.querySelector(".modal-header").textContent = "Field Error";
-        //change button labels to Go back and Cancel
+        MODAL.querySelector(".modal-header").textContent = "Field Error";  
+        
+        // hide cancel button
+        MODAL_CANCEL_BUTTON.style.display = "none";
+
+        //change button labels to Go back
         MODAL_CONFIRM_BUTTON.textContent = "Go Back";
         MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit);
         MODAL_CONFIRM_BUTTON.addEventListener("click", closeModal); // remove any old event listener

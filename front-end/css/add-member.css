@@ -1,5 +1,6 @@
-/* Form Styles */
-#edit-member-form {
+/*Form Styles*/
+
+#add-member-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,25 +16,28 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 600px;
     margin:  auto;
-  }
-  
-  #edit-member-form label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
+}
 
-  #edit-member-form input[type="text"], #edit-member-form input[type="email"] {
-    width: 70%;
-    height: 20px;
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  #edit-member-form button {
+#add-member-form label {
+        display: block;
+        margin-bottom: 10px;
+}
 
+.form-group {
+    width: 600px;
+}
+
+
+#add-member-form input[type="text"], #add-member-form input[type="email"] {
+        width: 70%;
+        height: 20px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+#add-member-form button {
     background-color: #ff5722;
     color: white;
     padding: 10px 20px;
@@ -42,9 +46,12 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  #edit-member-form button:hover {
+    }
+
+#add-member-form button:hover {
     background-color: #e64a19;
-  }
+    }
+
+
+
 

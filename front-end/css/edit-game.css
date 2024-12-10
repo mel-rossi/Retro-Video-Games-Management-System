@@ -1,5 +1,4 @@
-/* Form Styles */
-#edit-member-form {
+#edit-game-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,37 +13,30 @@
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 600px;
-    margin:  auto;
-  }
-  
-  #edit-member-form label {
+    margin: auto;
+}
+#edit-game-form label {
     display: block;
     margin-bottom: 10px;
-  }
-  
+}
 
-  #edit-member-form input[type="text"], #edit-member-form input[type="email"] {
+#edit-game-form input[type="text"], #edit-game-form input[type="number"] {
     width: 70%;
     height: 20px;
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-  }
-  
-  #edit-member-form button {
-
+}
+#edit-game-form button {
     background-color: #ff5722;
     color: white;
     padding: 10px 20px;
     font-size: 16px;
-    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  #edit-member-form button:hover {
+}
+#edit-game-form button:hover {
     background-color: #e64a19;
-  }
-
+}

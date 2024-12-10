@@ -1,5 +1,6 @@
 import re
 import pandas as pd
+from datetime import datetime
 from fetchDetails import get_r, get_m, get_g
 
 # This program contains Validation & Generation Methods
@@ -8,6 +9,12 @@ from fetchDetails import get_r, get_m, get_g
 df_r = get_r() # Rentals DataFrame 
 df_m = get_m() # Members DataFrame
 df_g = get_g() # (Video) Games DataFrame
+
+# Generate today's date
+def generateDate():
+
+    return pd.Timestamp.today().date()
+# generateDate
 
 # Generate the next valid RentalID 
 def generateRentalID():
@@ -56,6 +63,18 @@ def generateVideoGameID():
 
     return 'V' + format(number, '04') 
 # generateMemberID
+
+# Generate the new last place of Rank 
+def generateLastRank():
+
+    lastRank = df_g['Rank'].max()
+
+    lastRank += 1 # Next Number 
+
+    return lastRank
+# generateLastRank
+
+# generateLastRank
                  
 # Check Validation of VideoGameID input 
 def validateVideoGameID(VideoGameInput):
@@ -117,12 +136,6 @@ def confirmRentalID(RentalInput):
     return result
 # confirmRentalID
 
-# Generate today's date
-def generateDate():
-
-    return pd.Timestamp.today().date()
-# generateDate
-
 # Check Video Game Availability based on VideoGameID input
 def checkAvailability(VideoGameInput): 
 
@@ -170,7 +183,9 @@ def validateStringFormat(pattern, string):
 
 # Check Whether the Name is in a valid format 
 def validateNameFormat(Name): 
-    
+   
+    # Checks for Upper Case letters in each word. (Letters only) 
+    # "Henry Welch" == True     "henry Welch" == False 
     pattern = r'^(?! )[A-Z][a-z]*(?: [A-Z][a-z]*)*$'
 
     return validateStringFormat(pattern, Name) 
@@ -179,6 +194,9 @@ def validateNameFormat(Name):
 # Check Whether the Phone Number is in valid format 
 def validatePhoneFormat(Phone):
 
+    # Checks for 3 digits followed by a dash, followed by 3 digits, another
+    # dash and 4 digits 
+    # '###-###-####' : '123-456-7890' == True
     pattern = r'^\d{3}-\d{3}-\d{4}$'
     
     return validateStringFormat(pattern, Phone) 
@@ -187,6 +205,8 @@ def validatePhoneFormat(Phone):
 # Check Whether the Email is in valid format 
 def validateEmailFormat(Email):
 
+    # Checks for a string followed by "@gmail.com"
+    # ydosayisdaydkd@gmail.com == True      dhaoueuwew.gmailcom == False
     pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
 
     return validateStringFormat(pattern, Email) 
@@ -204,9 +224,79 @@ def checkPhoneEx(Phone):
 # Check Whether Email Exists 
 def checkEmailEx(Email): 
 
-    if not df_m[df_m['Email'] == Email].empty: 
+    if not df_m[df_m['Email'].str.lower() == Email.lower()].empty: 
         return True # Exist
 
     return False # Does Not Exist
 # checkEmailEx
+
+# Check Whether Title Exists
+def checkTitleEx(Title): 
+
+    if not df_g[df_g['Title'].str.lower() == Title.lower()].empty: 
+        return True # Exist 
+
+    return False # Does Not Exist
+# checkTitleEx
+
+# Check Whether Publisher is in valid Format
+def validatePublisherFormat(Publisher): 
+
+    # Checks for Capitalized Letters whenever a letter comes after a space
+    pattern = r'^[A-Za-z]+(?: [A-Z][A-Za-z]*|[^A-Za-z]+)*$'
+
+    return validateStringFormat(pattern, Publisher)
+# validatePublisherFormat 
+
+# Check Whether Year is in valid Format
+def validateYearFormat(Year):
+
+    # Get the current year
+    yr = datetime.now().year
+
+    # Checks for 4 digits.      Min : 1958       Max : Current Year
+    pattern = (
+            fr'^(?:19[5-9]\d|' # 1958 to 1999 
+            fr'20[0-{yr // 10 % 10}]\d|' # 2000 - 2099
+            fr'20{yr // 100 % 10}[0-{yr % 10}])$' # 2000 - Current Year
+    )
+    
+    return validateStringFormat(pattern, Year)
+# validateYearFormat
+
+# Check Whether the Number Input is valid 
+def validateNumInsert(Num): 
+
+    pattern = r'^\d{1,3}$'
+
+    return validateStringFormat(pattern, Num)
+# validateNumInsert
+
+# Check Whether Inventory is in valid Format 
+def validateInventoryFormat(Inventory):
+    
+    # Checks for digits only 
+    pattern = r'^\d+$'
+
+    return validateStringFormat(pattern, Inventory)
+# validateInventoryFormat
+
+# Check Whether Genres are in valid Format  
+def validateGenreFormat(Genre): 
+
+    # Checks for only letters and "/" uppercase letter after every /
+    pattern = r'^[A-Z][a-z]*(?:/[A-Z][a-z]*)*$'
+
+    return validateStringFormat(pattern, Genre)
+# validateGenreFormat
+
+# Check Insert Mode  
+def validateInsertion(Insertion): 
+
+    # Checks for either a + or - followed by digits 
+    pattern = r'^[+-]'
+
+    return validateStringFormat(pattern, Insertion)
+# validateInsertion
+
 

@@ -87,7 +87,43 @@ def gameTitle(VideoGameID):
     title = df_g.loc[df_g['VideoGameID'] == VideoGameID, 'Title'].values[0]
 
     return title 
-# gameTitle 
+# gameTitle
+
+# Fetch Publisher of corresponding VideoGame based on VideoGameID 
+def gamePublisher(VideoGameID): 
+
+    publisher = df_g.loc[df_g['VideoGameID'] == VideoGameID, \
+                                'Publisher'].values[0]
+
+    return publisher
+# gamePublisher
+
+# Fetch Total Inventory Number of corresponding VideoGame based on VideoGameID
+def gameInventory(VideoGameID): 
+
+    inventory = df_g.loc[df_g['VideoGameID'] == VideoGameID, \
+                                'Inventory'].values[0]
+
+    return inventory 
+# gameInventory
+
+# Fetch Genre(s) of corresponding VideoGame based on VideoGameID 
+def gameGenre(VideoGameID): 
+
+    genres = df_g.loc[df_g['VideoGameID'] == VideoGameID, \
+                                 'Genre'].values[0]
+
+    return genres
+# gameGenre
+
+# Fetch Year of corresponding VideoGame based on VideoGameID 
+def gameYear(VideoGameID): 
+
+    year = df_g.loc[df_g['VideoGameID'] == VideoGameID, \
+                                'Year'].values[0]
+
+    return year
+# gameYear
 
 # Fetch Name (LastName, FirstName) of corresponding Member based on MemberID
 def memberName(MemberID):

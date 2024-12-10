@@ -4,6 +4,8 @@ import webbrowser
 import bcrypt
 from Rank import rank_bp
 from Rank import sortingMethod
+from AddGame import addgame_bp
+from EditGame import editgame_bp
 from AddMember import addmember_bp
 from EditMember import editmember_bp
 from OpenRental import openrental_bp
@@ -15,15 +17,22 @@ from SearchMember import searchmember_bp
 from MemberRental import memberrental_bp
 from fetchDetails import read_rentals, read_members, read_games
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, session
+from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, session, g
 from flask_session import Session
 from datetime import timedelta
+from filelock import FileLock, Timeout
 
 # This program serves as the main entry point for the Web Application
 # When ran, opens main page and runs all the flask apps on startup
 # Also makes the url pretty instead of '.html'
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INVENTORY_DIR = os.path.join(BASE_DIR, 'Inventory')
+MEMBER_PATH = os.path.join(INVENTORY_DIR, 'Members.csv')
+RENTAL_PATH = os.path.join(INVENTORY_DIR, 'Rentals.csv')
+VIDEOGAME_PATH = os.path.join(INVENTORY_DIR, 'VideoGames.csv')
 SESSIONS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions') 
+FILE_PATHS = {VIDEOGAME_PATH, RENTAL_PATH, MEMBER_PATH}
 
 app = Flask(__name__, template_folder='front-end/html')
 app.config['SESSION_PERMANENT'] = True
@@ -45,6 +54,8 @@ app.register_blueprint(openrental_bp, url_prefix='')
 app.register_blueprint(closerental_bp, url_prefix='')
 app.register_blueprint(addmember_bp, url_prefix='')
 app.register_blueprint(editmember_bp, url_prefix='')
+app.register_blueprint(addgame_bp, url_prefix='')
+app.register_blueprint(editgame_bp, url_prefix='')
 
 def rank_update(): # updates/resorts videogames.csv by rank in ascending order
     ranked = sortingMethod('game','','','') # sort the file by score
@@ -92,6 +103,24 @@ def gamestats_route():
     return render_template('gameStats.html', videogame_id=id)
 # sends videogame_id as a parameter to gamestats_html
 # gamestats_route
+@app.route('/VGIMS/editMember')
+def edit_member_route():
+    id = request.args.get('ID')
+    return render_template('editMember.html', member_id=id)
+# edit_member_route
+
+@app.route('/VGIMS/editGame')
+def edit_game_route():
+    id = request.args.get('ID')
+    return render_template('editGame.html', videogame_id=id)
+
+@app.route('/VGIMS/addMember')
+def add_member_route():
+    return render_template('addMember.html')
+
+@app.route('/VGIMS/addGame')
+def add_game_route():
+    return render_template('addGame.html')
 
 @app.route('/VGIMS/login') # opens login page
 def login_page():
@@ -111,8 +140,7 @@ def authenticator():
             if bcrypt.checkpw(data.get('password').encode(), pw.strip()):
                 session['logged_in'] = True # creates session if password is correct
                 return jsonify({'valid': True, 'redirect_url' : '/VGIMS'})
-            else:
-                return jsonify({'valid' : False})
+    return jsonify({'valid' : False})
 # authenticator route
 
 # call route to change passwords (admin or employee)
@@ -141,7 +169,19 @@ def logout():
 
 @app.before_request # check session expiration before each request is sent
 def check_session():
+    writing_routes = ['/open_rental', '/close_rental', 
+                      '/edit_member', '/add_member', 
+                      '/edit_game', '/add_game']
     excluded_routes = ['authenticator'] # routes not effected
+    g.locks = {}
+    if request.path in writing_routes:
+        for path in FILE_PATHS:
+            try:
+                lock_path = f'{path}.lock'
+                g.locks[path] = FileLock(lock_path, timeout=5)
+                g.locks[path].acquire()
+            except Timeout:
+                return jsonify('Error, another write is occurring.'), 409
     if request.endpoint in excluded_routes:
         return None
     if request.path.startswith('/css') or request.path.startswith('/js'): 
@@ -153,7 +193,9 @@ def check_session():
 def refresh_csv(response): 
     read_rentals() 
     read_members() 
-    read_games() 
+    read_games()
+    for lock in g.locks.values():
+        lock.release() 
     return response
 
  # check session expiration at specific intervals

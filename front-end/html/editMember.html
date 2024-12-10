@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Edit Member</title>
-        <link rel="stylesheet" href="../css/shared-styles.css">
-        <link rel="stylesheet" href="../css/edit-member.css">
-    </head>
-    <body>
-        <div class="header">
-            <div class="inner-header flex">
-                <!-- Back Button -->
-                <button class="back-button" onclick="window.location.href='/VGIMS/status'">Back</button>
 
-                <!-- Title -->
-                <div class="title-container">
-                    <h1>Edit Member</h1>
-                </div>
+<head>
 
-                <!-- Edit Member -->
+    <title>Edit Member</title>
+    <link rel="stylesheet" href="../css/shared-styles.css">
+    <link rel="stylesheet" href="../css/edit-member.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="inner-header flex">
+            <!-- Back Button -->
+            <button class="back-button" onclick="window.location.href='/VGIMS/status'">Back</button>
+
+            <!-- Title -->
+            <div class="title-container">
+                <h1>Edit Member</h1>
+            </div>
+
+            <!-- Edit Member -->
+            <div id="edit-member-container" data-member-id="{{ member_id }}">
                 <form id="edit-member-form">
 
                     <h2>Edit Member Form</h2>
@@ -35,38 +39,56 @@
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email">
 
-                    <button id="request-button">Request Changes</button>
-                    <button id="confirm-button" style="display: none;">Confirm Changes</button>
-
-                      <!-- Error Messages -->
-                    <div id="error-messages" style="display: none;">
-                        <ul>
-                            <li id="first-name-error"></li>
-                            <li id="last-name-error"></li>
-                            <li id="phone-number-error"></li>
-                            <li id="email-error"></li>
-                        </ul>
-                    </div>
-                    
-
+                   <button id="request-button">Request Changes</button>
+                   
                 </form>
             </div>
-
-            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-                <defs>
-                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                </defs>
-                <g class="parallax">
-                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-                </g>
-            </svg>
         </div>
 
-        <script src="../js/ajax.js"></script>
+        <!-- Waves Animation -->
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+            </g>
+        </svg>
+    </div>
 
-    </body>
+            <!-- Request Modal Structure -->
+            <div id="custom-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Confirm Changes</h5>
+                    </div>
+                    <div class="modal-body">
+                    <!-- Confirmation message will appear here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-button">Cancel</button>
+                        <button class="confirm-button">Confirm</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Success Modal -->
+             <div id="success-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" id="close-success-modal">&times;</span>
+                        <p id="success-message">Member details updated successfully!</p>
+                </div>
+             </div>
+             
+    <!-- Response Message -->
+    <div id="response"></div>"
+    <script src="../js/ajax.js"></script>
+    <script src="../js/editMember.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
 </html>

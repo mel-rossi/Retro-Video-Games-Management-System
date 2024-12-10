@@ -111,7 +111,7 @@ def edit_member_route():
 
 @app.route('/VGIMS/editGame')
 def edit_game_route():
-    return render_template('editGame.html')
+    return render_template('editGame.html', videogame_id=id)
 
 @app.route('/VGIMS/addMember')
 def add_member_route():

@@ -1,5 +1,4 @@
-
-window.onload = function() {
+window.onload = function () {
     const FIRST_NAME_INPUT = document.getElementById("first-name");
     const LAST_NAME_INPUT = document.getElementById("last-name");
     const PHONE_NUMBER_INPUT = document.getElementById("phone-number");
@@ -16,104 +15,78 @@ window.onload = function() {
     const SUCCESS_MESSAGE = document.getElementById("success-message");
     const CLOSE_SUCCESS_MODAL = document.getElementById("close-success-modal");
 
-    if(SUBMIT_BUTTON){
-    SUBMIT_BUTTON.addEventListener("click", openModal);
-    }
-    else{
-        console.log("Submit button not found");
+    if (SUBMIT_BUTTON) {
+        SUBMIT_BUTTON.addEventListener("click", validateAndOpenModal);
+    } else {
+        console.error("Submit button not found");
     }
 
-    function openModal(event) {
-        event.preventDefault(); // prevent form submission
-        MODAL.querySelector(".modal-header").textContent = "Confirm Member"; // reset header
-        // check if any of the required fields are empty
-        if (!FIRST_NAME_INPUT.value.trim() || 
-            !LAST_NAME_INPUT.value.trim() || 
-            !PHONE_NUMBER_INPUT.value.trim()|| 
+    function validateAndOpenModal(event) {
+        event.preventDefault(); // Prevent form submission
+
+        if (!FIRST_NAME_INPUT.value.trim() ||
+            !LAST_NAME_INPUT.value.trim() ||
+            !PHONE_NUMBER_INPUT.value.trim() ||
             !EMAIL_INPUT.value.trim()) {
-            emptyFieldsMessage();
-            MODAL.style.display = "block";
+            showEmptyFieldsMessage();
             return;
         }
-        // show the entered details
-        const ENTERED_DETAILS= `
-        <p>Please confirm the following details for the new member:</p>
-        <ul>
-            <li>First Name: ${FIRST_NAME_INPUT.value.trim() || "[Not Provided]"} </li>
-            <li>Last Name: ${LAST_NAME_INPUT.value.trim() || "[Not Provided]"} </li>
-            <li>Phone Number: ${PHONE_NUMBER_INPUT.value.trim() || "[Not Provided]"} </li>
-            <li>Email: ${EMAIL_INPUT.value.trim() || "[Not Provided]"} </li>
-        </ul> `;
 
-       // MODAL.querySelector(".modal-header").textContent = "Confirm Details";
-        MODAL_BODY.innerHTML = ENTERED_DETAILS;
+        // Populate modal with entered details
+        MODAL_BODY.innerHTML = `
+            <p>Please confirm the following details for the new member:</p>
+            <ul>
+                <li>First Name: ${FIRST_NAME_INPUT.value.trim()}</li>
+                <li>Last Name: ${LAST_NAME_INPUT.value.trim()}</li>
+                <li>Phone Number: ${PHONE_NUMBER_INPUT.value.trim()}</li>
+                <li>Email: ${EMAIL_INPUT.value.trim()}</li>
+            </ul>
+        `;
         MODAL.style.display = "block";
 
-        MODAL_CONFIRM_BUTTON.addEventListener("click", handleSubmit);
-        MODAL_CANCEL_BUTTON.addEventListener("click", closeModal);
+        MODAL_CONFIRM_BUTTON.replaceWith(MODAL_CONFIRM_BUTTON.cloneNode(true)); // Reset listeners
+        document.querySelector("#custom-modal .confirm-button").addEventListener("click", submitForm);
+
+        MODAL_CANCEL_BUTTON.replaceWith(MODAL_CANCEL_BUTTON.cloneNode(true)); // Reset listeners
+        document.querySelector("#custom-modal .cancel-button").addEventListener("click", closeModal);
+    }
+
+    function submitForm() {
+        let formData = {
+            FirstName: FIRST_NAME_INPUT.value.trim(),
+            LastName: LAST_NAME_INPUT.value.trim(),
+            PhoneNumber: PHONE_NUMBER_INPUT.value.trim(),
+            Email: EMAIL_INPUT.value.trim(),
+            Confirm: "confirmed"
+        };
+
+        postRequestParams("add_member", formData, handleResponse, handleError);
+        closeModal();
+    }
+
+    function handleResponse(data) {
+        if (data["Registration Added"]) {
+            SUCCESS_MODAL.style.display = "block";
+        } else {
+            handleError(data);
+        }
     }
 
     function closeModal() {
         MODAL.style.display = "none";
-        MODAL_BODY.innerHTML = ""; //clear modal content
-        MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit);//remove any old event listener
-        MODAL_CONFIRM_BUTTON.removeEventListener("click", closeModal);//remove any old event listener
-        MODAL_CONFIRM_BUTTON.textContent = "Confirm"; // reset button label
-        MODAL_CANCEL_BUTTON.style.display = "block"; //reset cancel button
+        MODAL_BODY.innerHTML = ""; // Clear modal content
     }
 
-    function handleSubmit() {
-        const NEW_MEMBER_DATA = {
-            FirstName: FIRST_NAME_INPUT.value.trim(),
-            LastName: LAST_NAME_INPUT.value.trim(),
-            PhoneNumber: PHONE_NUMBER_INPUT.value.trim(),
-            Email: EMAIL_INPUT.value.trim()
-        };
-
-        let params ={
-            Confirm: 'confirmed',
-            FirstName: NEW_MEMBER_DATA.FirstName,
-            LastName: NEW_MEMBER_DATA.LastName,
-            PhoneNumber: NEW_MEMBER_DATA.PhoneNumber,
-            Email: NEW_MEMBER_DATA.Email
-
-        };
-        
-        postRequestParams("add_member", params, handleResponse, () =>{});
-
-        closeModal();//close modal after successful submission
-    }
-
-    function emptyFieldsMessage(){
+    function showEmptyFieldsMessage() {
         MODAL_BODY.innerHTML = `
-        <p>Please fill in all required fields.</p>
-    `;
-        MODAL.querySelector(".modal-header").textContent = "Field Error";  
-        
-        // hide cancel button
-        MODAL_CANCEL_BUTTON.style.display = "none";
-
-        //change button labels to Go back
-        MODAL_CONFIRM_BUTTON.textContent = "Go Back";
-        MODAL_CONFIRM_BUTTON.removeEventListener("click", handleSubmit);
-        MODAL_CONFIRM_BUTTON.addEventListener("click", closeModal); // remove any old event listener
-        }
-        MODAL.querySelector(".modal-header").textContent = "Confirm Member";
-
-
-    function handleResponse(data) {
-        console.log("Response:", data);
-        if (data && !data.error) {
-            showSuccessModal();
-        } else {
-            RESPONSE.textContent = `Error: ${data.error}`;
-            RESPONSE.className = "error";
-        }
+            <p style="color: red;">Please fill in all required fields before submitting.</p>
+        `;
+        MODAL.style.display = "block";
     }
 
-    function showSuccessModal() {
-        SUCCESS_MODAL.style.display = "block";
-        SUCCESS_MESSAGE.textContent = "Member added successfully.";
+    function handleError(error) {
+        RESPONSE.textContent = `Error: ${error.error || "Unknown error occurred"}`;
+        RESPONSE.className = "error";
     }
 
     CLOSE_SUCCESS_MODAL.addEventListener("click", () => {
@@ -121,9 +94,7 @@ window.onload = function() {
     });
 
     window.addEventListener("click", (event) => {
-        if (event.target == SUCCESS_MODAL) {
-            SUCCESS_MODAL.style.display = "none";
-        }
+        if (event.target === MODAL) closeModal();
+        if (event.target === SUCCESS_MODAL) SUCCESS_MODAL.style.display = "none";
     });
-}
-
+};

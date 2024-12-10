@@ -1,0 +1,42 @@
+#edit-game-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  
+    color: rgba(0, 0, 0, 0.727);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 600px;
+    margin: auto;
+}
+#edit-game-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#edit-game-form input[type="text"], #edit-game-form input[type="number"] {
+    width: 70%;
+    height: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#edit-game-form button {
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#edit-game-form button:hover {
+    background-color: #e64a19;
+}

@@ -23,9 +23,8 @@ window.onload = autopopulateForm;
 function autopopulateForm(){
 
     let memberID = EDIT_MEMBER_CONTAINER.getAttribute("data-member-id");
-    let params = {
-        MemberID: memberID
-    };
+    let params = { MemberID: memberID};
+    
     postRequestParams("edit_member", params, populateForm, (error) => {
         console.error("Failed to fetch member details:", error);
     });

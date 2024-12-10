@@ -5,7 +5,7 @@ from fetchDetails import gameGenre
 from fetchDetails import gameTitle
 from fetchDetails import gamePublisher
 from fetchDetails import gameInventory
-from validateEntries import checkTitleEx
+from validateEntries import checkTitleEx, validatePublisherFormat, validateYearFormat
 from fetchDetails import get_g, write_games
 from validateEntries import validateNumInsert
 from validateEntries import validateInsertion

@@ -25,13 +25,13 @@ function autopopulateForm(){
     let memberID = EDIT_MEMBER_CONTAINER.getAttribute("data-member-id");
     let params = { MemberID: memberID};
     
-    postRequestParams("edit_member", params, populateForm, (error) => {
+    postRequestParams("edit_member", params, populateGameForm, (error) => {
         console.error("Failed to fetch member details:", error);
     });
 }
 
 // populate the form
-function populateForm(data){
+function populateGameForm(data){
     if (!data || !data['Member Details Requested'] ||  data['Member Details Requested'].length === 0){
         console.error("No member details found in response.");
         return;
@@ -102,8 +102,12 @@ function validateAndOpenModal(event) {
     MODAL.style.display = "block";  
 
 }
-function closeModal(){
+function closeModal() {
     MODAL.style.display = "none";
+    MODAL_BODY.innerHTML = ""; // Clear modal content
+    MODAL.querySelector(".modal-header").textContent = "Confirm Changes"; // Reset the modal header to its default
+    MODAL_CONFIRM_BUTTON.textContent = "Confirm"; // Reset confirm button text
+    MODAL_CANCEL_BUTTON.style.display = "block"; // Ensure the cancel button is displayed
 }
 
 MODAL_CANCEL_BUTTON.addEventListener("click", closeModal);

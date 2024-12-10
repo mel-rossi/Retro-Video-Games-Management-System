@@ -111,6 +111,7 @@ def edit_member_route():
 
 @app.route('/VGIMS/editGame')
 def edit_game_route():
+    id = request.args.get('ID')
     return render_template('editGame.html', videogame_id=id)
 
 @app.route('/VGIMS/addMember')
